@@ -5,7 +5,7 @@ import LearnChapterLayout from './components/LearnChapterLayout';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
 const LearnIndex = lazy(() => import('./pages/learn/LearnIndex'));
-const PlaygroundIndex = lazy(() => import('./pages/playground/PlaygroundIndex'));
+import PlaygroundIndex from './pages/playground/PlaygroundIndex';
 const ReferenceIndex = lazy(() => import('./pages/reference/ReferenceIndex'));
 const PracticeIndex = lazy(() => import('./pages/practice/PracticeIndex'));
 const MisconceptionsPage = lazy(() => import('./pages/reference/MisconceptionsPage'));
@@ -28,8 +28,8 @@ const PhaseEstimation = lazy(() => import('./pages/learn/PhaseEstimation'));
 const Shor = lazy(() => import('./pages/learn/Shor'));
 const ModernTopics = lazy(() => import('./pages/learn/ModernTopics'));
 
-const LabPage = lazy(() => import('./pages/playground/LabPage'));
-const CircuitBuilderPage = lazy(() => import('./pages/playground/CircuitBuilderPage'));
+import LabPage from './pages/playground/LabPage';
+import CircuitBuilderPage from './pages/playground/CircuitBuilderPage';
 
 function PageLoader() {
   return (

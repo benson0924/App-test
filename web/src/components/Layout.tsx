@@ -9,7 +9,7 @@ export default function Layout() {
   const { theme, toggleTheme } = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [learnExpanded, setLearnExpanded] = useState(true);
-  const [playExpanded, setPlayExpanded] = useState(false);
+  const [playExpanded, setPlayExpanded] = useState(true);
 
   return (
     <div className="app-layout">
@@ -35,8 +35,11 @@ export default function Layout() {
               {item.title}
             </NavLink>
           ))}
+          <NavLink to="/playground" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+            Playground (27 Labs)
+          </NavLink>
           <button className="nav-section" onClick={() => setPlayExpanded(!playExpanded)}>
-            Playground {playExpanded ? '▾' : '▸'}
+            Lab list {playExpanded ? '▾' : '▸'}
           </button>
           {playExpanded && (
             <>
@@ -76,6 +79,13 @@ export default function Layout() {
           <Link to="/">Quantum Computing 2026</Link>
           <button className="btn" onClick={toggleTheme}>{theme === 'light' ? '🌙' : '☀️'}</button>
         </header>
+        <nav className="mobile-nav" aria-label="Quick navigation">
+          <NavLink to="/playground" className={({ isActive }) => isActive ? 'active' : ''}>Labs</NavLink>
+          <NavLink to="/playground/circuit-builder" className={({ isActive }) => isActive ? 'active' : ''}>Circuit</NavLink>
+          <NavLink to="/learn" className={({ isActive }) => isActive ? 'active' : ''}>Learn</NavLink>
+          <NavLink to="/practice" className={({ isActive }) => isActive ? 'active' : ''}>Practice</NavLink>
+          <NavLink to="/reference" className={({ isActive }) => isActive ? 'active' : ''}>Reference</NavLink>
+        </nav>
         <main className="main-content">
           <Outlet />
         </main>
