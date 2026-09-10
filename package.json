@@ -1,0 +1,11 @@
+{
+  "name": "introduction-to-quantum-computing-2026",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": ["packages/*", "web"],
+  "scripts": {
+    "dev": "npm run dev -w web",
+    "build": "npm run build -w quantum-core && npm run build -w web",
+    "build:book": "cd book && ./build.sh"
+  }
+}

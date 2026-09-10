@@ -1,0 +1,157 @@
+\chapter{Linear Algebra for Quantum Computing}
+\label{ch:linear-algebra}
+
+Quantum states are vectors; quantum gates are matrices. This chapter develops the Dirac \emph{bra-ket} notation, inner products, projectors, outer products, completeness relations, and unitary matrices---the linear-algebraic language used in every subsequent chapter.
+
+\section{Kets and Bras}
+\label{sec:kets-bras}
+
+\subsection{Column vectors and row covectors}
+
+A ket $\ket{\psi}$ denotes a column vector in $\mathbb{C}^d$. For one qubit,
+\begin{equation}
+\ket{\psi}=\begin{bmatrix}\alpha\\\beta\end{bmatrix},\qquad
+\bra{\psi}=\begin{bmatrix}\alpha^*&\beta^*\end{bmatrix}.
+\label{eq:ket-bra}
+\end{equation}
+The dagger (conjugate transpose) maps kets to bras: $(\ket{\psi})^\dagger=\bra{\psi}$.
+
+\subsection{Dual space}
+
+Bras live in the dual space---the space of linear functionals on kets. The pairing $\bra{\phi}$ acting on $\ket{\psi}$ yields a complex number, defined next.
+
+\section{Inner Products}
+\label{sec:inner-products}
+
+\subsection{Definition and properties}
+
+For $\ket{\phi}=\begin{bmatrix}a\\b\end{bmatrix}$ and $\ket{\psi}=\begin{bmatrix}c\\d\end{bmatrix}$,
+\begin{equation}
+\braket{\phi|\psi}=a^*c+b^*d,\qquad
+\|\ket{\psi}\|=\sqrt{\braket{\psi|\psi}}.
+\label{eq:inner-product}
+\end{equation}
+Properties: conjugate symmetry $\braket{\phi|\psi}=\braket{\psi|\phi}^*$, linearity in the second slot, and positive definiteness $\braket{\psi|\psi}\ge 0$ with equality iff $\ket{\psi}=0$.
+
+\subsection{Orthogonality and orthonormal bases}
+
+Vectors are \emph{orthogonal} if $\braket{\phi|\psi}=0$. An \emph{orthonormal basis} satisfies $\braket{i|j}=\delta_{ij}$. The computational basis~\eqref{eq:computational-basis} is orthonormal.
+
+\begin{example}
+Compute $\braket{+|-}$ using~\eqref{eq:x-basis}:
+\[
+\braket{+|-}=\frac{1}{2}(\bra{0}+\bra{1})(\ket{0}-\ket{1})=\frac{1}{2}(1-1)=0.
+\]
+Thus $\ket{+}$ and $\ket{-}$ are orthogonal despite sharing the same $Z$-measurement statistics.
+\end{example}
+
+\section{Projection and Measurement}
+\label{sec:projection}
+
+\subsection{Born rule revisited}
+
+Measuring in basis $\{\ket{m}\}$, the probability of outcome $m$ is
+\begin{equation}
+P(m)=|\braket{m|\psi}|^2.
+\label{eq:born-rule}
+\end{equation}
+The amplitude $\braket{m|\psi}$ is sometimes called the \emph{overlap} of $\ket{\psi}$ with $\ket{m}$.
+
+\subsection{Projectors}
+
+The rank-one projector onto $\ket{m}$ is
+\begin{equation}
+P_m=\ket{m}\bra{m}.
+\label{eq:projector}
+\end{equation}
+Then $P_m^2=P_m$, $P_m^\dagger=P_m$, and $P(m)=\bra{\psi}P_m\ket{\psi}$. For non-orthogonal measurements (POVMs), generalize to positive operators summing to identity---beyond our scope here.
+
+\begin{example}
+For $\ket{\psi}=\alpha\ket{0}+\beta\ket{1}$,
+\[
+P_0=\ket{0}\bra{0}=\begin{bmatrix}1&0\\0&0\end{bmatrix},\quad
+P(0)=\bra{\psi}P_0\ket{\psi}=|\alpha|^2.
+\]
+\end{example}
+
+\section{Outer Products and Completeness}
+\label{sec:outer-completeness}
+
+\subsection{Rank-one operators}
+
+The outer product $\ket{\psi}\bra{\phi}$ is a $d\times d$ matrix. Example:
+\begin{equation}
+\ket{1}\bra{0}=\begin{bmatrix}0&0\\1&0\end{bmatrix}.
+\label{eq:outer-product}
+\end{equation}
+Such operators appear in quantum channels and density matrices.
+
+\subsection{Resolution of the identity}
+
+Orthonormal basis $\{\ket{i}\}$ satisfies \emph{completeness}:
+\begin{equation}
+\sum_i \ket{i}\bra{i}=I.
+\label{eq:completeness}
+\end{equation}
+In the computational basis, $\ket{0}\bra{0}+\ket{1}\bra{1}=I$. Any state expands as $\ket{\psi}=\sum_i \ket{i}\braket{i|\psi}$.
+
+\begin{example}
+Expand $\ket{+}$ in the $Z$ basis:
+\[
+\ket{+}=\ket{0}\braket{0|+}+\ket{1}\braket{1|+}=\frac{1}{\sqrt{2}}(\ket{0}+\ket{1}).
+\]
+\end{example}
+
+\section{Unitary Matrices}
+\label{sec:unitary}
+
+\subsection{Definition}
+
+A matrix $U$ is \emph{unitary} if
+\begin{equation}
+U^\dagger U = UU^\dagger = I,\qquad U^{-1}=U^\dagger.
+\label{eq:unitary-def}
+\end{equation}
+Unitary matrices preserve inner products: $\braket{U\phi|U\psi}=\braket{\phi|\psi}$.
+
+\subsection{Physical interpretation}
+
+Quantum gates are unitary evolutions (before measurement). Normalization is preserved:
+\begin{equation}
+\braket{\psi'|\psi'}=\braket{\psi|U^\dagger U|\psi}=\braket{\psi|\psi}.
+\label{eq:norm-preservation}
+\end{equation}
+Determinant has unit magnitude: $|\det U|=1$. Eigenvalues lie on the unit circle.
+
+\begin{labbox}{9}{Matrix \& Unitary Checker}
+Enter a $2\times 2$ matrix at \texttt{/playground/unitary-checker}. Verify $H^\dagger H=I$ and confirm that a random complex matrix fails unitarity unless specially constructed.
+\end{labbox}
+
+\begin{example}
+Show $H$ is unitary by computing $H^\dagger H$:
+\[
+H^\dagger H=\frac{1}{2}\begin{bmatrix}1&1\\1&-1\end{bmatrix}\begin{bmatrix}1&1\\1&-1\end{bmatrix}
+=\frac{1}{2}\begin{bmatrix}2&0\\0&2\end{bmatrix}=I.
+\]
+\end{example}
+
+\subsection{Special unitary group}
+
+Matrices with $\det U=1$ form $\mathrm{SU}(2)$, the double cover of rotations on the Bloch sphere. Pauli matrices $X,Y,Z$ generate $\mathrm{SU}(2)$ up to global phase.
+
+\section{Linear Operators on Composite Systems (Preview)}
+\label{sec:tensor-preview}
+
+When subsystems combine, operators act as tensor products: $A\otimes B$ applies $A$ to the first subsystem and $B$ to the second. Chapter~\ref{ch:multi} develops this systematically. For now, note that unitarity extends: $(A\otimes B)^\dagger=A^\dagger\otimes B^\dagger$.
+
+\section*{Exercises}
+\begin{enumerate}[label=\arabic*.]
+\item Compute $\braket{0|1}$, $\braket{+|\psi}$ for $\ket{\psi}=\ket{0}$, and $\braket{i|+i}$ where $\ket{i}=\ket{+i}$ in the $Y$ basis.
+\item Verify~\eqref{eq:completeness} explicitly for the $X$ basis states $\ket{\pm}$.
+\item Write $\ket{1}\bra{0}$ and $\ket{+}\bra{-}$ as $2\times 2$ matrices.
+\item Show that if $U$ is unitary, so is $U^\dagger$.
+\item Prove $\|U\ket{\psi}\|=\|\ket{\psi}\|$ using~\eqref{eq:unitary-def}.
+\item For projector $P_+=\ket{+}\bra{+}$, compute $\mathrm{Tr}(P_+)$ and $P_+^2$.
+\item Express $X$ as a linear combination of outer products in the $Z$ basis.
+\item Why must quantum gate matrices be unitary rather than merely invertible?
+\end{enumerate}

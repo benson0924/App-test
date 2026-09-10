@@ -1,0 +1,136 @@
+\chapter{Modern Quantum Computing in 2026}
+\label{ch:modern}
+
+This chapter surveys the landscape a serious introductory student should know beyond foundational algorithms: hardware platforms, surface codes and logical qubits, the NISQ era, software ecosystems, fault-tolerance roadmaps, and post-quantum cryptography. Statements are tagged by evidence type; company roadmaps are not scientific facts and must be verified against peer-reviewed literature.
+
+\section{Physical Qubit Platforms}
+\label{sec:hardware}
+
+\subsection{Leading modalities}
+
+As of the \cutoff{} cutoff, several qubit modalities compete:
+\begin{itemize}[noitemsep]
+\item \textbf{Superconducting transmons:} microwave control, fast gates, planar fabrication; short $T_1,T_2$ relative to ions.
+\item \textbf{Trapped ions:} long coherence, high fidelity, all-to-all connectivity in chains; slower gates.
+\item \textbf{Neutral atoms:} reconfigurable arrays via optical tweezers; promising for error-correction layouts.
+\item \textbf{Photonic:} room-temperature operation; challenges in deterministic two-qubit gates.
+\item \textbf{Spin qubits:} semiconductor integration potential; scaling research active.
+\end{itemize}
+
+\subsection{Metrics that matter}
+
+Compare platforms using gate fidelity ($>99.9\%$ two-qubit targets), coherence times ($T_1,T_2$), connectivity graph, and reproducible cross-calibrated benchmarks---not qubit count alone.
+
+\begin{example}
+A device advertising ``1000+ qubits'' with $10^{-2}$ two-qubit error rates cannot yet run fault-tolerant Shor at cryptographically relevant scales without extensive QEC overhead \cite{preskill2018}.
+\end{example}
+
+\section{Logical Qubits and the Surface Code}
+\label{sec:surface-code}
+
+\subsection{From physical to logical}
+
+Fault-tolerant computation stores information in \emph{logical} qubits encoded across many \emph{physical} qubits. Syndrome extraction detects errors faster than they accumulate. The \emph{threshold theorem} guarantees arbitrary low logical error rates if physical errors per gate stay below a code-specific threshold.
+
+\subsection{Surface code highlights}
+
+The surface code \cite{acharya2024} arranges stabilizer checks on a 2D lattice with local interactions suitable for superconducting and neutral-atom layouts. Recent experiments demonstrate \emph{logical} error rates below \emph{physical} rates at increasing code distance---a milestone toward scalable QEC, though resource estimates for chemistry or RSA-scale factoring remain substantial.
+
+\begin{example}
+Distance-$d$ surface code requires $\approx d^2$ physical qubits per logical qubit and $d$ rounds of syndrome extraction per logical gate in rough estimates; exact constants depend on implementation and magic-state factories.
+\end{example}
+
+\section{Noise, Channels, and Mitigation}
+\label{sec:nisq}
+
+\subsection{NISQ definition}
+
+NISQ devices \cite{preskill2018} have $50$--$500$ noisy qubits without full error correction. Useful tasks include variational algorithms, simulation prototypes, and benchmarking---not arbitrary-depth fault-tolerant programs.
+
+\subsection{Mitigation versus correction}
+
+Mitigation (Chapter~\ref{ch:qec}) reduces statistical bias in short circuits; correction suppresses logical error rates exponentially given sufficient redundancy. Long-term utility requires the latter for deep algorithms.
+
+\section{Quantum Advantage and Benchmarks}
+\label{sec:advantage}
+
+\subsection{Random circuit sampling}
+
+Random circuit sampling milestones \cite{arute2019} demonstrate quantum behavior difficult to simulate classically for \emph{specific} tasks. This is not universal speedup for everyday workloads.
+
+\subsection{How to read claims}
+
+Always ask: \emph{Which problem? Which metric? Which classical comparison?} Cross-entropy benchmarks, quantum volume, and application-specific demos measure different things.
+
+\begin{example}
+Sycamore-style supremacy argues classical simulation of a particular random circuit distribution is infeasible; it does not imply Gmail runs faster on quantum processors.
+\end{example}
+
+\section{Quantum Networking and Cryptography}
+\label{sec:networking-crypto}
+
+\subsection{Quantum key distribution}
+
+QKD (Chapter~\ref{ch:protocols}) offers information-theoretic security under explicit device and channel trust models. Deployment exists in limited links; scaling requires quantum repeaters still under research.
+
+\subsection{Post-quantum classical cryptography}
+
+Shor's algorithm threatens RSA and elliptic-curve cryptography by efficiently solving hidden subgroup problems underlying those schemes. \emph{Post-quantum cryptography} (PQC) standardizes classical algorithms believed secure against quantum adversaries (lattice-based, hash-based, code-based). PQC deployment proceeds independently of quantum hardware timelines.
+
+\section{Software Ecosystem (2026)}
+\label{sec:software-ecosystem}
+
+\subsection{Stack layers}
+
+\begin{itemize}[noitemsep]
+\item \textbf{Languages \& IR:} OpenQASM~3, Quil, vendor DSLs.
+\item \textbf{SDKs:} Qiskit, Cirq, PennyLane, Braket, Azure Quantum, IBM Quantum Platform \cite{ibm2026}.
+\item \textbf{Compilers:} routing, pulse-level optimization, error-aware transpilation.
+\item \textbf{Simulators:} state-vector, density matrix, stabilizer, tensor-network.
+\end{itemize}
+
+\subsection{Hybrid workflows}
+
+Near-term applications combine classical optimizers with quantum coprocessors (variational quantum eigensolvers, QAOA). HPC integration treats quantum devices as specialized accelerators with queueing and calibration schedules.
+
+\section{Fault Tolerance Roadmaps}
+\label{sec:ft-roadmaps}
+
+\subsection{Magic states and distillation}
+
+Non-Clifford gates (especially $T$) dominate resource estimates. \emph{Magic-state distillation} factories supply clean $T$ states to fault-tolerant circuits; their footprint often exceeds the computation proper.
+
+\subsection{Company versus science}
+
+Vendor announcements (e.g.\ processor codenames, qubit counts) are engineering milestones, not proofs of utility. Distinguish peer-reviewed logical-qubit demonstrations \cite{acharya2024} from marketing materials \cite{google2024}.
+
+\section{Resource Estimation and Classical Simulation}
+\label{sec:resources}
+
+Exact simulation of $n$ qubits needs $O(2^n)$ complex amplitudes---infeasible beyond $\approx 50$ qubits on classical supercomputers for generic states. Clifford circuits simulate in polynomial time, clarifying why non-Clifford content matters for advantage claims.
+
+\section{Open Questions at the \cutoff{} Cutoff}
+\label{sec:open-questions}
+
+\begin{itemize}
+\item Fault-tolerant logical qubits at scale with practical space-time overheads.
+\item Durable quantum advantage in chemistry, optimization, or machine learning.
+\item Integration of quantum accelerators with classical HPC and secure PQC migration.
+\item Standardized benchmarks correlating device metrics with application performance.
+\end{itemize}
+
+\section*{Further Reading}
+
+See \cite{nielsen2010,preskill2018,ibm2026} and peer-reviewed surveys. Re-verify hardware claims against primary literature before citing in research.
+
+\section*{Exercises}
+\begin{enumerate}[label=\arabic*.]
+\item Compare two hardware platforms on fidelity, coherence, and connectivity in a table.
+\item Explain why surface codes favor 2D-local architectures.
+\item Distinguish quantum advantage, quantum supremacy, and fault tolerance in one paragraph each.
+\item Why does PQC migration not require a working quantum computer?
+\item Estimate qubits needed to factor RSA-2048 using rough literature exponents (order-of-magnitude).
+\item Name three software layers in the 2026 quantum stack.
+\item What role do magic states play in fault-tolerant $T$ gates?
+\item Critique a hypothetical headline: ``1000-qubit computer breaks encryption.''
+\end{enumerate}

@@ -1,0 +1,19 @@
+node_modules/
+dist/
+web/dist/
+packages/quantum-core/dist/
+*.tsbuildinfo
+.DS_Store
+.env
+.env.local
+
+# LaTeX build artifacts (keep main.pdf)
+book/*.aux
+book/*.log
+book/*.out
+book/*.toc
+book/*.bbl
+book/*.blg
+book/*.fls
+book/*.fdb_latexmk
+book/*.synctex.gz

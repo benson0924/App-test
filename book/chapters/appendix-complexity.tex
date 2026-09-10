@@ -1,0 +1,63 @@
+This appendix records complexity classes and representative problem scalings. See Chapters~\ref{ch:classical} and~\ref{ch:algorithms} for context.
+
+\section{Growth Classes}
+
+Common asymptotic notations:
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Notation & Example \\
+\midrule
+$O(1)$ & Array index lookup \\
+$O(\log n)$ & Binary search \\
+$O(n)$ & Linear scan \\
+$O(n\log n)$ & Merge sort \\
+$O(n^2)$ & Naive matrix multiply \\
+$O(2^n)$ & Exact TSP brute force \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Complexity Classes}
+
+\textbf{P:} Decision problems solvable in polynomial time on a deterministic classical Turing machine.
+
+\textbf{NP:} Decision problems whose yes-instances admit polynomial-size certificates verifiable in polynomial time.
+
+\textbf{BQP:} Decision problems solvable in polynomial time on a quantum computer with error probability $<1/3$, equivalently bounded-error quantum polynomial time.
+
+Known containments: $\mathrm{P}\subseteq\mathrm{BQP}\subseteq\mathrm{PSPACE}$. The relationship between \textbf{NP} and \textbf{BQP} is open; quantum computers are not known to solve NP-complete problems in polynomial time.
+
+\section{Algorithm Comparison Table}
+
+\begin{table}[H]
+\centering
+\caption{Representative query or time complexity (promise problems).}
+\label{tab:complexity-full}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Problem & Classical & Quantum \\
+\midrule
+Deutsch ($n=1$) & 2 queries (worst) & 1 query \\
+Deutsch--Jozsa & $2^{n-1}+1$ & 1 \\
+Bernstein--Vazirani & $n$ & 1 \\
+Simon (period $s$) & $O(2^{n/2})$ queries & $O(n)$ queries \\
+Grover unstructured search & $\Theta(N)$ & $O(\sqrt{N})$ \\
+Quantum walk hits (typical) & varies & often quadratic speedups \\
+Factoring (Shor, ideal) & no known poly-time & poly-time \\
+Discrete log (Shor, ideal) & no known poly-time & poly-time \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Simulation Complexity}
+
+\begin{itemize}[noitemsep]
+\item \textbf{General $n$-qubit state:} $O(2^n)$ amplitudes; exact simulation intractable for large $n$.
+\item \textbf{Clifford circuits:} Gottesman--Knill simulation in $O(n^2)$ per layer (polynomial).
+\item \textbf{Tensor networks:} structured states may simulate beyond $50$ qubits with approximations.
+\end{itemize}
+
+\section{Cautionary Notes}
+
+Different algorithms provide different advantages. Quantum computers are not universally exponentially faster. Always specify: problem family, promise conditions, metric (queries, time, samples), and classical baseline.

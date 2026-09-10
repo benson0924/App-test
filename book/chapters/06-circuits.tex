@@ -1,0 +1,145 @@
+\chapter{Quantum Circuits and Programming}
+\label{ch:circuits}
+
+Quantum algorithms are expressed as \emph{circuits}: wires represent qubits, time flows left to right, boxes are gates, control dots mark controlled operations, and measurement symbols denote readout. This chapter formalizes the circuit model, walks through Bell-state synthesis, surveys gate sets and OpenQASM, and discusses depth and resource costs---connecting mathematics to the software tools used on real hardware.
+
+\section{The Circuit Model}
+\label{sec:circuit-model}
+
+\subsection{Unitary evolution}
+
+An $n$-qubit circuit transforms $\ket{\psi_{\mathrm{in}}}$ to
+\begin{equation}
+\ket{\psi_{\mathrm{out}}}=U_k\cdots U_2 U_1\ket{\psi_{\mathrm{in}}},
+\label{eq:circuit-evolution}
+\end{equation}
+where each $U_i$ acts unitarily on some subset of qubits (often tensored with identity on others). Measurement at the end samples classical outcomes from Born probabilities. Circuits are \emph{acyclic}: no feedback unless classical control is explicitly modeled.
+
+\subsection{Diagrammatic conventions}
+
+Wires index qubits from top to bottom; time flows left to right. A solid control dot on one wire with $\oplus$ on another denotes CNOT. Single-qubit boxes label gates ($H$, $T$, etc.). Double lines occasionally denote classical bits conditioned on measurement outcomes.
+
+\subsection{Depth, width, and gate count}
+
+\begin{itemize}[noitemsep]
+\item \textbf{Width:} number of qubits $n$.
+\item \textbf{Gate count:} total gates applied.
+\item \textbf{Depth:} number of sequential \emph{layers} of gates that can run in parallel on disjoint qubits.
+\end{itemize}
+Depth determines latency on hardware with sequential gate calibration; gate count relates to total error budget. On superconducting devices, two-qubit gates along the same coupling edge often cannot execute simultaneously.
+
+\begin{example}
+Two CNOTs sharing a control qubit cannot run in parallel if they use the same control line in conflicting ways; two single-qubit gates on different qubits \emph{can} occupy one depth layer. A circuit with $n$ sequential CNOTs on a chain has depth $\Omega(n)$ even if gate count is also $n$.
+\end{example}
+
+\subsection{Measurement and classical control}
+
+Mid-circuit measurement feeds classical registers that condition later gates (\emph{dynamic circuits}). This extends~\eqref{eq:circuit-evolution} to conditional operations $U_k(c_1,\ldots,c_m)$ where $c_j$ are prior measurement outcomes---essential for teleportation and error correction.
+
+\section{Building Bell States}
+\label{sec:bell-circuit}
+
+\subsection{Standard construction}
+
+The canonical Bell circuit prepares $\ket{\Phi^+}$ from $\ket{00}$:
+\begin{equation}
+\ket{00}\xrightarrow{H_0}\xrightarrow{\mathrm{CNOT}_{0,1}}\ket{\Phi^+}
+=\frac{\ket{00}+\ket{11}}{\sqrt{2}}.
+\label{eq:bell-circuit}
+\end{equation}
+Here $H_0$ denotes Hadamard on qubit~0; $\mathrm{CNOT}_{0,1}$ uses qubit~0 as control and qubit~1 as target.
+
+\subsection{Step-by-step state update}
+
+\begin{align*}
+\ket{00} &\xrightarrow{H\otimes I} \frac{1}{\sqrt{2}}(\ket{00}+\ket{10}), \\
+&\xrightarrow{\mathrm{CNOT}} \frac{1}{\sqrt{2}}(\ket{00}+\ket{11})=\ket{\Phi^+}.
+\end{align*}
+Other Bell states arise from additional single-qubit Pauli rotations before or after this core.
+
+\begin{labbox}{CB}{Circuit Builder}
+Open \texttt{/playground/circuit-builder}. Drag $H$ and CNOT onto two qubits, simulate step-by-step, and read the statevector. Confirm amplitudes match~\eqref{eq:bell-states}.
+\end{labbox}
+
+\section{Gate Sets and Native Hardware}
+\label{sec:gate-sets}
+
+\subsection{Universal versus native gates}
+
+Theory uses $\{H,T,\mathrm{CNOT}\}$; hardware exposes \emph{native} gates---e.g.\ $R_x,R_y,R_z$ and CNOT on fixed connectivity graphs. \emph{Compilation} transpiles abstract circuits into native pulses with SWAP routing for limited connectivity.
+
+\subsection{Clifford+T and T-count}
+
+Fault-tolerant architectures often separate fast \emph{Clifford} gates ($H,S,\mathrm{CNOT}$) from costly \emph{T} gates, which require magic-state distillation. $T$-count dominates resource estimates for Shor's algorithm.
+
+\section{OpenQASM}
+\label{sec:openqasm}
+
+\subsection{Language overview}
+
+Open Quantum Assembly Language (OpenQASM) describes circuits textually. OpenQASM~3.0 adds classical control flow, gate modifiers, and richer typing. A minimal Bell preparation:
+
+\begin{verbatim}
+OPENQASM 3.0;
+include "stdgates.inc";
+qubit[2] q;
+h q[0];
+cx q[0], q[1];
+\end{verbatim}
+
+\subsection{Registers and timing}
+
+OpenQASM declares \texttt{qubit[n]} quantum and \texttt{bit[m]} classical registers. Statements execute in order unless grouped into \texttt{box} blocks for timing semantics. Gate arguments specify qubit indices; creg stores measurement outcomes for conditional gates such as \texttt{if (c == 1) x q[0];}.
+
+\subsection{Reading and writing QASM}
+
+Export from visual builders or SDKs (Qiskit \texttt{qasm3.dumps}, Cirq \texttt{to\_qasm}). Always map each statement back to unitaries on the Hilbert space; \texttt{cx} is CNOT, \texttt{h} is Hadamard, \texttt{rz(theta)} is $R_z(\theta)$.
+
+\begin{example}
+The OpenQASM snippet above corresponds to $U=\mathrm{CNOT}_{0,1}\,(H\otimes I)$ applied left-to-right as $U\ket{00}=\ket{\Phi^+}$. Reversing gate order in the file changes the unitary product accordingly.
+\end{example}
+
+\begin{example}
+The unitary for $H\otimes I$ on two qubits is
+\[
+H\otimes I=\frac{1}{\sqrt{2}}\begin{bmatrix}
+1&1&0&0\\1&-1&0&0\\0&0&1&1\\0&0&1&-1
+\end{bmatrix}.
+\]
+Apply it to $\ket{00}$ before CNOT to derive~\eqref{eq:bell-circuit}.
+\end{example}
+
+\section{Depth and Resource Analysis}
+\label{sec:depth}
+
+\subsection{Ripple adders revisited}
+
+An $n$-bit ripple-carry adder built from Toffoli and CNOT has depth $O(n)$ in the worst case---analogous classical depth from Chapter~\ref{ch:classical}. Quantum carry-lookahead and Fourier adders reduce depth at the cost of ancillas.
+
+\subsection{Simulation cost}
+
+Exact state-vector simulation of $n$ qubits requires $O(2^n)$ complex amplitudes. Clifford circuits (generated by $\{H,S,\mathrm{CNOT}\}$ without $T$) simulate in polynomial time (Gottesman--Knill), explaining why random-circuit supremacy demos use non-Clifford gates \cite{arute2019}.
+
+\section{Modern Software Ecosystem (2026)}
+\label{sec:software}
+
+Production quantum software typically combines:
+\begin{itemize}[noitemsep]
+\item \textbf{Circuit construction:} OpenQASM~3, Qiskit, Cirq, PennyLane, and vendor SDKs.
+\item \textbf{Simulation:} local state-vector simulators (exponential in $n$) and stabilizer simulators for Clifford circuits.
+\item \textbf{Execution:} cloud access to superconducting, trapped-ion, neutral-atom, and photonic backends with calibration data and error models.
+\end{itemize}
+
+Map API calls (\texttt{h(0)}, \texttt{cx(0,1)}) to unitaries and tensor structure before trusting black-box outputs.
+
+\section*{Exercises}
+\begin{enumerate}[label=\arabic*.]
+\item Write the $4\times 4$ matrix for $H\otimes I$ and verify $ (H\otimes I)\ket{00}$.
+\item Count depth (qualitatively) of an $n$-bit ripple-carry adder from Toffoli gates.
+\item Export a Bell circuit to OpenQASM: which gates appear?
+\item Why does CNOT not equal $\mathrm{CNOT}_{1,0}$? Give the matrix of swapped control/target.
+\item Estimate memory for simulating $n=30$ qubits in double precision (bytes $\approx 16\cdot 2^n$).
+\item Which gates in $\{H,S,\mathrm{CNOT}\}$ generate the Clifford group?
+\item Transpile $T$ into $R_z(\pi/4)$ up to global phase.
+\item Explain why measurement is not modeled as a unitary gate in~\eqref{eq:circuit-evolution}.
+\end{enumerate}

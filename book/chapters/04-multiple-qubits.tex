@@ -1,0 +1,146 @@
+\chapter{Composite Quantum Systems}
+\label{ch:multi}
+
+Multiple qubits describe joint quantum systems whose state space grows exponentially: $n$ qubits live in a $2^n$-dimensional Hilbert space. This chapter introduces tensor products, entanglement, Bell states, controlled gates, the no-cloning theorem, and universal gate sets---the structural foundation for circuits, protocols, and algorithms.
+
+\section{Tensor Products}
+\label{sec:tensor}
+
+\subsection{Kronecker product}
+
+For single-qubit kets $\ket{\psi}\in\mathbb{C}^2$ and $\ket{\phi}\in\mathbb{C}^2$, the \emph{tensor product} $\ket{\psi}\otimes\ket{\phi}$ is a four-dimensional vector. Example:
+\begin{equation}
+\ket{0}\otimes\ket{1}=\ket{01}=\begin{bmatrix}0\\1\\0\\0\end{bmatrix}.
+\label{eq:tensor-example}
+\end{equation}
+A general two-qubit \emph{pure} state is
+\begin{equation}
+\ket{\Psi}=c_{00}\ket{00}+c_{01}\ket{01}+c_{10}\ket{10}+c_{11}\ket{11},\qquad
+\sum_{i,j}|c_{ij}|^2=1.
+\label{eq:two-qubit-general}
+\end{equation}
+
+\subsection{Dimension counting}
+
+For $n$ qubits, the computational basis $\ket{b_1\cdots b_n}$ has $2^n$ elements. This exponential scaling is the origin of both quantum computational power and the difficulty of classical simulation.
+
+\begin{labbox}{10}{Tensor Product Calculator}
+At \texttt{/playground/tensor-product}, form $\ket{+}\otimes\ket{0}$, $\ket{1}\otimes\ket{-}$, and verify inner products factorize on product states: $\braket{\psi_1\otimes\phi_1|\psi_2\otimes\phi_2}=\braket{\psi_1|\psi_2}\braket{\phi_1|\phi_2}$.
+\end{labbox}
+
+\begin{example}
+Write $\ket{+}\otimes\ket{0}$ in the four-dimensional computational basis:
+\[
+\ket{+}\otimes\ket{0}=\frac{1}{\sqrt{2}}(\ket{0}+\ket{1})\otimes\ket{0}
+=\frac{1}{\sqrt{2}}(\ket{00}+\ket{10}).
+\]
+\end{example}
+
+\section{Entanglement}
+\label{sec:entanglement}
+
+\subsection{Separable versus entangled states}
+
+A pure state $\ket{\Psi}$ on two qubits is \emph{separable} (product) if
+\begin{equation}
+\ket{\Psi}=\ket{\alpha}\otimes\ket{\beta}
+\label{eq:separable}
+\end{equation}
+for some single-qubit states $\ket{\alpha},\ket{\beta}$. Otherwise it is \emph{entangled}. Entanglement is not correlation in the classical sense---local hidden-variable models cannot reproduce all quantum predictions (Chapter~\ref{ch:protocols}).
+
+\subsection{Bell states}
+
+The four \emph{Bell states} form an orthonormal maximally entangled basis:
+\begin{align}
+\ket{\Phi^+}&=\frac{\ket{00}+\ket{11}}{\sqrt{2}}, &
+\ket{\Phi^-}&=\frac{\ket{00}-\ket{11}}{\sqrt{2}}, \\
+\ket{\Psi^+}&=\frac{\ket{01}+\ket{10}}{\sqrt{2}}, &
+\ket{\Psi^-}&=\frac{\ket{01}-\ket{10}}{\sqrt{2}}.
+\label{eq:bell-states}
+\end{align}
+Measuring one qubit of $\ket{\Phi^+}$ in $Z$ perfectly predicts the other ($00$ or $11$), yet individual qubits are maximally mixed.
+
+\begin{labbox}{11}{Bell State Generator}
+Prepare each Bell state at \texttt{/playground/bell-states} using $H$ and CNOT. Measure qubit~0 repeatedly and track correlations on qubit~1.
+\end{labbox}
+
+\begin{example}
+Show $\ket{\Phi^+}$ is not separable. Suppose $\ket{\Phi^+}=(a\ket{0}+b\ket{1})\otimes(c\ket{0}+d\ket{1})$. Matching coefficients yields $ac=1/\sqrt{2}$, $ad=0$, $bc=0$, $bd=1/\sqrt{2}$. From $ad=0$ and $bc=0$, either $a=0$ or $d=0$; either case contradicts $ac=1/\sqrt{2}$ or $bd=1/\sqrt{2}$.
+\end{example}
+
+\begin{labbox}{12}{Entanglement Measurement}
+Use \texttt{/playground/entanglement} to estimate correlation functions for product versus Bell states. Confirm that product states factorize while Bell states violate certain classical bounds.
+\end{labbox}
+
+\section{Multi-Qubit Gates}
+\label{sec:multi-gates}
+
+\subsection{CNOT gate}
+
+The controlled-NOT (CNOT) acts on $\ket{a,b}$ as
+\begin{equation}
+\mathrm{CNOT}\ket{a,b}=\ket{a,a\oplus b}.
+\label{eq:cnot}
+\end{equation}
+Matrix form in the ordered basis $\ket{00},\ket{01},\ket{10},\ket{11}$:
+\begin{equation}
+\mathrm{CNOT}=\begin{bmatrix}
+1&0&0&0\\0&1&0&0\\0&0&0&1\\0&0&1&0
+\end{bmatrix}.
+\label{eq:cnot-matrix}
+\end{equation}
+CNOT is entangling: $H\otimes I$ followed by CNOT maps $\ket{00}\to\ket{\Phi^+}$.
+
+\subsection{SWAP and Toffoli}
+
+SWAP exchanges qubits: $\mathrm{SWAP}\ket{a,b}=\ket{b,a}$. The Toffoli (CCNOT) gate generalizes classical reversible AND to three qubits. Any classical reversible function embeds in quantum circuits using Toffoli and $X$ gates.
+
+\begin{example}
+Apply CNOT to $\frac{1}{\sqrt{2}}(\ket{00}+\ket{10})=\ket{+}\otimes\ket{0}$:
+\[
+\mathrm{CNOT}\ket{+}\otimes\ket{0}=\frac{1}{\sqrt{2}}(\ket{00}+\ket{11})=\ket{\Phi^+}.
+\]
+\end{example}
+
+\section{No-Cloning Theorem}
+\label{sec:no-cloning}
+
+\subsection{Statement and proof sketch}
+
+There is no unitary $U$ such that for all normalized $\ket{\psi}$,
+\begin{equation}
+U\ket{\psi}\otimes\ket{0}=\ket{\psi}\otimes\ket{\psi}.
+\label{eq:clone-attempt}
+\end{equation}
+\emph{Proof sketch.} Take $\braket{\phi|\psi}$ for two non-orthogonal states. Unitarity requires $\braket{\phi|\psi}=\braket{\phi|\psi}^2$, forcing $\braket{\phi|\psi}\in\{0,1\}$. Thus cloning works only for orthogonal states---not arbitrary unknown qubits.
+
+\subsection{Implications}
+
+Unknown quantum states cannot be duplicated. Error correction must encode information redundantly without copying (Chapter~\ref{ch:qec}). Teleportation transfers state information without cloning (Chapter~\ref{ch:protocols}).
+
+\section{Universal Gate Sets}
+\label{sec:universal}
+
+\subsection{Approximate universality}
+
+A finite gate set is \emph{universal} if any $n$-qubit unitary can be approximated to arbitrary precision using finitely many gates from the set. The set $\{H,T,\mathrm{CNOT}\}$ is universal for single-qubit rotations plus entanglement.
+
+\subsection{Solovay--Kitaev theorem}
+
+The Solovay--Kitaev theorem (stated without proof) guarantees efficient $\varepsilon$-approximations of arbitrary $\mathrm{SU}(2)$ gates using $H,T$ and their inverses, with gate count $O(\log^c(1/\varepsilon))$ for a constant $c$. Combined with CNOT, this yields universal quantum computation.
+
+\begin{example}
+Approximate $R_z(\pi/8)$ using $T=\mathrm{diag}(1,e^{i\pi/4})$ applied once. For finer angles, compose $T$ with $H$ and Clifford gates in Solovay--Kitaev compilations.
+\end{example}
+
+\section*{Exercises}
+\begin{enumerate}[label=\arabic*.]
+\item Write $\ket{1}\otimes\ket{+}$ and $\ket{-}\otimes\ket{-}$ in the four-bit computational basis.
+\item Show $\ket{\Psi^-}$ is entangled using the same coefficient-matching argument as $\ket{\Phi^+}$.
+\item Compute $\mathrm{CNOT}(\ket{+}\otimes\ket{+})$ step by step.
+\item Verify~\eqref{eq:cnot-matrix} by applying CNOT to each basis vector.
+\item Explain why cloning would simplify BB84 eavesdropping but is forbidden.
+\item How many parameters specify a general two-qubit pure state up to global phase? Compare with a product state.
+\item Express SWAP using three CNOT gates (draw or write the sequence).
+\item Why does $\{X,\mathrm{CNOT}\}$ alone fail to be universal for arbitrary single-qubit rotations?
+\end{enumerate}

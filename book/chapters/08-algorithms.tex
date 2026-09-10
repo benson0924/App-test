@@ -1,0 +1,216 @@
+\chapter{Quantum Algorithms}
+\label{ch:algorithms}
+
+Quantum algorithms exploit interference and phase to outperform classical strategies for \emph{specific} problems. This chapter develops the oracle model, Deutsch and Deutsch--Jozsa algorithms, Bernstein--Vazirani, Simon's algorithm, Grover search, the quantum Fourier transform, phase estimation, and Shor's factoring algorithm---with complexity comparisons throughout.
+
+\section{Oracles and Phase Kickback}
+\label{sec:oracle}
+
+\subsection{Standard oracle}
+
+A Boolean function $f:\{0,1\}^n\to\{0,1\}$ is accessed via a unitary
+\begin{equation}
+U_f\ket{x}\ket{y}=\ket{x}\ket{y\oplus f(x)}.
+\label{eq:standard-oracle}
+\end{equation}
+The second register is an \emph{ancilla}; XOR implements reversible function evaluation.
+
+\subsection{Phase oracle via kickback}
+
+Initialize the ancilla in $\ket{-}=\frac{1}{\sqrt{2}}(\ket{0}-\ket{1})$. Then
+\begin{equation}
+U_f\ket{x}\ket{-}=\ket{x}\frac{(-1)^{f(x)}\ket{0}-\ket{1}}{\sqrt{2}}=(-1)^{f(x)}\ket{x}\ket{-}.
+\label{eq:phase-kickback}
+\end{equation}
+Ignoring the unchanged ancilla defines the \emph{phase oracle}
+\begin{equation}
+O_f\ket{x}=(-1)^{f(x)}\ket{x}.
+\label{eq:phase-oracle}
+\end{equation}
+Phase kickback is the workhorse of many algorithms.
+
+\begin{labbox}{18}{Deutsch Algorithm}
+Implement \texttt{/playground/deutsch}: test constant versus balanced $f:\{0,1\}\to\{0,1\}$ in one query using phase kickback.
+\end{labbox}
+
+\begin{example}
+For $f(x)=x$ (balanced), $O_f\ket{0}=+\ket{0}$ and $O_f\ket{1}=-\ket{1}$: the oracle acts as $Z$ on the query qubit---detectable after $H$ interference.
+\end{example}
+
+\section{Deutsch and Deutsch--Jozsa}
+\label{sec:deutsch-jozsa}
+
+\subsection{Deutsch's problem}
+
+For $n=1$, distinguish \emph{constant} ($f(0)=f(1)$) from \emph{balanced} ($f(0)\neq f(1)$) functions. Classically, two queries may be needed in the worst case; Deutsch's algorithm uses one.
+
+\subsection{Circuit outline}
+
+Prepare $\ket{+}\ket{-}$, apply $O_f$, apply $H$ on the query qubit, measure. Constant $f$ yields $\ket{0}$ with certainty; balanced $f$ yields $\ket{1}$.
+
+\subsection{Deutsch--Jozsa generalization}
+
+For $f:\{0,1\}^n\to\{0,1\}$ promised constant or balanced, classical worst-case queries are $2^{n-1}+1$; Deutsch--Jozsa uses one query with $n$ qubits plus ancilla.
+
+\begin{labbox}{19}{Deutsch--Jozsa}
+Explore \texttt{/playground/deutsch-jozsa} for $n=2,3$. Verify constant functions never produce all-ones parity pattern on the query register.
+\end{labbox}
+
+\begin{example}
+The four $n=1$ functions: $f_0(x)=0$, $f_1(x)=1$ (constant); $f_2(x)=x$, $f_3(x)=1-x$ (balanced). Deutsch distinguishes the two classes in one shot.
+\end{example}
+
+\section{Bernstein--Vazirani}
+\label{sec:bv}
+
+\subsection{Hidden string problem}
+
+Given $f(x)=s\cdot x \bmod 2$ (inner product mod~2) for hidden $s\in\{0,1\}^n$, find $s$. Classically, $n$ queries are required (one per bit); Bernstein--Vazirani uses one query after preparing $\ket{+}^{\otimes n}$ and applying $O_f$.
+
+\subsection{Query complexity}
+
+The algorithm demonstrates an exponential separation in query complexity for this structured promise problem---a template for Simon and Shor.
+
+\begin{labbox}{20}{Bernstein--Vazirani}
+At \texttt{/playground/bernstein-vazirani}, choose random $s$ and recover it from measurement outcomes in the $Z$ basis after $H^{\otimes n}$.
+\end{labbox}
+
+\section{Simon's Algorithm}
+\label{sec:simon}
+
+\subsection{Periodicity promise}
+
+For $f:\{0,1\}^n\to\{0,1\}^n$ with hidden period $s\neq 0$ such that $f(x)=f(x\oplus s)$, find $s$. Classical algorithms need exponential queries; Simon needs $O(n)$ quantum queries plus classical post-processing.
+
+\subsection{Linear algebra over $\mathbb{F}_2$}
+
+Measurement outcomes $y$ satisfy $y\cdot s = 0 \pmod 2$. Collecting $\approx n$ independent equations yields $s$ by Gaussian elimination over $\mathbb{F}_2$.
+
+\begin{labbox}{21}{Simon's Algorithm}
+Simulate \texttt{/playground/simon}: observe random $y$ strings orthogonal to $s$ and solve for $s$ classically.
+\end{labbox}
+
+\begin{example}
+If $s=110$ and measured $y_1=101$, $y_2=011$, then $y_1\cdot s=1+0+0=1\neq 0$---discard dependent samples until independent constraints determine $s$.
+\end{example}
+
+\section{Grover Search}
+\label{sec:grover}
+
+\subsection{Unstructured search}
+
+Search space size $N=2^n$; exactly one marked state $\ket{w}$. Classically, $\Theta(N)$ queries are needed in the worst case; Grover achieves $O(\sqrt{N})$ oracle queries \cite{grover1996}.
+
+\subsection{Grover iterate}
+
+Define oracle $O_w=I-2\ket{w}\bra{w}$ and diffusion operator $D=2\ket{s}\bra{s}-I$ where $\ket{s}=\frac{1}{\sqrt{N}}\sum_x\ket{x}$. The iterate $G=DO_w$ rotates the amplitude vector toward $\ket{w}$ by angle $\approx 2\arcsin(1/\sqrt{N})$ per application.
+
+\subsection{Optimal iteration count}
+
+Approximately
+\begin{equation}
+k\approx \left\lfloor\frac{\pi}{4}\sqrt{N}\right\rfloor
+\label{eq:grover-iterations}
+\end{equation}
+iterations maximize success probability.
+
+\begin{labbox}{22}{Grover Search}
+Run \texttt{/playground/grover} with $N=8$, marked $\ket{011}$. Compare $k=2$ versus $k=5$ success rates with~\eqref{eq:grover-iterations}.
+\end{labbox}
+
+\begin{example}
+For $N=8$, $\lfloor\frac{\pi}{4}\sqrt{8}\rfloor=\lfloor 2.22\rfloor=2$. After two Grover iterations starting from uniform superposition, $P(\ket{w})\approx 1$ for the unique marked state.
+\end{example}
+
+\section{Quantum Fourier Transform}
+\label{sec:qft}
+
+\subsection{Definition}
+
+On $N=2^n$ basis states,
+\begin{equation}
+\mathrm{QFT}_N\ket{x}=\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1} e^{2\pi i xk/N}\ket{k}.
+\label{eq:qft}
+\end{equation}
+The QFT is unitary and efficiently implementable with $O(n^2)$ gates, but amplitudes are \emph{not} all readable at once---measurement samples one outcome.
+
+\begin{labbox}{23}{QFT Visualizer}
+Inspect \texttt{/playground/qft} for $n=3$: apply QFT to $\ket{001}$ and compare magnitude patterns before measurement.
+\end{labbox}
+
+\section{Quantum Phase Estimation}
+\label{sec:qpe}
+
+\subsection{Problem}
+
+Given unitary $U$ and eigenstate $\ket{u}$ with $U\ket{u}=e^{2\pi i\phi}\ket{u}$, estimate $\phi$ to $m$ bits using $m$ ancilla qubits and controlled powers $U^{2^j}$.
+
+\subsection{Binary fraction expansion}
+
+Phase estimation implements the QFT on controlled-$U$ outcomes, yielding an $m$-bit approximation to $\phi$. Shor's algorithm uses QPE on modular exponentiation unitaries.
+
+\begin{labbox}{24}{Phase Estimation}
+Use \texttt{/playground/phase-estimation} with $U=R_z$ on an eigenstate and $m=3$. Compare readout to $\phi=1/3\approx 0.333\ldots$ in binary.
+\end{labbox}
+
+\begin{example}
+With $m=3$, binary digits approximate $\phi=1/3=0.\overline{010}_2$. Rounding errors arise from finite $m$; repeat with larger $m$ for precision.
+\end{example}
+
+\section{Shor's Factoring Algorithm}
+\label{sec:shor}
+
+\subsection{Reduction to period finding}
+
+Factoring $N$ reduces to finding period $r$ of $f(x)=a^x\bmod N$ for random $a$ coprime to $N$. If $r$ is even and $a^{r/2}\not\equiv -1\pmod N$, then $\gcd(a^{r/2}\pm 1,N)$ yields nontrivial factors.
+
+\subsection{Example $N=15$, $a=2$}
+
+The period is $r=4$ since $2^4=16\equiv 1\pmod{15}$. Then
+\[
+\gcd(2^2+1,15)=\gcd(5,15)=5,\qquad
+\gcd(2^2-1,15)=\gcd(3,15)=3.
+\]
+Quantum speedup lies in finding $r$ via QPE; remaining steps are classical \cite{shor1994}.
+
+\begin{labbox}{25}{Period Explorer}
+Explore \texttt{/playground/period-finding} for modular exponentiation and period $r$ of $f(x)=a^x\bmod N$.
+\end{labbox}
+
+\begin{labbox}{26}{Shor Demo}
+Complete the factoring pipeline at \texttt{/playground/shor} using QPE-derived periods and classical $\gcd$ steps.
+\end{labbox}
+
+\subsection{Complexity summary}
+
+Table~\ref{tab:algo-complexity} collects query/time scalings covered in this chapter; see Appendix~C for a fuller reference.
+
+\begin{table}[H]
+\centering
+\caption{Representative query complexity advantages (promise problems).}
+\label{tab:algo-complexity}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Problem & Classical (worst case) & Quantum \\
+\midrule
+Deutsch ($n=1$) & 2 queries & 1 \\
+Deutsch--Jozsa & $2^{n-1}+1$ & 1 \\
+Bernstein--Vazirani & $n$ & 1 \\
+Simon & $O(2^{n/2})$ & $O(n)$ \\
+Grover & $O(N)$ & $O(\sqrt{N})$ \\
+Factoring (Shor) & no known poly-time & poly-time (ideal) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{Exercises}
+\begin{enumerate}[label=\arabic*.]
+\item Which of the four $n=1$ Boolean functions are constant versus balanced?
+\item Run Grover on $N=8$ with marked $\ket{011}$; how many iterations does~\eqref{eq:grover-iterations} predict?
+\item For QPE with $m=3$, what binary fraction approximates $\phi=1/3$?
+\item Construct a phase oracle for $f(x)=1$ (constant) and show Deutsch outputs $\ket{0}$.
+\item Why does Grover not achieve exponential speedup for NP-complete search?
+\item Write the QFT matrix for $N=4$ and verify unitarity.
+\item For Simon, why are measured $y$ vectors uniform over $\{0,1\}^n$ before post-processing?
+\item Outline Shor's classical post-processing after obtaining period $r$.
+\end{enumerate}
