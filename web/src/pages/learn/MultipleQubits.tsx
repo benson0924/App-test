@@ -457,6 +457,16 @@ export default function MultipleQubits() {
           </p>
         </Expandable>
 
+        <Expandable title="Partial measurement collapses the joint state">
+          <p>
+            Measuring qubit 0 of |Φ⁺⟩ yields |0⟩ on qubit 0 with probability ½, leaving the pair
+            in |00⟩; or |1⟩ with probability ½, leaving |11⟩. The unmeasured qubit is now in a
+            definite state correlated with the outcome — but this correlation cannot be detected
+            until the parties compare results using a classical channel.
+          </p>
+          <Katex display>{`|\\Phi^+\\rangle \\xrightarrow{\\text{measure } q_0} |00\\rangle \\text{ or } |11\\rangle`}</Katex>
+        </Expandable>
+
         <LabLink id="entanglement" title="Entanglement Measurement Lab" />
         <LabLink id="bell-states" title="Bell State Generator" />
       </Section>

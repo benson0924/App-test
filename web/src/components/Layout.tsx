@@ -39,16 +39,23 @@ export default function Layout() {
           </button>
           {playExpanded && (
             <>
-              <NavLink to="/playground" className={({ isActive }) => isActive ? 'nav-item nested active' : 'nav-item nested'}>
+              <NavLink to="/playground" end className={({ isActive }) => isActive ? 'nav-item nested active' : 'nav-item nested'}>
                 All Labs
               </NavLink>
               <NavLink to="/playground/circuit-builder" className={({ isActive }) => isActive ? 'nav-item nested active' : 'nav-item nested'}>
                 Circuit Builder
               </NavLink>
-              {labs.slice(0, 8).map((lab) => (
-                <NavLink key={lab.id} to={`/playground/${lab.id}`} className={({ isActive }) => isActive ? 'nav-item nested active' : 'nav-item nested'}>
-                  {lab.title}
-                </NavLink>
+              {Array.from(new Set(labs.map((l) => l.chapter))).map((chapter) => (
+                <div key={chapter}>
+                  <span className="nav-item nested" style={{ fontWeight: 600, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--text-muted)', paddingTop: '0.75rem' }}>
+                    {chapter}
+                  </span>
+                  {labs.filter((l) => l.chapter === chapter).map((lab) => (
+                    <NavLink key={lab.id} to={`/playground/${lab.id}`} className={({ isActive }) => isActive ? 'nav-item nested active' : 'nav-item nested'}>
+                      {lab.title}
+                    </NavLink>
+                  ))}
+                </div>
               ))}
             </>
           )}

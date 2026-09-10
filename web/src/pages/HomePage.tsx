@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
-import { learnNav } from '@/data/navigation';
+import { learnNav, labs } from '@/data/navigation';
+
+const chapterLinks = learnNav.map((ch) => ({ title: ch.title, path: ch.path }));
 
 const pathOverview = [
   { phase: 'Foundation', chapters: ['Classical Computing', 'Linear Algebra', 'One Qubit'], color: 'var(--accent)' },
@@ -88,6 +90,32 @@ export default function HomePage() {
           <Link to="/practice" className="btn">Practice Problems</Link>
         </div>
       </div>
+
+      <section className="card" style={{ marginTop: '1.5rem' }}>
+        <h2 style={{ marginTop: 0 }}>All Chapters</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0.75rem' }}>
+          {chapterLinks.map((ch) => (
+            <Link key={ch.path} to={ch.path} className="btn" style={{ textDecoration: 'none', justifyContent: 'flex-start' }}>
+              {ch.title}
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="card" style={{ marginTop: '1.5rem' }}>
+        <h2 style={{ marginTop: 0 }}>Featured Labs</h2>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+          {['bloch-sphere', 'circuit-builder', 'teleportation', 'grover', 'bb84', 'shor'].map((id) => {
+            const lab = labs.find((l) => l.id === id);
+            if (!lab) return null;
+            return (
+              <Link key={id} to={id === 'circuit-builder' ? '/playground/circuit-builder' : `/playground/${id}`} className="btn">
+                {lab.title}
+              </Link>
+            );
+          })}
+        </div>
+      </section>
 
       <aside className="lab-panel" style={{ marginTop: '2rem' }}>
         <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-muted)' }}>

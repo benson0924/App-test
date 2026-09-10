@@ -5,6 +5,7 @@ import Checkpoint from '@/components/Checkpoint';
 import WorkedExample from '@/components/WorkedExample';
 import Expandable from '@/components/Expandable';
 import Section from '@/components/Section';
+import ChapterOutline, { LabLink, MisconceptionAlert, PracticeBlock } from '@/components/ChapterHelpers';
 import ComplexPlaneLab from '@/components/labs/ComplexPlaneLab';
 import QubitStateLab from '@/components/labs/QubitStateLab';
 import MeasurementLab from '@/components/labs/MeasurementLab';
@@ -16,137 +17,199 @@ import {
   normalize,
   singleQubitMeasurementProbabilities,
   fidelity,
+  blochCoordinates,
+  fromBloch,
+  type MeasurementBasis,
 } from 'quantum-core';
 
-function LabLink({ id, title }: { id: string; title: string }) {
+const OUTLINE = [
+  { id: 'what-is-a-qubit', title: '2.1 What Is a Qubit?' },
+  { id: 'complex-amplitudes', title: '2.2 Complex Amplitudes' },
+  { id: 'measurement', title: '2.3 Measurement' },
+  { id: 'other-bases', title: '2.4 Other Measurement Bases' },
+  { id: 'global-relative-phase', title: '2.5 Global and Relative Phase' },
+  { id: 'bloch-sphere', title: '2.6 The Bloch Sphere' },
+  { id: 'one-qubit-gates', title: '2.7 One-Qubit Gates' },
+];
+
+function BasisProbabilityPanel() {
+  const [alphaRe, setAlphaRe] = useState(0.6);
+  const [betaRe, setBetaRe] = useState(0.4);
+  const [betaIm, setBetaIm] = useState(0);
+  const [basis, setBasis] = useState<MeasurementBasis>('Z');
+
+  const state = useMemo(() => {
+    try {
+      return normalize(singleQubitState(
+        C.scale(alphaRe, C.one()),
+        { re: betaRe, im: betaIm }
+      ));
+    } catch {
+      return null;
+    }
+  }, [alphaRe, betaRe, betaIm]);
+
+  const probs = state
+    ? singleQubitMeasurementProbabilities(state.amplitudes[0], state.amplitudes[1], basis)
+    : null;
+
   return (
-    <p style={{ marginTop: '0.75rem' }}>
-      <Link to={`/playground/${id}`} className="btn btn-primary" style={{ textDecoration: 'none' }}>
-        Open full lab: {title} →
-      </Link>
-    </p>
+    <div className="lab-panel">
+      <h3>Basis probability calculator</h3>
+      <div className="grid-2">
+        <div>
+          <label>Re(α): {alphaRe.toFixed(2)}</label>
+          <input type="range" min={0} max={1} step={0.01} value={alphaRe} onChange={(e) => setAlphaRe(Number(e.target.value))} />
+          <label>Re(β): {betaRe.toFixed(2)}</label>
+          <input type="range" min={-1} max={1} step={0.01} value={betaRe} onChange={(e) => setBetaRe(Number(e.target.value))} />
+          <label>Im(β): {betaIm.toFixed(2)}</label>
+          <input type="range" min={-1} max={1} step={0.01} value={betaIm} onChange={(e) => setBetaIm(Number(e.target.value))} />
+        </div>
+        <div>
+          <label>Measurement basis</label>
+          <div className="btn-group">
+            {(['Z', 'X', 'Y'] as const).map((b) => (
+              <button key={b} className={`btn ${basis === b ? 'btn-primary' : ''}`} onClick={() => setBasis(b)}>{b}</button>
+            ))}
+          </div>
+          {state && probs && (
+            <table className="data-table" style={{ marginTop: '0.75rem' }}>
+              <thead><tr><th>Outcome</th><th>Probability</th></tr></thead>
+              <tbody>
+                {Object.entries(probs).map(([k, p]) => (
+                  <tr key={k}><td>|{k}⟩</td><td>{(p * 100).toFixed(1)}%</td></tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </div>
+      {state && (
+        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: 0 }}>
+          |ψ⟩ = {C.toString(state.amplitudes[0])}|0⟩ + {C.toString(state.amplitudes[1])}|1⟩
+        </p>
+      )}
+    </div>
+  );
+}
+
+function RelativePhaseDemo() {
+  const [phi, setPhi] = useState(0);
+  const plus = useMemo(() => normalize(singleQubitState(
+    C.scale(1 / Math.sqrt(2), C.one()),
+    C.scale(1 / Math.sqrt(2), C.one())
+  )), []);
+  const shifted = useMemo(() => normalize(singleQubitState(
+    C.scale(1 / Math.sqrt(2), C.one()),
+    C.scale(1 / Math.sqrt(2), C.exp(phi))
+  )), [phi]);
+
+  const zPlus = singleQubitMeasurementProbabilities(plus.amplitudes[0], plus.amplitudes[1], 'Z');
+  const zShift = singleQubitMeasurementProbabilities(shifted.amplitudes[0], shifted.amplitudes[1], 'Z');
+  const xPlus = singleQubitMeasurementProbabilities(plus.amplitudes[0], plus.amplitudes[1], 'X');
+  const xShift = singleQubitMeasurementProbabilities(shifted.amplitudes[0], shifted.amplitudes[1], 'X');
+  const blochPlus = blochCoordinates(plus);
+  const blochShift = blochCoordinates(shifted);
+
+  return (
+    <div className="lab-panel">
+      <h3>Relative phase slider</h3>
+      <label>φ (radians): {phi.toFixed(2)}</label>
+      <input type="range" min={0} max={2 * Math.PI} step={0.05} value={phi} onChange={(e) => setPhi(Number(e.target.value))} />
+      <p>|ψ⟩ = (|0⟩ + e<sup>iφ</sup>|1⟩)/√2</p>
+      <div className="grid-2">
+        <div>
+          <strong>Z basis</strong>
+          <p style={{ fontSize: '0.85rem', margin: '0.25rem 0' }}>
+            P(0): {(zPlus['0'] * 100).toFixed(0)}% vs {(zShift['0'] * 100).toFixed(0)}% — unchanged
+          </p>
+        </div>
+        <div>
+          <strong>X basis</strong>
+          <p style={{ fontSize: '0.85rem', margin: '0.25rem 0' }}>
+            P(+): {(xPlus['+'] * 100).toFixed(0)}% vs {(xShift['+'] * 100).toFixed(0)}% — changes with φ
+          </p>
+        </div>
+      </div>
+      <p style={{ fontSize: '0.85rem', marginBottom: 0 }}>
+        Bloch y: {blochPlus.y.toFixed(2)} → {blochShift.y.toFixed(2)} as φ varies
+      </p>
+    </div>
   );
 }
 
 export default function OneQubit() {
-  const [demoAlpha, setDemoAlpha] = useState(0.6);
-  const [demoBeta, setDemoBeta] = useState(0.8);
-
-  const demoState = useMemo(() => {
-    const raw = singleQubitState(C.scale(demoAlpha, C.one()), C.scale(demoBeta, C.one()));
-    try {
-      return normalize(raw);
-    } catch {
-      return null;
-    }
-  }, [demoAlpha, demoBeta]);
-
-  const demoProbs = demoState
-    ? singleQubitMeasurementProbabilities(demoState.amplitudes[0], demoState.amplitudes[1], 'Z')
-    : null;
-
-  const plusState = useMemo(() => normalize(singleQubitState(
-    C.scale(1 / Math.sqrt(2), C.one()),
-    C.scale(1 / Math.sqrt(2), C.one())
-  )), []);
-
-  const phaseShifted = useMemo(() => normalize(singleQubitState(
-    C.one(),
-    C.i()
-  )), []);
-
-  const phaseFidelity = fidelity(plusState, phaseShifted);
-
   return (
     <article>
-      <h1>Chapter 2: One Qubit</h1>
+      <h1>Chapter 2: The Qubit</h1>
       <p>
-        A single qubit is the simplest quantum system—and the foundation for everything that follows.
-        In this chapter we build intuition for amplitudes, measurement, alternative bases, phase,
-        the Bloch sphere, and the elementary gates that manipulate one qubit.
+        A qubit is the fundamental unit of quantum information. Unlike a classical bit, it is described
+        by complex amplitudes that can interfere. This chapter develops the language of superposition,
+        measurement, alternative bases, phase, the Bloch sphere, and elementary gates — everything you
+        need before combining qubits into larger systems.
       </p>
+
+      <ChapterOutline items={OUTLINE} />
+
+      <MisconceptionAlert
+        myth="A qubit is simply both 0 and 1 at the same time."
+        correction="A qubit is a normalized vector in ℂ². Measurement returns one classical outcome with probabilities |α|² and |β|². The amplitudes encode phase information that affects interference and non-Z measurements."
+      />
 
       <Section id="what-is-a-qubit" title="2.1 What Is a Qubit?">
         <p>
-          A classical bit is always in one of two definite states: 0 or 1. A <strong>qubit</strong> (quantum bit)
-          generalizes this idea. While we still obtain classical outcomes 0 or 1 when we measure, the qubit
-          can exist in a <em>superposition</em>—a linear combination of both basis states simultaneously.
+          A classical bit lives in the set {'{0, 1}'}. A <strong>qubit</strong> lives in a two-dimensional
+          complex vector space with orthonormal basis |0⟩ and |1⟩. The general pure state is a
+          superposition:
         </p>
 
-        <Katex display>{`|\\psi\\rangle = \\alpha|0\\rangle + \\beta|1\\rangle`}</Katex>
+        <Katex display>{`|\\psi\\rangle = \\alpha|0\\rangle + \\beta|1\\rangle, \\quad \\alpha,\\beta \\in \\mathbb{C}`}</Katex>
+        <Katex display>{`|\\alpha|^2 + |\\beta|^2 = 1`}</Katex>
 
         <p>
-          Here |0⟩ and |1⟩ are orthonormal basis vectors, and α and β are complex amplitudes.
-          The ket notation |ψ⟩ denotes the state vector living in a two-dimensional complex Hilbert space ℂ².
+          Normalization ensures total measurement probability equals 1. The global phase e<sup>iγ</sup>|ψ⟩
+          is unobservable, but the relative phase between α and β is physically meaningful in non-Z bases.
         </p>
 
         <WorkedExample
-          title="Writing a superposition"
+          title="Equal superposition |+⟩"
           steps={[
-            { label: 'Start with equal weights on |0⟩ and |1⟩.', latex: '|\\psi\\rangle = \\tfrac{1}{\\sqrt{2}}|0\\rangle + \\tfrac{1}{\\sqrt{2}}|1\\rangle' },
-            { label: 'This is the |+⟩ state—a uniform superposition in the computational basis.', latex: '|+\\rangle = H|0\\rangle' },
-            { label: 'Measuring in the Z basis gives 0 or 1 each with probability 50%.', latex: 'P(0) = P(1) = \\tfrac{1}{2}' },
+            { label: 'Choose α = β = 1/√2.', latex: '|\\psi\\rangle = \\tfrac{1}{\\sqrt{2}}|0\\rangle + \\tfrac{1}{\\sqrt{2}}|1\\rangle' },
+            { label: 'Check normalization: 1/2 + 1/2 = 1.', latex: '|\\alpha|^2 + |\\beta|^2 = 1' },
+            { label: 'This state is H|0⟩ = |+⟩.', latex: '|+\\rangle = H|0\\rangle' },
+            { label: 'Z measurement: P(0) = P(1) = 1/2.', latex: 'P(0) = P(1) = \\tfrac{1}{2}' },
           ]}
         />
 
-        <Expandable title="Bit vs qubit — key differences">
-          <ul>
-            <li>A bit stores exactly one classical value; a qubit stores amplitudes for both outcomes.</li>
-            <li>Reading a bit is non-destructive; measuring a qubit generally disturbs the state.</li>
-            <li>Two qubits require four complex amplitudes (|00⟩, |01⟩, |10⟩, |11⟩), not two independent bits.</li>
-          </ul>
+        <Expandable title="Why two complex numbers?">
+          <p>
+            Two real numbers would not suffice: quantum mechanics requires complex Hilbert spaces so that
+            unitary evolution can implement rotations and interference. The Born rule uses |α|², but
+            gates combine amplitudes with complex phases before squaring.
+          </p>
         </Expandable>
 
-        <Checkpoint
-          question="How many complex amplitudes describe a single qubit?"
-          answer="2"
-          hint="Count the basis states |0⟩ and |1⟩."
-        />
-
+        <Checkpoint question="How many real parameters describe a pure qubit, ignoring global phase?" answer="2" hint="Think Bloch sphere angles θ and φ." />
         <LabLink id="qubit-state" title="Single-Qubit State Explorer" />
       </Section>
 
       <Section id="complex-amplitudes" title="2.2 Complex Amplitudes">
         <p>
-          Amplitudes are complex numbers. Writing z = a + bi (rectangular form) or z = re<sup>iφ</sup> (polar form)
-          makes their magnitude and phase explicit. Only the <em>relative</em> phase between α and β affects
-          physical predictions—not the overall phase of the state.
+          Write z = a + bi with conjugate z* = a − bi, magnitude |z| = √(a² + b²), and polar form
+          z = re<sup>iφ</sup>. Euler's identity e<sup>iφ</sup> = cos φ + i sin φ connects rotation to phase.
         </p>
 
-        <Katex display>{`\\alpha = r_\\alpha e^{i\\phi_\\alpha}, \\quad \\beta = r_\\beta e^{i\\phi_\\beta}`}</Katex>
+        <Katex display>{`|z|^2 = z^* z = a^2 + b^2`}</Katex>
+        <Katex display>{`z = r e^{i\\phi}`}</Katex>
 
-        <p>
-          Normalization requires |α|² + |β|² = 1. Probabilities come from squared magnitudes:
-          P(0) = |α|² and P(1) = |β|².
-        </p>
-
-        <div className="lab-panel">
-          <h3>Quick amplitude demo</h3>
-          <label>Real part scale for α: {demoAlpha.toFixed(2)}</label>
-          <input
-            type="range"
-            min={0}
-            max={1}
-            step={0.01}
-            value={demoAlpha}
-            onChange={(e) => setDemoAlpha(Number(e.target.value))}
-          />
-          <label>Real part scale for β: {demoBeta.toFixed(2)}</label>
-          <input
-            type="range"
-            min={0}
-            max={1}
-            step={0.01}
-            value={demoBeta}
-            onChange={(e) => setDemoBeta(Number(e.target.value))}
-          />
-          {demoState && demoProbs && (
-            <p>
-              Normalized P(|0⟩) = {(demoProbs['0'] * 100).toFixed(1)}%,
-              P(|1⟩) = {(demoProbs['1'] * 100).toFixed(1)}%
-            </p>
-          )}
-        </div>
+        <WorkedExample
+          title="Amplitude (2 + i)/√13"
+          steps={[
+            { label: 'Identify a = 2/√13, b = 1/√13.', latex: 'z = \\tfrac{2}{\\sqrt{13}} + \\tfrac{i}{\\sqrt{13}}' },
+            { label: 'Magnitude squared: |z|² = 4/13 + 1/13 = 5/13... wait, check: (4+1)/13 = 5/13 for single amplitude.' },
+            { label: 'For a full state, both |α|² and |β|² must sum to 1.', latex: '|\\alpha|^2 + |\\beta|^2 = 1' },
+          ]}
+        />
 
         <ComplexPlaneLab />
         <LabLink id="complex-plane" title="Complex Number Explorer" />
@@ -154,107 +217,98 @@ export default function OneQubit() {
 
       <Section id="measurement" title="2.3 Measurement">
         <p>
-          Measurement in the computational (Z) basis projects the state onto |0⟩ or |1⟩.
-          The Born rule gives outcome probabilities from amplitude magnitudes squared.
-          After measurement, the state collapses to the observed outcome.
+          Measuring in the Z basis yields outcome 0 with probability P(0) = |α|² and outcome 1 with
+          P(1) = |β|². After observing 0, the state collapses to |0⟩; after 1, to |1⟩. This is the
+          Born rule for projective measurement.
         </p>
 
         <Katex display>{`P(0) = |\\langle 0|\\psi\\rangle|^2 = |\\alpha|^2, \\quad P(1) = |\\beta|^2`}</Katex>
 
         <WorkedExample
-          title="Measuring a biased superposition"
+          title="State ( √3/2 |0⟩ + 1/2 |1⟩ )"
           steps={[
-            { label: 'Consider |ψ⟩ = 0.8|0⟩ + 0.6|1⟩ (already normalized since 0.64 + 0.36 = 1).', latex: '|\\psi\\rangle = 0.8|0\\rangle + 0.6|1\\rangle' },
-            { label: 'Compute P(0).', latex: 'P(0) = 0.8^2 = 0.64' },
-            { label: 'If the outcome is 1, the post-measurement state is |1⟩.', latex: '|\\psi\\rangle \\to |1\\rangle' },
+            { label: 'Identify α = √3/2, β = 1/2.', latex: '|\\psi\\rangle = \\tfrac{\\sqrt{3}}{2}|0\\rangle + \\tfrac{1}{2}|1\\rangle' },
+            { label: 'P(0) = (√3/2)² = 3/4.', latex: 'P(0) = \\tfrac{3}{4}' },
+            { label: 'P(1) = (1/2)² = 1/4.', latex: 'P(1) = \\tfrac{1}{4}' },
+            { label: 'Check: 3/4 + 1/4 = 1.', latex: 'P(0)+P(1)=1' },
           ]}
         />
 
-        <Checkpoint
-          question="If |α|² = 0.25, what is P(1)?"
-          answer="0.75"
-          hint="Probabilities must sum to 1."
-        />
+        <Expandable title="Full projection calculation for P(0)">
+          <Katex display>{`\\langle 0|\\psi\\rangle = \\alpha, \\quad P(0) = |\\alpha|^2`}</Katex>
+          <p>Similarly ⟨1|ψ⟩ = β. The projector |0⟩⟨0| gives P(0) = ⟨ψ|0⟩⟨0|ψ⟩ = |α|².</p>
+        </Expandable>
 
+        <Checkpoint question="After measuring |ψ⟩ and obtaining 1, what is the post-measurement state?" answer="|1⟩" />
         <MeasurementLab />
         <LabLink id="measurement" title="Measurement Simulator" />
       </Section>
 
       <Section id="other-bases" title="2.4 Other Measurement Bases">
         <p>
-          The computational basis {'{|0⟩, |1⟩}'} is not the only choice. The X basis uses
-          |+⟩ = (|0⟩ + |1⟩)/√2 and |−⟩ = (|0⟩ − |1⟩)/√2. The Y basis uses |i⟩ and |−i⟩.
-          Measuring in a different basis corresponds to first rotating the state, then measuring in Z.
+          The X basis uses |+⟩ = (|0⟩ + |1⟩)/√2 and |−⟩ = (|0⟩ − |1⟩)/√2. The Y basis uses
+          |i⟩ = (|0⟩ + i|1⟩)/√2 and |−i⟩ = (|0⟩ − i|1⟩)/√2. Rewrite any state in the chosen basis
+          and square coefficient magnitudes for probabilities.
         </p>
 
-        <Katex display>{`|+\\rangle = \\tfrac{1}{\\sqrt{2}}(|0\\rangle + |1\\rangle), \\quad |-\\rangle = \\tfrac{1}{\\sqrt{2}}(|0\\rangle - |1\\rangle)`}</Katex>
+        <Katex display>{`|0\\rangle = \\tfrac{|+\\rangle + |-\\rangle}{\\sqrt{2}}, \\quad |1\\rangle = \\tfrac{|+\\rangle - |-\\rangle}{\\sqrt{2}}`}</Katex>
+        <Katex display>{`P(+) = \\left|\\tfrac{\\alpha + \\beta}{\\sqrt{2}}\\right|^2, \\quad P(-) = \\left|\\tfrac{\\alpha - \\beta}{\\sqrt{2}}\\right|^2`}</Katex>
 
-        <p>
-          The Hadamard gate H swaps between Z and X bases: H|0⟩ = |+⟩ and H|1⟩ = |−⟩.
-          Use the measurement lab below with the basis selector to compare outcome statistics.
-        </p>
+        <WorkedExample
+          title="Measuring |−⟩ in the X basis"
+          steps={[
+            { label: '|−⟩ is already an X-basis eigenstate.', latex: '|\\psi\\rangle = |-\\rangle' },
+            { label: 'Therefore P(−) = 1 with certainty.', latex: 'P(-) = 1' },
+            { label: 'In Z basis, P(0) = P(1) = 1/2 — same as |+⟩.', latex: 'P(0) = P(1) = \\tfrac{1}{2}' },
+          ]}
+        />
 
-        <Expandable title="Why multiple bases matter">
-          <p>
-            Quantum algorithms exploit interference in carefully chosen bases. Grover's diffusion operator
-            reflects about the average; quantum Fourier transforms move between computational and Fourier bases.
-            Understanding basis change is essential for reading circuits.
-          </p>
-        </Expandable>
-
+        <BasisProbabilityPanel />
         <LabLink id="measurement" title="Measurement Simulator (basis selector)" />
       </Section>
 
       <Section id="global-relative-phase" title="2.5 Global and Relative Phase">
         <p>
-          Multiplying an entire state by a complex phase e<sup>iγ</sup> produces a physically equivalent state.
-          This <strong>global phase</strong> cannot be observed. What <em>does</em> matter is the
-          <strong> relative phase</strong> between |0⟩ and |1⟩ components—it affects interference and
-          measurement statistics in non-Z bases.
+          Multiplying |ψ⟩ by e<sup>iγ</sup> does not change any measurement probability in any basis.
+          Relative phase between |0⟩ and |1⟩ components <em>does</em> matter: |+⟩ and (|0⟩ + i|1⟩)/√2
+          share Z statistics but differ in X and Y statistics and on the Bloch sphere.
         </p>
 
-        <Katex display>{`|\\psi\\rangle \\equiv e^{i\\gamma}|\\psi\\rangle \\quad \\text{(same physics)}`}</Katex>
-        <Katex display>{`|\\psi_1\\rangle = \\tfrac{1}{\\sqrt{2}}(|0\\rangle + |1\\rangle), \\quad |\\psi_2\\rangle = \\tfrac{1}{\\sqrt{2}}(|0\\rangle + i|1\\rangle)`}</Katex>
+        <Katex display>{`|\\psi\\rangle \\sim e^{i\\gamma}|\\psi\\rangle`}</Katex>
 
-        <div className="card">
-          <p>
-            Fidelity between |+⟩ and (|0⟩ + i|1⟩)/√2: <strong>{phaseFidelity.toFixed(4)}</strong>
-          </p>
-          <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-            Same Z-basis probabilities, different relative phase → different X/Y statistics and Bloch position.
-          </p>
-        </div>
+        <RelativePhaseDemo />
 
-        <Checkpoint
-          question="Does global phase change measurement probabilities in the Z basis?"
-          answer="no"
-          hint="Probabilities depend on |α|² and |β|², which are unchanged by an overall phase factor."
-        />
-
+        <Checkpoint question="Do |+⟩ and |−⟩ have the same Z-basis probabilities?" answer="yes" hint="Both are uniform superpositions with equal magnitude." />
         <QubitStateLab />
         <LabLink id="qubit-state" title="Single-Qubit State Explorer" />
       </Section>
 
       <Section id="bloch-sphere" title="2.6 The Bloch Sphere">
         <p>
-          Every pure single-qubit state (up to global phase) corresponds to a point on the unit sphere.
-          The north pole is |0⟩, the south pole is |1⟩, and equatorial points are equal superpositions
-          with different relative phases.
+          Every pure qubit (up to global phase) maps to a point on the unit sphere with
+          θ ∈ [0, π] and φ ∈ [0, 2π):
         </p>
 
         <Katex display>{`|\\psi\\rangle = \\cos\\tfrac{\\theta}{2}|0\\rangle + e^{i\\phi}\\sin\\tfrac{\\theta}{2}|1\\rangle`}</Katex>
+        <Katex display>{`x = \\sin\\theta\\cos\\phi, \\quad y = \\sin\\theta\\sin\\phi, \\quad z = \\cos\\theta`}</Katex>
 
-        <p>
-          Bloch coordinates (x, y, z) relate to expectation values of Pauli operators:
-          x = ⟨X⟩, y = ⟨Y⟩, z = ⟨Z⟩. Rotations on the sphere are implemented by single-qubit gates.
-        </p>
+        <table className="data-table">
+          <thead><tr><th>State</th><th>Bloch (x, y, z)</th></tr></thead>
+          <tbody>
+            <tr><td>|0⟩</td><td>(0, 0, 1)</td></tr>
+            <tr><td>|1⟩</td><td>(0, 0, −1)</td></tr>
+            <tr><td>|+⟩</td><td>(1, 0, 0)</td></tr>
+            <tr><td>|−⟩</td><td>(−1, 0, 0)</td></tr>
+            <tr><td>|i⟩</td><td>(0, 1, 0)</td></tr>
+            <tr><td>|−i⟩</td><td>(0, −1, 0)</td></tr>
+          </tbody>
+        </table>
 
         <WorkedExample
-          title="From state to Bloch coordinates"
+          title="|0⟩ on the Bloch sphere"
           steps={[
-            { label: 'Take |ψ⟩ = |+⟩ = (|0⟩ + |1⟩)/√2.', latex: '|\\psi\\rangle = |+\\rangle' },
-            { label: 'Equal superposition places the vector on the +X axis of the Bloch sphere.', latex: '(x,y,z) = (1,0,0)' },
-            { label: 'Measuring X always gives + with probability 1 (after appropriate basis convention).', latex: 'P(+) = 1' },
+            { label: 'θ = 0 ⇒ cos(θ/2) = 1, sin(θ/2) = 0.', latex: '|\\psi\\rangle = |0\\rangle' },
+            { label: 'Coordinates: x = y = 0, z = 1 (north pole).', latex: '(x,y,z)=(0,0,1)' },
           ]}
         />
 
@@ -264,45 +318,32 @@ export default function OneQubit() {
 
       <Section id="one-qubit-gates" title="2.7 One-Qubit Gates">
         <p>
-          Quantum gates are unitary operations—reversible linear maps that preserve normalization.
-          On one qubit, gates are 2×2 unitary matrices acting on the amplitude vector.
+          Gates are 2×2 unitary matrices. Pauli X flips |0⟩ ↔ |1⟩; Z adds a phase to |1⟩; H creates
+          superposition. Important identities: X² = Y² = Z² = H² = I, S² = Z, T² = S.
         </p>
 
-        <Katex display>{`|\\psi'\\rangle = U|\\psi\\rangle, \\quad U^\\dagger U = I`}</Katex>
+        <Katex display>{`X|0\\rangle = |1\\rangle, \\quad H|0\\rangle = |+\\rangle, \\quad Z|1\\rangle = -|1\\rangle`}</Katex>
+        <Katex display>{`X = \\begin{pmatrix} 0 & 1 \\\\ 1 & 0 \\end{pmatrix}, \\quad H = \\tfrac{1}{\\sqrt{2}}\\begin{pmatrix} 1 & 1 \\\\ 1 & -1 \\end{pmatrix}`}</Katex>
 
-        <p>Common single-qubit gates include:</p>
-        <ul>
-          <li><strong>Pauli X, Y, Z</strong> — bit flip, bit+phase flip, phase flip</li>
-          <li><strong>Hadamard H</strong> — creates/removes superposition</li>
-          <li><strong>S, T</strong> — π/2 and π/4 phase gates on |1⟩</li>
-        </ul>
-
-        <table className="data-table">
-          <thead>
-            <tr><th>Gate</th><th>Action on |0⟩</th><th>Action on |1⟩</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>X</td><td>|1⟩</td><td>|0⟩</td></tr>
-            <tr><td>Z</td><td>|0⟩</td><td>−|1⟩</td></tr>
-            <tr><td>H</td><td>|+⟩</td><td>|−⟩</td></tr>
-            <tr><td>S</td><td>|0⟩</td><td>i|1⟩</td></tr>
-          </tbody>
-        </table>
-
-        <Expandable title="Gate matrices (reference)">
-          <Katex display>{`X = \\begin{pmatrix} 0 & 1 \\\\ 1 & 0 \\end{pmatrix}, \\quad
-            H = \\tfrac{1}{\\sqrt{2}}\\begin{pmatrix} 1 & 1 \\\\ 1 & -1 \\end{pmatrix}`}</Katex>
+        <Expandable title="Geometric action on the Bloch sphere">
+          <ul>
+            <li>X, Y, Z are 180° rotations about their respective axes.</li>
+            <li>H maps Z-axis to X-axis (and back, since H² = I).</li>
+            <li>S is 90° rotation about Z; T is 45° about Z.</li>
+          </ul>
         </Expandable>
 
-        <Checkpoint
-          question="What gate takes |0⟩ to |+⟩?"
-          answer="hadamard"
-          hint="It creates equal superposition."
-        />
-
+        <Checkpoint question="What is H|+⟩?" answer="|0⟩" hint="H is its own inverse: H² = I." />
         <GateExplorerLab />
         <LabLink id="gate-explorer" title="Quantum Gate Explorer" />
       </Section>
+
+      <PracticeBlock problems={[
+        { q: 'Normalize (2|0⟩ + 3i|1⟩) and find P(0) in the Z basis.', a: 'Norm is √13. P(0) = 4/13.' },
+        { q: 'For |ψ⟩ = (|0⟩ − |1⟩)/√2, what is P(−) in the X basis?', a: 'The state is |−⟩, so P(−) = 1.' },
+        { q: 'Apply X then H to |0⟩. What is the result?', a: 'X|0⟩ = |1⟩, H|1⟩ = |−⟩.' },
+        { q: 'What Bloch coordinates does |i⟩ have?', a: '(0, 1, 0) on the equator at +Y.' },
+      ]} />
 
       <div className="section-nav">
         <Link to="/learn/classical">← Classical Computing</Link>
