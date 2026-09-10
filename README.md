@@ -19,7 +19,7 @@ This is an **independently authored** educational work. It uses standard curricu
 
 **PDF (60 pages):** [book/main.pdf](book/main.pdf) in this repository
 
-> **One-time setup:** Rename this repository to `benson0924.github.io` in GitHub **Settings → General → Repository name**, then enable **Settings → Pages → Source: GitHub Actions**. This replaces any previous personal site at that URL.
+> **GitHub Pages 設定：** 到 [Settings → Pages](https://github.com/benson0924/benson0924.github.io/settings/pages)，**Build and deployment → Source** 選 **Deploy from a branch**，Branch 選 `gh-pages` / `/ (root)`。Repo 需設為 **Public** 才能公開存取。
 
 ## Quick start
 
