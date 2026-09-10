@@ -1,0 +1,1 @@
+import{r as o,j as a}from"./index-BcSIlOWo.js";import{k as f}from"./katex-Dc8nsIP1.js";function x({children:e,display:t=!1,className:s=""}){const r=o.useRef(null);return o.useEffect(()=>{r.current&&f.render(e,r.current,{displayMode:t,throwOnError:!1,trust:!0})},[e,t]),t?a.jsx("div",{className:`katex-display ${s}`,ref:r}):a.jsx("span",{className:s,ref:r})}export{x as K};

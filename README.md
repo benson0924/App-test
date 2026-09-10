@@ -15,11 +15,11 @@ This is an **independently authored** educational work. It uses standard curricu
 
 ## Live site
 
-**Interactive textbook:** https://benson0924.github.io/
+**Interactive textbook:** https://benson0924.github.io/docs/
 
 **PDF (60 pages):** [book/main.pdf](book/main.pdf) in this repository
 
-> **GitHub Pages 設定：** 到 [Settings → Pages](https://github.com/benson0924/benson0924.github.io/settings/pages)，**Build and deployment → Source** 選 **Deploy from a branch**，Branch 選 `gh-pages` / `/ (root)`。Repo 需設為 **Public** 才能公開存取。
+> **重要：** 請到 [Settings → General](https://github.com/benson0924/benson0924.github.io/settings) 將 repo 設為 **Public**，並到 [Settings → Pages](https://github.com/benson0924/benson0924.github.io/settings/pages) 確認 Source 為 **Deploy from a branch → main → /docs**。
 
 ## Quick start
 

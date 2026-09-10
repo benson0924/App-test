@@ -7,8 +7,6 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: github-pages
@@ -31,14 +29,15 @@ jobs:
       - name: Build web textbook
         run: npm run build
         env:
-          VITE_BASE: /
+          VITE_BASE: /docs/
 
       - name: SPA fallback for client-side routing
         run: cp web/dist/index.html web/dist/404.html
 
-      - name: Deploy to gh-pages branch
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Publish to docs/ on main
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./web/dist
-          force_orphan: true
+          folder: web/dist
+          target-folder: docs
+          branch: main
+          commit-message: Deploy site to docs/
