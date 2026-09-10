@@ -119,9 +119,39 @@ const jaLearn = {
 };
 
 const bundles: Record<Locale, TranslationTree> = {
-  en: mergeTrees(enCommon, enNavigation, enHome, enCurriculum, { labs: enLabs }, { reference: enReference }, { practice: enPractice }, { playground: enPlayground }, { learn: enLearn }),
-  'zh-TW': mergeTrees(zhCommon, zhNavigation, zhHome, zhCurriculum, { labs: zhLabs }, { reference: zhReference }, { practice: zhPractice }, { playground: zhPlayground }, { learn: zhLearn }),
-  ja: mergeTrees(jaCommon, jaNavigation, jaHome, jaCurriculum, { labs: jaLabs }, { reference: jaReference }, { practice: jaPractice }, { playground: jaPlayground }, { learn: jaLearn }),
+  en: mergeTrees(
+    { common: enCommon },
+    { navigation: enNavigation },
+    { home: enHome },
+    { curriculum: enCurriculum },
+    { labs: enLabs },
+    { reference: enReference },
+    { practice: enPractice },
+    { playground: enPlayground },
+    { learn: enLearn }
+  ),
+  'zh-TW': mergeTrees(
+    { common: zhCommon },
+    { navigation: zhNavigation },
+    { home: zhHome },
+    { curriculum: zhCurriculum },
+    { labs: zhLabs },
+    { reference: zhReference },
+    { practice: zhPractice },
+    { playground: zhPlayground },
+    { learn: zhLearn }
+  ),
+  ja: mergeTrees(
+    { common: jaCommon },
+    { navigation: jaNavigation },
+    { home: jaHome },
+    { curriculum: jaCurriculum },
+    { labs: jaLabs },
+    { reference: jaReference },
+    { practice: jaPractice },
+    { playground: jaPlayground },
+    { learn: jaLearn }
+  ),
 };
 
 export function getLocaleBundle(locale: Locale): TranslationTree {
