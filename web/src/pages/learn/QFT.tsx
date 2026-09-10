@@ -1,5 +1,5 @@
 import Section from '../../components/Section';
-import Math from '../../components/Math';
+import Katex from '../../components/Math';
 import Checkpoint from '../../components/Checkpoint';
 import WorkedExample from '../../components/WorkedExample';
 import Expandable from '../../components/Expandable';
@@ -11,7 +11,7 @@ export default function QFT() {
       <h1>Quantum Fourier Transform</h1>
 
       <Section id="9.1" title="Definition" prev={{ title: 'Quantum Algorithms', path: '/learn/algorithms' }}>
-        <Math display>{`\\text{QFT}|x\\rangle = \\frac{1}{\\sqrt{N}}\\sum_{k=0}^{N-1} e^{2\\pi i xk/N}|k\\rangle`}</Math>
+        <Katex display>{`\\text{QFT}|x\\rangle = \\frac{1}{\\sqrt{N}}\\sum_{k=0}^{N-1} e^{2\\pi i xk/N}|k\\rangle`}</Katex>
         <p>The QFT maps computational basis to Fourier basis — enabling phase/period information extraction.</p>
         <p><Link to="/playground/qft">QFT Visualizer →</Link></p>
       </Section>

@@ -7,7 +7,7 @@ interface MathProps {
   className?: string;
 }
 
-export default function Math({ children, display = false, className = '' }: MathProps) {
+export default function Katex({ children, display = false, className = '' }: MathProps) {
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {

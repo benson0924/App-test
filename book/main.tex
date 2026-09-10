@@ -1,0 +1,74 @@
+\documentclass[11pt,openany]{book}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts,mathtools}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{quantikz}
+\usepackage{braket}
+\usepackage{microtype}
+\usepackage{xcolor}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!60!black,
+  urlcolor=cyan!40!black,
+  citecolor=green!40!black
+}
+
+\newcommand{\iqc}{Introduction to Quantum Computing}
+\newcommand{\cutoff}{September 2026}
+
+\title{\iqc\\[0.5em]\large From Classical Bits to Quantum Algorithms\\[1em]\normalsize 2026 Edition}
+\author{An Independent Modern Textbook\\Research cutoff: \cutoff}
+\date{}
+
+\begin{document}
+\frontmatter
+\maketitle
+
+\begin{abstract}
+This textbook provides a mathematically careful yet accessible introduction to quantum computation and quantum information for readers who know basic algebra, trigonometry, and complex numbers but need not already know linear algebra, quantum mechanics, or quantum programming. It develops classical information and computation, reversible logic, single- and multi-qubit quantum theory, measurement, the Bloch sphere, linear-algebraic tools, entanglement, quantum circuits, error correction, protocols, and foundational quantum algorithms through Shor's factoring algorithm. A companion interactive website synchronizes notation, examples, and laboratory exercises with this PDF. Material labeled with the research cutoff reflects the state of the field as of \cutoff{} and should be re-checked as hardware and software evolve.
+\end{abstract}
+
+\tableofcontents
+
+\chapter*{How to Use This Book}
+\addcontentsline{toc}{chapter}{How to Use This Book}
+
+Each chapter in the PDF corresponds to a section of the interactive web textbook at the project repository. When you see a \textbf{Interactive Lab} box, open the linked lab in your browser to manipulate states, run simulations, and verify calculations step by step.
+
+\mainmatter
+
+\input{chapters/01-classical}
+\input{chapters/02-qubit}
+\input{chapters/03-linear-algebra}
+\input{chapters/04-multiple-qubits}
+\input{chapters/05-error-correction}
+\input{chapters/06-circuits}
+\input{chapters/07-protocols}
+\input{chapters/08-algorithms}
+\input{chapters/09-modern}
+
+\appendix
+\chapter{Gate Reference}
+\input{chapters/appendix-gates}
+
+\chapter{Formula Sheet}
+\input{chapters/appendix-formulas}
+
+\chapter{Complexity Reference}
+\input{chapters/appendix-complexity}
+
+\chapter{Glossary}
+\input{chapters/appendix-glossary}
+
+\backmatter
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

@@ -1,0 +1,67 @@
+\chapter{Classical Information and Computation}
+
+Physical systems can encode information by occupying distinguishable states. A classical bit is the simplest unit: it takes one of two values, $0$ or $1$. For $n$ bits there are $2^n$ distinct register states.
+
+\section{States and Information}
+
+If each bit is independent, an $n$-bit register has
+\[
+N = 2^n
+\]
+possible configurations. For $n=3$, the eight strings are $000,001,\ldots,111$. Bits may represent numbers, text, instructions, or any digital data once an encoding convention is fixed.
+
+\begin{center}
+\fbox{\parbox{0.9\textwidth}{\textbf{Interactive Lab 1:} Binary State Explorer --- select $n$ and inspect $2^n$ on the website.}}
+\end{center}
+
+\section{Binary Numbers}
+
+Positional notation interprets a bit string $b_{n-1}\cdots b_0$ as
+\[
+\sum_{j=0}^{n-1} b_j 2^j.
+\]
+For example, $1011_2 = 1\cdot 8 + 0\cdot 4 + 1\cdot 2 + 1 = 11_{10}$.
+
+\section{Logic Gates}
+
+Boolean variables $A,B\in\{0,1\}$ combine through gates such as NOT ($\overline A$), AND ($A\land B$), OR ($A\lor B$), and XOR ($A\oplus B$). XOR satisfies $1\oplus 1 = 0$ and is its own inverse.
+
+\section{Boolean Algebra}
+
+Identities include $A\land 1 = A$, $A\lor 0 = A$, and $A\land\overline A = 0$. De Morgan's laws state
+\[
+\overline{A\land B} = \overline A \lor \overline B,\qquad
+\overline{A\lor B} = \overline A \land \overline B.
+\]
+
+\section{Adders}
+
+A half adder outputs sum $S = A\oplus B$ and carry $C = A\land B$. A full adder adds an incoming carry $C_{\mathrm{in}}$:
+\[
+S = A\oplus B\oplus C_{\mathrm{in}},\qquad
+C_{\mathrm{out}} = (A\land B)\lor\bigl(C_{\mathrm{in}}\land(A\oplus B)\bigr).
+\]
+Ripple-carry addition propagates carries sequentially, introducing a depth cost that foreshadows circuit depth in quantum computing.
+
+\section{Reversible Computation}
+
+Reversible operations preserve enough information to recover inputs. NOT is reversible; AND is not. The Toffoli gate $(a,b,c)\mapsto(a,b,c\oplus ab)$ is reversible and can emulate AND when $c=0$. Quantum evolution before measurement must be reversible (unitary).
+
+\section{Classical Error Correction}
+
+Three-bit repetition encoding uses $0_L=000$ and $1_L=111$. A single bit flip is corrected by majority vote. Parity $p=a\oplus b$ summarizes two-bit information.
+
+\section{Computational Complexity}
+
+Growth classes include $O(1)$, $O(\log n)$, $O(n)$, $O(n\log n)$, $O(n^2)$, and $O(2^n)$. The class \textbf{P} contains problems solvable in polynomial time on a deterministic classical computer. \textbf{NP} is defined decision-theoretically; quantum computers do not automatically solve NP-complete problems in polynomial time.
+
+\section{Turing Machines}
+
+A Turing machine reads and writes symbols on a tape, changes internal state, and moves its head according to transition rules. The Church--Turing thesis asserts that realistic classical computation is captured by this model. Quantum computation asks whether every physically realizable process is efficiently simulable classically; this motivates the class \textbf{BQP}.
+
+\section*{Exercises}
+\begin{enumerate}[label=\arabic*.]
+\item How many states does a 10-bit register have?
+\item Simplify $\overline{A\land(B\lor C)}$ using De Morgan.
+\item Add $1101_2 + 1011_2$ with ripple carry.
+\end{enumerate}

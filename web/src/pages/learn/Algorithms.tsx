@@ -1,5 +1,5 @@
 import Section from '../../components/Section';
-import Math from '../../components/Math';
+import Katex from '../../components/Math';
 import Checkpoint from '../../components/Checkpoint';
 import WorkedExample from '../../components/WorkedExample';
 import Expandable from '../../components/Expandable';
@@ -18,7 +18,7 @@ export default function Algorithms() {
 
       <Section id="8.2" title="8.2 Deutsch &amp; Deutsch–Jozsa">
         <p><Link to="/playground/deutsch">Deutsch lab</Link> · <Link to="/playground/deutsch-jozsa">Deutsch–Jozsa lab</Link></p>
-        <Math display>{`\\text{DJ: 1 query vs } 2^{n-1}+1 \\text{ classically (worst case)}`}</Math>
+        <Katex display>{`\\text{DJ: 1 query vs } 2^{n-1}+1 \\text{ classically (worst case)}`}</Katex>
       </Section>
 
       <Section id="8.3" title="8.3 Bernstein–Vazirani">
@@ -36,7 +36,7 @@ export default function Algorithms() {
       </Section>
 
       <Section id="8.5" title="8.5 Grover search" next={{ title: 'Quantum Fourier Transform', path: '/learn/qft' }}>
-        <Math display>{`O(\\sqrt{N}) \\text{ queries vs } O(N) \\text{ classically}`}</Math>
+        <Katex display>{`O(\\sqrt{N}) \\text{ queries vs } O(N) \\text{ classically}`}</Katex>
         <Expandable title="Optimality">
           <p>Grover&apos;s algorithm is optimal for unstructured search up to constants — quadratic speedup is the limit.</p>
         </Expandable>

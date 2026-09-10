@@ -1,5 +1,5 @@
 import Section from '../../components/Section';
-import Math from '../../components/Math';
+import Katex from '../../components/Math';
 import Checkpoint from '../../components/Checkpoint';
 import WorkedExample from '../../components/WorkedExample';
 import Expandable from '../../components/Expandable';
@@ -12,12 +12,12 @@ export default function MultipleQubits() {
       <p>Chapter 4 — composite systems, product states, and multi-qubit gates.</p>
 
       <Section id="4.1" title="4.1 Composite systems" prev={{ title: 'Linear Algebra', path: '/learn/linear-algebra' }}>
-        <Math display>{`|\\psi\\rangle_{AB} = \\sum_{x,y} c_{xy}|x\\rangle|y\\rangle, \\quad x,y \\in \\{0,1\\}`}</Math>
+        <Katex display>{`|\\psi\\rangle_{AB} = \\sum_{x,y} c_{xy}|x\\rangle|y\\rangle, \\quad x,y \\in \\{0,1\\}`}</Katex>
         <p>An n-qubit register has dimension 2ⁿ — exponential in qubit count for the state description.</p>
       </Section>
 
       <Section id="4.2" title="4.2 Product vs entangled states">
-        <Math display>{`|\\psi\\rangle = |a\\rangle \\otimes |b\\rangle \\quad \\text{(product)}`}</Math>
+        <Katex display>{`|\\psi\\rangle = |a\\rangle \\otimes |b\\rangle \\quad \\text{(product)}`}</Katex>
         <Checkpoint question="Is |Φ⁺⟩ = (|00⟩+|11⟩)/√2 a product state?" answer="no" hint="Try factoring." />
         <p><Link to="/playground/entanglement">Entanglement lab →</Link></p>
       </Section>
@@ -44,7 +44,7 @@ export default function MultipleQubits() {
       </Section>
 
       <Section id="4.6" title="4.6 Schmidt decomposition" next={{ title: 'Quantum Circuits', path: '/learn/circuits' }}>
-        <Math display>{`|\\psi\\rangle = \\sum_i \\lambda_i |i_A\\rangle|i_B\\rangle, \\quad \\lambda_i \\geq 0`}</Math>
+        <Katex display>{`|\\psi\\rangle = \\sum_i \\lambda_i |i_A\\rangle|i_B\\rangle, \\quad \\lambda_i \\geq 0`}</Katex>
         <p>Schmidt rank 1 iff the state is product; rank &gt; 1 indicates entanglement.</p>
       </Section>
     </article>

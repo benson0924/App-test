@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import Math from '@/components/Math';
+import Katex from '@/components/Math';
 import Section from '@/components/Section';
 import Checkpoint from '@/components/Checkpoint';
 import WorkedExample from '@/components/WorkedExample';
@@ -41,8 +41,8 @@ function BitExplorer() {
         onChange={(e) => setN(Number(e.target.value))}
       />
       <p>
-        An <Math>{`${n}`}</Math>-bit register has{' '}
-        <Math>{`2^{${n}} = ${count.toLocaleString()}`}</Math> distinct states.
+        An <Katex>{`${n}`}</Katex>-bit register has{' '}
+        <Katex>{`2^{${n}} = ${count.toLocaleString()}`}</Katex> distinct states.
       </p>
       <div
         style={{
@@ -205,7 +205,7 @@ function DeMorganDemo() {
         {' '}B ={' '}
         <button className="btn" onClick={() => setB(b === 0 ? 1 : 0)}>{b}</button>
       </p>
-      <Math display>{`\\overline{A ${mode} B} \\equiv \\bar{A} ${mode === 'AND' ? '\\lor' : '\\land'} \\bar{B}`}</Math>
+      <Katex display>{`\\overline{A ${mode} B} \\equiv \\bar{A} ${mode === 'AND' ? '\\lor' : '\\land'} \\bar{B}`}</Katex>
       <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem' }}>
         {dm.left} → {leftVal} &nbsp;|&nbsp; {dm.right} → {rightVal}
         {leftVal === rightVal ? ' ✓ equal' : ' ✗ differ'}
@@ -385,11 +385,11 @@ export default function ClassicalComputing() {
           is a string of bits.
         </p>
         <p>
-          An <Math>{`n`}</Math>-bit register can be in exactly one of <Math>{`2^n`}</Math> states at any
+          An <Katex>{`n`}</Katex>-bit register can be in exactly one of <Katex>{`2^n`}</Katex> states at any
           moment. There is no fractional bit and no simultaneous 0-and-1 — the register's content is
           fully specified by which bit string it holds.
         </p>
-        <Math display>{`|\\text{register}\\rangle \\in \\{0,1\\}^n, \\quad |\\{0,1\\}^n| = 2^n`}</Math>
+        <Katex display>{`|\\text{register}\\rangle \\in \\{0,1\\}^n, \\quad |\\{0,1\\}^n| = 2^n`}</Katex>
 
         <BitExplorer />
 
@@ -424,7 +424,7 @@ export default function ClassicalComputing() {
           Binary strings are not just abstract states — they encode numbers. Each position carries a
           weight that is a power of two, read from right (least significant) to left (most significant).
         </p>
-        <Math display>{`N = \\sum_{i=0}^{n-1} b_i \\, 2^i, \\quad b_i \\in \\{0,1\\}`}</Math>
+        <Katex display>{`N = \\sum_{i=0}^{n-1} b_i \\, 2^i, \\quad b_i \\in \\{0,1\\}`}</Katex>
         <p>
           Conversion between binary and decimal is a routine skill. Fixed-width representations pad
           with leading zeros so that, for example, 5 becomes <code>0101</code> in 4 bits.
@@ -465,7 +465,7 @@ export default function ClassicalComputing() {
           circuits: combinational networks (no memory) and sequential machines (with feedback or clocks).
         </p>
         <p>Common gates include NOT (inverter), AND, OR, XOR, and their negated variants NAND and NOR.</p>
-        <Math display>{`\\text{AND}(a,b) = ab, \\quad \\text{OR}(a,b) = a + b - ab, \\quad \\text{XOR}(a,b) = a \\oplus b`}</Math>
+        <Katex display>{`\\text{AND}(a,b) = ab, \\quad \\text{OR}(a,b) = a + b - ab, \\quad \\text{XOR}(a,b) = a \\oplus b`}</Katex>
 
         <TruthTableSimulator />
 
@@ -500,7 +500,7 @@ export default function ClassicalComputing() {
           distributivity, identity elements, and complement. These laws let us simplify circuits and prove
           gate networks equivalent without enumerating every input.
         </p>
-        <Math display>{`\\overline{A \\land B} = \\bar{A} \\lor \\bar{B}, \\quad \\overline{A \\lor B} = \\bar{A} \\land \\bar{B} \\quad \\text{(De Morgan)}`}</Math>
+        <Katex display>{`\\overline{A \\land B} = \\bar{A} \\lor \\bar{B}, \\quad \\overline{A \\lor B} = \\bar{A} \\land \\bar{B} \\quad \\text{(De Morgan)}`}</Katex>
         <p>
           De Morgan's laws swap AND/OR under negation and are indispensable when translating between
           positive and negative logic, or when optimizing chip area.
@@ -525,8 +525,8 @@ export default function ClassicalComputing() {
         />
 
         <Expandable title="Additional Boolean identities">
-          <Math display>{`A \\land A = A, \\quad A \\lor A = A, \\quad A \\land 1 = A, \\quad A \\lor 0 = A`}</Math>
-          <Math display>{`A \\land (B \\lor C) = (A \\land B) \\lor (A \\land C)`}</Math>
+          <Katex display>{`A \\land A = A, \\quad A \\lor A = A, \\quad A \\land 1 = A, \\quad A \\lor 0 = A`}</Katex>
+          <Katex display>{`A \\land (B \\lor C) = (A \\land B) \\lor (A \\land C)`}</Katex>
         </Expandable>
       </Section>
 
@@ -541,7 +541,7 @@ export default function ClassicalComputing() {
           producing sum and carry; a <strong>full adder</strong> also accepts an incoming carry from
           the previous (less significant) column. Chaining full adders yields a ripple-carry adder.
         </p>
-        <Math display>{`\\text{sum} = a \\oplus b \\oplus c_{\\text{in}}, \\quad c_{\\text{out}} = (a \\land b) \\lor (c_{\\text{in}} \\land (a \\oplus b))`}</Math>
+        <Katex display>{`\\text{sum} = a \\oplus b \\oplus c_{\\text{in}}, \\quad c_{\\text{out}} = (a \\land b) \\lor (c_{\\text{in}} \\land (a \\oplus b))`}</Katex>
 
         <RippleCarryDemo />
 
@@ -585,7 +585,7 @@ export default function ClassicalComputing() {
           computation when combined with NOT. Quantum computing adopts Toffoli (and its 2-qubit cousin CNOT)
           as native operations.
         </p>
-        <Math display>{`\\text{CCNOT}(a,b,c) = (a,\\; b,\\; c \\oplus (a \\land b))`}</Math>
+        <Katex display>{`\\text{CCNOT}(a,b,c) = (a,\\; b,\\; c \\oplus (a \\land b))`}</Katex>
 
         <ToffoliDemo />
 
@@ -616,7 +616,7 @@ export default function ClassicalComputing() {
           add redundancy so the receiver can detect or correct errors. The simplest idea is repetition:
           send each bit three times and take a majority vote at decode time.
         </p>
-        <Math display>{`\\text{decode}(b_1, b_2, b_3) = \\mathbb{1}\\big[\\sum_i b_i \\geq 2\\big]`}</Math>
+        <Katex display>{`\\text{decode}(b_1, b_2, b_3) = \\mathbb{1}\\big[\\sum_i b_i \\geq 2\\big]`}</Katex>
         <p>
           More efficient codes (Hamming, Reed–Solomon) achieve better rate–distance tradeoffs. Quantum
           error correction generalizes these ideas to protect qubits — but the no-cloning theorem forbids
@@ -654,10 +654,10 @@ export default function ClassicalComputing() {
       >
         <p>
           As problems scale, resource usage matters. <strong>Computational complexity</strong> classifies
-          problems by how time or space grows with input size <Math>{`n`}</Math>. Polynomial growth is
+          problems by how time or space grows with input size <Katex>{`n`}</Katex>. Polynomial growth is
           generally feasible; exponential growth becomes intractable quickly.
         </p>
-        <Math display>{`O(1) \\subset O(\\log n) \\subset O(n) \\subset O(n \\log n) \\subset O(n^2) \\subset O(2^n)`}</Math>
+        <Katex display>{`O(1) \\subset O(\\log n) \\subset O(n) \\subset O(n \\log n) \\subset O(n^2) \\subset O(2^n)`}</Katex>
         <p>
           The class P contains problems solvable in polynomial time on a deterministic Turing machine.
           NP contains problems whose solutions are verifiable in polynomial time. Whether P = NP remains
@@ -700,9 +700,9 @@ export default function ClassicalComputing() {
           simplicity, the model captures everything a modern computer can compute — the <strong>Church–Turing thesis</strong>{' '}
           equates intuitive "algorithm" with Turing-machine computability.
         </p>
-        <Math display>{`M = (Q, \\Sigma, \\Gamma, \\delta, q_0, q_{\\text{accept}}, q_{\\text{reject}})`}</Math>
+        <Katex display>{`M = (Q, \\Sigma, \\Gamma, \\delta, q_0, q_{\\text{accept}}, q_{\\text{reject}})`}</Katex>
         <p>
-          The transition function <Math>{`\\delta`}</Math> specifies, for each state and tape symbol,
+          The transition function <Katex>{`\\delta`}</Katex> specifies, for each state and tape symbol,
           what to write, which direction to move, and the next state. A machine <strong>decides</strong>{' '}
           a language if it halts on every input, accepting members and rejecting non-members.
         </p>

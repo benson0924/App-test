@@ -1,5 +1,5 @@
 import Section from '../../components/Section';
-import Math from '../../components/Math';
+import Katex from '../../components/Math';
 import Checkpoint from '../../components/Checkpoint';
 import WorkedExample from '../../components/WorkedExample';
 import Expandable from '../../components/Expandable';
@@ -13,7 +13,7 @@ export default function Protocols() {
 
       <Section id="7.1" title="7.1 Teleportation" prev={{ title: 'Entanglement', path: '/learn/entanglement' }}>
         <p>Transfer an unknown qubit using one ebit + two classical bits — no cloning required.</p>
-        <Math display>{`|\\psi\\rangle \\xrightarrow{\\text{ebit + 2 bits}} |\\psi\\rangle`}</Math>
+        <Katex display>{`|\\psi\\rangle \\xrightarrow{\\text{ebit + 2 bits}} |\\psi\\rangle`}</Katex>
         <p><Link to="/playground/teleportation">Teleportation lab →</Link></p>
       </Section>
 

@@ -1,0 +1,27 @@
+Standard single-qubit gates:
+
+\[
+I=\begin{bmatrix}1&0\\0&1\end{bmatrix},\quad
+X=\begin{bmatrix}0&1\\1&0\end{bmatrix},\quad
+Y=\begin{bmatrix}0&-i\\i&0\end{bmatrix},\quad
+Z=\begin{bmatrix}1&0\\0&-1\end{bmatrix},
+\]
+\[
+H=\frac{1}{\sqrt2}\begin{bmatrix}1&1\\1&-1\end{bmatrix},\quad
+S=\begin{bmatrix}1&0\\0&i\end{bmatrix},\quad
+T=\begin{bmatrix}1&0\\0&e^{i\pi/4}\end{bmatrix}.
+\]
+
+Rotation gates:
+\[
+R_x(\theta)=e^{-i\theta X/2},\quad
+R_y(\theta)=e^{-i\theta Y/2},\quad
+R_z(\theta)=e^{-i\theta Z/2}.
+\]
+
+Two-qubit:
+\[
+\mathrm{CNOT}=\begin{bmatrix}1&0&0&0\\0&1&0&0\\0&0&0&1\\0&0&1&0\end{bmatrix}.
+\]
+
+Useful identities: $HXH=Z$, $HZH=X$, $H^2=I$, $T^2=S$, $S^2=Z$.

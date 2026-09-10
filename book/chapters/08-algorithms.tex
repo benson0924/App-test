@@ -1,0 +1,49 @@
+\chapter{Quantum Algorithms}
+
+Quantum algorithms exploit interference and phase to outperform classical strategies for specific problems.
+
+\section{Oracles and Phase Kickback}
+
+Standard oracle: $U_f\ket{x}\ket{y}=\ket{x}\ket{y\oplus f(x)}$. With $\ket{y}=\ket{-}$, phase kickback yields $(-1)^{f(x)}\ket{x}\ket{-}$, implementing a phase oracle $O_f\ket{x}=(-1)^{f(x)}\ket{x}$.
+
+\section{Deutsch and Deutsch--Jozsa}
+
+For $f:\{0,1\}\to\{0,1\}$, Deutsch's algorithm distinguishes constant from balanced functions with one query versus two classically in the worst case. Deutsch--Jozsa generalizes to $n$ bits with one query versus up to $2^{n-1}+1$ classically.
+
+\section{Bernstein--Vazirani}
+
+Hidden string $s\in\{0,1\}^n$ with $f(x)=s\cdot x\bmod 2$ is found with one query quantumly versus $n$ classically.
+
+\section{Simon's Algorithm}
+
+Periodic functions $f(x)=f(x\oplus s)$ yield equations $y\cdot s=0$ over $\mathbb F_2$; enough samples determine $s$ via linear algebra.
+
+\section{Grover Search}
+
+Unstructured search over $N=2^n$ items uses $O(\sqrt N)$ oracle queries via alternating oracle $O_w=I-2\ket{w}\bra{w}$ and diffusion $D=2\ket{s}\bra{s}-I$. Optimal iterations $\approx \lfloor\frac{\pi}{4}\sqrt N\rfloor$.
+
+\section{Quantum Fourier Transform}
+
+\[
+\mathrm{QFT}_N\ket{x}=\frac{1}{\sqrt N}\sum_{k=0}^{N-1}e^{2\pi ixk/N}\ket{k}.
+\]
+The QFT is unitary and efficiently implementable, but amplitudes are not all readable at once.
+
+\section{Quantum Phase Estimation}
+
+Given $U\ket{u}=e^{2\pi i\phi}\ket{u}$, controlled powers of $U$ and inverse QFT estimate $\phi$ to $m$ bits using $m$ ancilla qubits.
+
+\section{Shor's Factoring Algorithm}
+
+Factoring reduces to finding period $r$ of $f(x)=a^x\bmod N$. For $N=15$, $a=2$, we find $r=4$, then $\gcd(2^{r/2}\pm 1,N)\in\{3,5\}$. Quantum speedup lies in period finding; remaining steps are classical \cite{shor1994}.
+
+\begin{center}
+\fbox{\parbox{0.9\textwidth}{\textbf{Interactive Labs 19--27:} Full algorithm simulators on the website.}}
+\end{center}
+
+\section*{Exercises}
+\begin{enumerate}[label=\arabic*.]
+\item Which of the four $n=1$ Boolean functions is constant?
+\item Run Grover on $N=8$ with marked $\ket{011}$; how many iterations?
+\item For QPE with $m=3$, what binary fraction approximates $\phi=1/3$?
+\end{enumerate}

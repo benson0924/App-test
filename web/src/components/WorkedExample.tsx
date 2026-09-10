@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Math from './Math';
+import Katex from './Math';
 
 interface Step {
   label: string;
@@ -21,7 +21,7 @@ export default function WorkedExample({ title, steps }: WorkedExampleProps) {
         <div key={i} style={{ marginTop: '0.75rem' }}>
           <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-muted)' }}>Step {i + 1}</p>
           <p>{step.label}</p>
-          {step.latex && <Math display>{step.latex}</Math>}
+          {step.latex && <Katex display>{step.latex}</Katex>}
         </div>
       ))}
       {visible < steps.length - 1 && (

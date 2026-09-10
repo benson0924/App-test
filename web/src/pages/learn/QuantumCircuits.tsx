@@ -1,5 +1,5 @@
 import Section from '../../components/Section';
-import Math from '../../components/Math';
+import Katex from '../../components/Math';
 import Checkpoint from '../../components/Checkpoint';
 import WorkedExample from '../../components/WorkedExample';
 import Expandable from '../../components/Expandable';
@@ -13,7 +13,7 @@ export default function QuantumCircuits() {
 
       <Section id="5.0" title="Circuit model" prev={{ title: 'Multiple Qubits', path: '/learn/multiple-qubits' }}>
         <p>A quantum circuit applies unitary gates left-to-right (or time-advancing), then optional measurements.</p>
-        <Math display>{`|\\psi_{\\text{out}}\\rangle = U_k \\cdots U_2 U_1 |\\psi_{\\text{in}}\\rangle`}</Math>
+        <Katex display>{`|\\psi_{\\text{out}}\\rangle = U_k \\cdots U_2 U_1 |\\psi_{\\text{in}}\\rangle`}</Katex>
         <p><Link to="/playground/circuit-builder">Open Circuit Builder →</Link></p>
       </Section>
 

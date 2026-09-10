@@ -1,5 +1,5 @@
 import Section from '../../components/Section';
-import Math from '../../components/Math';
+import Katex from '../../components/Math';
 import Checkpoint from '../../components/Checkpoint';
 import WorkedExample from '../../components/WorkedExample';
 import Expandable from '../../components/Expandable';
@@ -17,7 +17,7 @@ export default function ErrorCorrection() {
       </Section>
 
       <Section id="5.2" title="5.2 Three-qubit bit-flip code">
-        <Math display>{`|0\\rangle_L = |000\\rangle, \\quad |1\\rangle_L = |111\\rangle`}</Math>
+        <Katex display>{`|0\\rangle_L = |000\\rangle, \\quad |1\\rangle_L = |111\\rangle`}</Katex>
         <WorkedExample title="Detect error on qubit 1" steps={[
           { label: 'Encode |1⟩ → |111⟩ via CNOTs from qubit 0.' },
           { label: 'Bit-flip on qubit 1 → |101⟩.' },

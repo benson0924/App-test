@@ -1,5 +1,5 @@
 import Section from '../../components/Section';
-import Math from '../../components/Math';
+import Katex from '../../components/Math';
 import Checkpoint from '../../components/Checkpoint';
 import WorkedExample from '../../components/WorkedExample';
 import Expandable from '../../components/Expandable';
@@ -12,7 +12,7 @@ export default function Shor() {
       <p>Factoring via period finding — demo with N = 15.</p>
 
       <Section id="11.1" title="Reduction to period finding" prev={{ title: 'Phase Estimation', path: '/learn/phase-estimation' }}>
-        <Math display>{`a^r \\equiv 1 \\pmod{N} \\Rightarrow \\gcd(a^{r/2}\\pm 1, N) \\text{ may factor } N`}</Math>
+        <Katex display>{`a^r \\equiv 1 \\pmod{N} \\Rightarrow \\gcd(a^{r/2}\\pm 1, N) \\text{ may factor } N`}</Katex>
         <p><Link to="/playground/shor">Shor Demo (N=15) →</Link> · <Link to="/playground/period-finding">Period Explorer →</Link></p>
       </Section>
 

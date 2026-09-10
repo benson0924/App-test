@@ -1,0 +1,42 @@
+\chapter{Composite Quantum Systems}
+
+Multiple qubits are described by tensor products. An $n$-qubit computational basis has $2^n$ states.
+
+\section{Tensor Products}
+
+Two-qubit product states satisfy $\ket{\psi}\otimes\ket{\phi}$; for example $\ket{0}\otimes\ket{1}=\ket{01}$. A general two-qubit state is
+\[
+\ket{\psi}=c_{00}\ket{00}+c_{01}\ket{01}+c_{10}\ket{10}+c_{11}\ket{11},
+\]
+with $\sum|c_{ij}|^2=1$.
+
+\section{Entanglement}
+
+A state is \emph{separable} if it equals a product $\ket{\alpha}\otimes\ket{\beta}$; otherwise it is \emph{entangled}. Bell states include
+\[
+\ket{\Phi^+}=\frac{\ket{00}+\ket{11}}{\sqrt2}.
+\]
+Measuring one qubit of $\ket{\Phi^+}$ in the Z basis yields correlated outcomes; this does not enable faster-than-light signaling.
+
+\section{Multi-Qubit Gates}
+
+The CNOT gate acts as $\ket{a,b}\mapsto\ket{a,a\oplus b}$. Creating $\ket{\Phi^+}$ from $\ket{00}$ uses $H$ on the first qubit followed by CNOT. SWAP exchanges qubits; Toffoli generalizes classical reversible AND.
+
+\section{No-Cloning Theorem}
+
+No unitary process can clone an unknown arbitrary qubit: cloning would require $\braket{\psi|\phi}=\braket{\psi|\phi}^2$ for all pairs, which fails unless states are orthogonal.
+
+\section{Universal Gate Sets}
+
+The set $\{H,T,\mathrm{CNOT}\}$ is universal: any $n$-qubit unitary can be approximated to arbitrary precision using finitely many gates from a universal set (Solovay--Kitaev theorem, stated without proof).
+
+\begin{center}
+\fbox{\parbox{0.9\textwidth}{\textbf{Interactive Labs 10--12:} Tensor products, Bell pairs, entanglement measurement.}}
+\end{center}
+
+\section*{Exercises}
+\begin{enumerate}[label=\arabic*.]
+\item Write $\ket{+}\otimes\ket{0}$ in the four-bit computational basis.
+\item Show $\ket{\Phi^+}$ is not a product state.
+\item Apply CNOT to $\frac{\ket{00}+\ket{10}}{\sqrt2}$.
+\end{enumerate}

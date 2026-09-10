@@ -1,5 +1,5 @@
 import Section from '../../components/Section';
-import Math from '../../components/Math';
+import Katex from '../../components/Math';
 import Checkpoint from '../../components/Checkpoint';
 import WorkedExample from '../../components/WorkedExample';
 import Expandable from '../../components/Expandable';
@@ -11,7 +11,7 @@ export default function PhaseEstimation() {
       <h1>Quantum Phase Estimation</h1>
 
       <Section id="10.1" title="Problem statement" prev={{ title: 'Quantum Fourier Transform', path: '/learn/qft' }}>
-        <Math display>{`U|\\psi\\rangle = e^{2\\pi i \\phi}|\\psi\\rangle \\Rightarrow \\text{estimate } \\phi`}</Math>
+        <Katex display>{`U|\\psi\\rangle = e^{2\\pi i \\phi}|\\psi\\rangle \\Rightarrow \\text{estimate } \\phi`}</Katex>
         <p><Link to="/playground/phase-estimation">Phase Estimation lab →</Link></p>
       </Section>
 

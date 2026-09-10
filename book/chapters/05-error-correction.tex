@@ -1,0 +1,34 @@
+\chapter{Quantum Error Correction}
+
+Real devices decohere. Error correction protects \emph{logical} qubits using redundancy in \emph{physical} qubits.
+
+\section{Noise and Decoherence}
+
+Errors include bit flips ($X$), phase flips ($Z$), depolarizing noise, relaxation ($T_1$), and dephasing ($T_2$). As of the \cutoff{} research cutoff, large-scale fault-tolerant quantum computation remains an active engineering goal; recent experiments demonstrate improving logical error rates with surface-code scaling \cite{acharya2024}, while commercial roadmaps should be distinguished from established theorems.
+
+\section{Three-Qubit Bit-Flip Code}
+
+Logical encoding: $\ket{0_L}=\ket{000}$, $\ket{1_L}=\ket{111}$. An arbitrary logical qubit $\alpha\ket{0_L}+\beta\ket{1_L}$ can suffer a single $X$ error on one wire; parity measurements reveal the syndrome without collapsing $\alpha,\beta$.
+
+\section{Phase-Flip Code}
+
+Phase errors flip $\ket{+}\leftrightarrow\ket{-}$. Conjugation by $H$ exchanges $X$ and $Z$, reducing phase-flip correction to bit-flip correction in the rotated basis.
+
+\section{Shor Nine-Qubit Code}
+
+The Shor code combines bit- and phase-flip protection using nine physical qubits per logical qubit. Modern research emphasizes surface codes and other topological schemes with higher thresholds and more hardware-friendly layouts.
+
+\section{Error Mitigation vs.\ Correction}
+
+In the NISQ era \cite{preskill2018}, error \emph{mitigation} techniques (zero-noise extrapolation, probabilistic error cancellation) reduce bias without full logical encoding. Mitigation is not a substitute for fault tolerance at scale.
+
+\begin{center}
+\fbox{\parbox{0.9\textwidth}{\textbf{Interactive Lab 14:} Inject bit-flip errors and correct with syndromes.}}
+\end{center}
+
+\section*{Exercises}
+\begin{enumerate}[label=\arabic*.]
+\item What syndrome indicates an $X$ error on qubit 2 in the three-bit code?
+\item Why cannot you clone $\ket{\psi}$ to protect it?
+\item Distinguish physical and logical qubits in one paragraph.
+\end{enumerate}

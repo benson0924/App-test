@@ -1,0 +1,63 @@
+\chapter{The Qubit}
+
+A qubit generalizes a classical bit. Whereas a classical bit is either $0$ or $1$, a qubit may occupy a \emph{superposition}---a normalized linear combination of $|0\rangle$ and $|1\rangle$.
+
+\section{What Is a Qubit?}
+
+A pure one-qubit state is
+\[
+\ket{\psi} = \alpha\ket{0} + \beta\ket{1},\qquad \alpha,\beta\in\mathbb{C},\qquad |\alpha|^2+|\beta|^2=1.
+\]
+In the computational (Z) basis,
+\[
+\ket{0}=\begin{bmatrix}1\\0\end{bmatrix},\qquad
+\ket{1}=\begin{bmatrix}0\\1\end{bmatrix}.
+\]
+A qubit is \emph{not} simply ``both 0 and 1 at once'' in a classical sense; amplitudes carry magnitude and phase, and interference governs observable statistics.
+
+\section{Complex Amplitudes}
+
+For $z=a+bi$, the conjugate is $z^*=a-bi$, magnitude $|z|=\sqrt{a^2+b^2}$, and polar form $z=re^{i\phi}$ with Euler's formula $e^{i\phi}=\cos\phi+i\sin\phi$.
+
+\section{Measurement in the Z Basis}
+
+Measuring $\ket{\psi}=\alpha\ket{0}+\beta\ket{1}$ in the Z basis yields outcome $0$ with probability $|\alpha|^2$ and outcome $1$ with probability $|\beta|^2$. After outcome $0$, the state collapses to $\ket{0}$.
+
+\paragraph{Example.} For $\ket{\psi}=\frac{\sqrt3}{2}\ket{0}+\frac12\ket{1}$, we have $P(0)=3/4$ and $P(1)=1/4$.
+
+\section{Other Measurement Bases}
+
+The X basis uses $\ket{+}=\frac{\ket{0}+\ket{1}}{\sqrt2}$ and $\ket{-}=\frac{\ket{0}-\ket{1}}{\sqrt2}$. The Y basis uses $\ket{i}=\frac{\ket{0}+i\ket{1}}{\sqrt2}$ and $\ket{-i}=\frac{\ket{0}-i\ket{1}}{\sqrt2}$. Rewriting $\ket{\psi}$ in a chosen basis and squaring coefficient magnitudes gives measurement probabilities.
+
+\section{Global and Relative Phase}
+
+Multiplying $\ket{\psi}$ by a global phase $e^{i\gamma}$ does not change Z-basis probabilities. Relative phase between $\ket{0}$ and $\ket{1}$ \emph{does} matter: $\ket{+}$ and $\ket{-}$ have identical Z statistics but differ in X statistics.
+
+\section{The Bloch Sphere}
+
+Ignoring global phase, any pure qubit satisfies
+\[
+\ket{\psi}=\cos\frac{\theta}{2}\ket{0}+e^{i\phi}\sin\frac{\theta}{2}\ket{1},
+\]
+with Bloch coordinates $x=\sin\theta\cos\phi$, $y=\sin\theta\sin\phi$, $z=\cos\theta$. Important states include $\ket{0}\mapsto(0,0,1)$, $\ket{1}\mapsto(0,0,-1)$, $\ket{+}\mapsto(1,0,0)$, and $\ket{i}\mapsto(0,1,0)$.
+
+\section{One-Qubit Gates}
+
+Common gates include identity $I$, Pauli $X,Y,Z$, Hadamard $H$, phase $S$, and $T$. For example,
+\[
+X=\begin{bmatrix}0&1\\1&0\end{bmatrix},\quad
+H=\frac{1}{\sqrt2}\begin{bmatrix}1&1\\1&-1\end{bmatrix},\quad
+H\ket{0}=\ket{+}.
+\]
+Identities include $X^2=Y^2=Z^2=H^2=I$ and $S^2=Z$, $T^2=S$.
+
+\begin{center}
+\fbox{\parbox{0.9\textwidth}{\textbf{Interactive Labs 4--8:} Complex plane, measurement histograms, Bloch sphere, and gate explorer on the website.}}
+\end{center}
+
+\section*{Exercises}
+\begin{enumerate}[label=\arabic*.]
+\item Normalize $(2,1)^\top$ and compute $P(0)$.
+\item Express $\ket{-}$ in the Z basis and compute $P(-)$ for $\ket{0}$.
+\item Apply $H$ then $Z$ to $\ket{+}$ and give Bloch coordinates.
+\end{enumerate}

@@ -1,4 +1,4 @@
-import Math from '../../components/Math';
+import Katex from '../../components/Math';
 
 const ROWS = [
   { problem: 'Unstructured search (N items)', classical: 'O(N)', quantum: 'O(√N) — Grover' },
@@ -27,7 +27,7 @@ export default function ComplexityPage() {
           ))}
         </tbody>
       </table>
-      <Math display>{`\\text{BQP} \\subseteq \\text{PSPACE}`}</Math>
+      <Katex display>{`\\text{BQP} \\subseteq \\text{PSPACE}`}</Katex>
     </article>
   );
 }

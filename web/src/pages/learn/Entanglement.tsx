@@ -1,5 +1,5 @@
 import Section from '../../components/Section';
-import Math from '../../components/Math';
+import Katex from '../../components/Math';
 import Checkpoint from '../../components/Checkpoint';
 import WorkedExample from '../../components/WorkedExample';
 import Expandable from '../../components/Expandable';
@@ -12,13 +12,13 @@ export default function Entanglement() {
       <p>Non-classical correlations between separated quantum systems.</p>
 
       <Section id="6.1" title="Bell correlations" prev={{ title: 'Error Correction', path: '/learn/error-correction' }}>
-        <Math display>{`|\\Phi^-\\rangle = \\frac{|01\\rangle - |10\\rangle}{\\sqrt{2}}`}</Math>
+        <Katex display>{`|\\Phi^-\\rangle = \\frac{|01\\rangle - |10\\rangle}{\\sqrt{2}}`}</Katex>
         <p>Singlet states show perfect anti-correlations in matched measurement bases — stronger than any local hidden-variable model allows.</p>
         <p><Link to="/playground/chsh">CHSH experiment lab →</Link></p>
       </Section>
 
       <Section id="6.2" title="CHSH inequality">
-        <Math display>{`S = E(a,b) + E(a,b') + E(a',b) - E(a',b') \\leq 2 \\text{ (classical)}`}</Math>
+        <Katex display>{`S = E(a,b) + E(a,b') + E(a',b) - E(a',b') \\leq 2 \\text{ (classical)}`}</Katex>
         <WorkedExample title="Quantum violation" steps={[
           { label: 'Choose angles achieving Tsirelson bound |S| ≤ 2√2.' },
           { label: 'Quantum mechanics predicts S ≈ 2√2 for optimal settings.' },

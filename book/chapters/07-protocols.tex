@@ -1,0 +1,38 @@
+\chapter{Entanglement and Quantum Protocols}
+
+Entanglement enables communication protocols impossible with classical bits alone, while respecting the no-signaling principle.
+
+\section{EPR and Hidden Variables}
+
+Entangled correlations prompted questions about local hidden variables. Quantum mechanics predicts correlations beyond any local classical model for certain measurements.
+
+\section{CHSH Inequality}
+
+Define correlations $E(a,b)$ for measurement settings $a,b$. The CHSH combination
+\[
+S=E(a,b)+E(a,b')+E(a',b)-E(a',b')\le 2
+\]
+for local hidden-variable theories. Quantum mechanics permits $|S|\le 2\sqrt2$ (Tsirelson bound).
+
+\section{Superdense Coding}
+
+Shared $\ket{\Phi^+}$ lets Alice encode two classical bits into one qubit by applying $I,X,Z,$ or $XZ$ before sending her qubit to Bob, who performs Bell decoding.
+
+\section{Quantum Teleportation}
+
+Unknown $\ket{\psi}=\alpha\ket{0}+\beta\ket{1}$ transfers to Bob using shared entanglement, local gates, measurement, and two classical bits. No matter moves; Alice's original state is destroyed; signaling faster than light is impossible.
+
+\section{BB84 Quantum Key Distribution}
+
+Alice encodes random bits in random Z or X bases; Bob measures in random bases. Matching bases yield sifted key bits; sampling reveals eavesdropping via elevated error rates.
+
+\begin{center}
+\fbox{\parbox{0.9\textwidth}{\textbf{Interactive Labs 15--18:} CHSH, superdense coding, teleportation, BB84.}}
+\end{center}
+
+\section*{Exercises}
+\begin{enumerate}[label=\arabic*.]
+\item After Alice measures $\ket{\Phi^+}$ and gets $1$, what is Bob's qubit?
+\item Why does Eve's intercept-resend attack increase the error rate?
+\item Compute $S$ for a singlet with optimal angles (sketch).
+\end{enumerate}

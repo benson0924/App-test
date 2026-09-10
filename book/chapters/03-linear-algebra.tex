@@ -1,0 +1,48 @@
+\chapter{Linear Algebra for Quantum Computing}
+
+Quantum states are vectors; quantum gates are matrices. This chapter introduces the Dirac notation and linear tools used throughout the book.
+
+\section{Kets and Bras}
+
+We write $\ket{\psi}=\begin{bmatrix}\alpha\\\beta\end{bmatrix}$ and $\bra{\psi}=\begin{bmatrix}\alpha^*&\beta^*\end{bmatrix}$.
+
+\section{Inner Products}
+
+For $\ket{\phi}=\begin{bmatrix}a\\b\end{bmatrix}$ and $\ket{\psi}=\begin{bmatrix}c\\d\end{bmatrix}$,
+\[
+\braket{\phi|\psi}=a^*c+b^*d,\qquad \|\ket{\psi}\|=\sqrt{\braket{\psi|\psi}}.
+\]
+Computational basis vectors are orthonormal: $\braket{0|0}=\braket{1|1}=1$ and $\braket{0|1}=0$.
+
+\section{Projection and Measurement}
+
+The amplitude for outcome $\ket{m}$ is $\braket{m|\psi}$ and
+\[
+P(m)=|\braket{m|\psi}|^2.
+\]
+The projector is $P_m=\ket{m}\bra{m}$.
+
+\section{Outer Products and Completeness}
+
+$\ket{\psi}\bra{\phi}$ is a rank-one matrix. Completeness in the computational basis:
+\[
+\ket{0}\bra{0}+\ket{1}\bra{1}=I.
+\]
+
+\section{Unitary Matrices}
+
+A gate $U$ is unitary if $U^\dagger U=UU^\dagger=I$, hence $U^{-1}=U^\dagger$. Unitary evolution preserves normalization:
+\[
+\braket{\psi'|\psi'}=\braket{\psi|U^\dagger U|\psi}=\braket{\psi|\psi}.
+\]
+
+\begin{center}
+\fbox{\parbox{0.9\textwidth}{\textbf{Interactive Lab 9:} Unitary checker --- enter a $2\times2$ matrix and verify $U^\dagger U$.}}
+\end{center}
+
+\section*{Exercises}
+\begin{enumerate}[label=\arabic*.]
+\item Compute $\braket{+|-}$ and interpret orthogonality.
+\item Show that $H$ is unitary by computing $H^\dagger H$.
+\item Write $\ket{1}\bra{0}$ as a matrix.
+\end{enumerate}

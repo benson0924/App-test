@@ -1,0 +1,17 @@
+\begin{tabular}{@{}lll@{}}
+\toprule
+Problem & Classical & Quantum \\
+\midrule
+Deutsch ($n=1$) & 2 queries (worst) & 1 query \\
+Deutsch--Jozsa & $2^{n-1}+1$ & 1 \\
+Bernstein--Vazirani & $n$ & 1 \\
+Grover search & $O(N)$ & $O(\sqrt N)$ \\
+Factoring (Shor) & no known poly-time & poly-time (ideal model) \\
+\bottomrule
+\end{tabular}
+
+\medskip
+\textbf{BQP} is the class of decision problems solvable in polynomial time with bounded error on a quantum computer. BQP is contained in PSPACE; the relationship to NP is unknown.
+
+\medskip
+\textbf{Caution:} Different algorithms provide different advantages. Quantum computers are not universally exponentially faster.

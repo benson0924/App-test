@@ -1,0 +1,39 @@
+\chapter{Quantum Circuits and Programming}
+
+Quantum algorithms are often expressed as circuits: horizontal wires are qubits, time flows left to right, boxes are gates, control dots mark controlled operations, and meters denote measurement.
+
+\section{The Circuit Model}
+
+An $n$-qubit state evolves as $\ket{\psi_{\mathrm{out}}}=U_k\cdots U_1\ket{\psi_{\mathrm{in}}}$ with each $U_i$ a unitary on some qubits. Circuit \emph{depth} counts sequential layers; \emph{gate count} totals operations.
+
+\section{Building Bell States}
+
+\[
+\ket{00}\xrightarrow{H_0}\xrightarrow{\mathrm{CNOT}_{0,1}}\ket{\Phi^+}.
+\]
+
+\section{Modern Software Ecosystem (2026)}
+
+Production quantum software typically combines:
+\begin{itemize}[noitemsep]
+\item \textbf{Circuit construction:} OpenQASM~3, Qiskit, Cirq, PennyLane, and vendor SDKs.
+\item \textbf{Simulation:} local state-vector simulators (exponential cost in qubits) and stabilizer simulators for Clifford circuits.
+\item \textbf{Execution:} cloud access to superconducting, trapped-ion, neutral-atom, and photonic backends with calibration data and error models.
+\end{itemize}
+
+The interactive website includes a drag-and-drop circuit builder with state-vector readout; no external account is required for core learning labs.
+
+\section{Reading Quantum Programs}
+
+A Qiskit-style Bell circuit prepares $\ket{\Phi^+}$ using \texttt{h(0)} and \texttt{cx(0,1)}. Always map API calls back to unitaries and tensor-product structure on the underlying Hilbert space.
+
+\begin{center}
+\fbox{\parbox{0.9\textwidth}{\textbf{Interactive Lab 13:} Circuit Builder on the website.}}
+\end{center}
+
+\section*{Exercises}
+\begin{enumerate}[label=\arabic*.]
+\item What is the unitary for $H\otimes I$ on two qubits?
+\item Count depth of a ripple-carry adder built from Toffoli gates (qualitatively).
+\item Export a Bell circuit to OpenQASM mentally: which gates appear?
+\end{enumerate}
