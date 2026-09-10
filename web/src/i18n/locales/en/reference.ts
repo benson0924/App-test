@@ -145,6 +145,10 @@ export const reference: TranslationTree = {
     "complexity": "Complexity classes",
     "classical": "Classical computing (Part I)"
   },
+  "misconceptions": {
+    "myth": "Myth:",
+    "correction": "Correction:"
+  },
   "complexity": {
     "title": "Complexity Reference",
     "intro": "Query and time complexity comparisons for foundational quantum algorithms. Constants hidden; fault-tolerant model assumed unless noted.",

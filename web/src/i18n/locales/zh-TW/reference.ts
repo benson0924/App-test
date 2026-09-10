@@ -145,6 +145,10 @@ export const reference: TranslationTree = {
     "complexity": "複雜度類",
     "classical": "古典計算（第一部）"
   },
+  "misconceptions": {
+    "myth": "迷思：",
+    "correction": "正確說明："
+  },
   "complexity": {
     "title": "複雜度參考",
     "intro": "基礎量子演算法的查詢與時間複雜度比較。常數省略；除非另有說明，假設容錯模型。",

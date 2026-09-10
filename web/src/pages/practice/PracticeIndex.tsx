@@ -1,7 +1,8 @@
 import { useState, useCallback, useMemo } from 'react';
 import Katex from '@/components/Math';
 import Expandable from '@/components/Expandable';
-import { useT } from '@/context/LocaleContext';
+import { useLocale } from '@/context/LocaleContext';
+import { usePracticeT, usePracticeUi, usePracticeCategory } from '@/i18n/practiceHelpers';
 import {
   C,
   Gates,
@@ -19,13 +20,16 @@ import {
   fromBloch,
 } from 'quantum-core';
 
-type Category =
-  | 'Classical'
-  | 'One Qubit'
-  | 'Linear Algebra'
-  | 'Multi-qubit'
-  | 'Protocols'
-  | 'Algorithms';
+type CategoryKey =
+  | 'classical'
+  | 'oneQubit'
+  | 'linearAlgebra'
+  | 'multiQubit'
+  | 'protocols'
+  | 'algorithms';
+
+type Pt = (problemId: string, key: string, params?: Record<string, string | number>) => string;
+type Pc = (key: string) => string;
 
 interface Step {
   text: string;
@@ -34,7 +38,7 @@ interface Step {
 
 interface Problem {
   id: string;
-  category: Category;
+  category: CategoryKey;
   question: string;
   latex?: string;
   choices: string[];
@@ -45,13 +49,13 @@ interface Problem {
   verify?: () => boolean;
 }
 
-const CATEGORIES: Category[] = [
-  'Classical',
-  'One Qubit',
-  'Linear Algebra',
-  'Multi-qubit',
-  'Protocols',
-  'Algorithms',
+const CATEGORY_KEYS: CategoryKey[] = [
+  'classical',
+  'oneQubit',
+  'linearAlgebra',
+  'multiQubit',
+  'protocols',
+  'algorithms',
 ];
 
 function pick<T>(arr: T[]): T {
@@ -76,24 +80,22 @@ function shuffleChoices(choices: string[], correct: number): { choices: string[]
   };
 }
 
-// --- Problem templates (≥3 per category) ---
-
-function classicalTemplates(): Problem[] {
+function classicalTemplates(pt: Pt, _pc: Pc): Problem[] {
   const a = pick([0, 1]) as 0 | 1;
   const b = pick([0, 1]) as 0 | 1;
   const xor = LogicGates.XOR(a, b);
   const p1: Problem = {
     id: 'cl-xor',
-    category: 'Classical',
-    question: `What is ${a} XOR ${b}?`,
+    category: 'classical',
+    question: pt('cl-xor', 'question', { a, b }),
     choices: ['0', '1'],
     correct: xor,
-    hint: 'XOR is 1 when inputs differ.',
+    hint: pt('cl-xor', 'hint'),
     steps: [
-      { text: 'XOR returns 1 if exactly one input is 1.' },
-      { text: `Inputs: a=${a}, b=${b}.`, latex: `${a} \\oplus ${b} = ${xor}` },
+      { text: pt('cl-xor', 'step1') },
+      { text: pt('cl-xor', 'step2', { a, b }), latex: `${a} \\oplus ${b} = ${xor}` },
     ],
-    solution: `${a} ⊕ ${b} = ${xor}.`,
+    solution: pt('cl-xor', 'solution', { a, b, xor }),
     verify: () => LogicGates.XOR(a, b) === xor,
   };
 
@@ -101,16 +103,16 @@ function classicalTemplates(): Problem[] {
   const dec = binaryToDecimal(bits);
   const p2: Problem = {
     id: 'cl-bin',
-    category: 'Classical',
-    question: `Convert binary ${bits} to decimal.`,
+    category: 'classical',
+    question: pt('cl-bin', 'question', { bits }),
     choices: shuffle([dec, dec + 1, dec - 1, dec + 2].filter((n) => n >= 0).map(String)).slice(0, 4),
     correct: 0,
-    hint: 'Sum powers of two where the bit is 1.',
+    hint: pt('cl-bin', 'hint'),
     steps: [
-      { text: 'Read bits from right to left as 2⁰, 2¹, 2², …' },
-      { text: `Evaluate ${bits} in base 2.`, latex: `${bits}_2 = ${dec}_{10}` },
+      { text: pt('cl-bin', 'step1') },
+      { text: pt('cl-bin', 'step2', { bits }), latex: `${bits}_2 = ${dec}_{10}` },
     ],
-    solution: `${bits}₂ = ${dec}₁₀.`,
+    solution: pt('cl-bin', 'solution', { bits, dec }),
     verify: () => binaryToDecimal(bits) === dec,
   };
   const sh2 = shuffleChoices(p2.choices, 0);
@@ -121,16 +123,16 @@ function classicalTemplates(): Problem[] {
   const bin = decimalToBinary(x, 4);
   const p3: Problem = {
     id: 'cl-dec',
-    category: 'Classical',
-    question: `Convert decimal ${x} to 4-bit binary.`,
+    category: 'classical',
+    question: pt('cl-dec', 'question', { x }),
     choices: shuffle([bin, decimalToBinary(x + 1, 4), decimalToBinary(x - 1, 4), decimalToBinary(x + 2, 4)]),
     correct: 0,
-    hint: 'Repeatedly divide by 2 and read remainders bottom-up.',
+    hint: pt('cl-dec', 'hint'),
     steps: [
-      { text: `Divide ${x} by 2 repeatedly to get remainders.` },
-      { text: 'Pad to 4 bits.', latex: `${x}_{10} = ${bin}_2` },
+      { text: pt('cl-dec', 'step1', { x }) },
+      { text: pt('cl-dec', 'step2'), latex: `${x}_{10} = ${bin}_2` },
     ],
-    solution: `${x}₁₀ = ${bin}₂.`,
+    solution: pt('cl-dec', 'solution', { x, bin }),
     verify: () => decimalToBinary(x, 4) === bin,
   };
   const sh3 = shuffleChoices(p3.choices, 0);
@@ -142,16 +144,16 @@ function classicalTemplates(): Problem[] {
   const { sum } = rippleCarryAdd(addA, addB);
   const p4: Problem = {
     id: 'cl-add',
-    category: 'Classical',
-    question: `Binary add: ${addA} + ${addB} = ?`,
+    category: 'classical',
+    question: pt('cl-add', 'question', { a: addA, b: addB }),
     choices: shuffle([sum, decimalToBinary(binaryToDecimal(addA) + binaryToDecimal(addB) + 1, sum.length), sum.slice(1).padStart(sum.length, '0'), '000']).filter((v, i, a) => a.indexOf(v) === i).slice(0, 4),
     correct: 0,
-    hint: 'Use ripple-carry: XOR for sum bit, AND for carry.',
+    hint: pt('cl-add', 'hint'),
     steps: [
-      { text: 'Add bit-by-bit from right with carry.' },
-      { text: 'Result', latex: `${addA}_2 + ${addB}_2 = ${sum}_2` },
+      { text: pt('cl-add', 'step1') },
+      { text: pt('cl-add', 'step2'), latex: `${addA}_2 + ${addB}_2 = ${sum}_2` },
     ],
-    solution: `${addA} + ${addB} = ${sum} (binary).`,
+    solution: pt('cl-add', 'solution', { a: addA, b: addB, sum }),
     verify: () => rippleCarryAdd(addA, addB).sum === sum,
   };
   const sh4 = shuffleChoices(p4.choices, 0);
@@ -161,7 +163,7 @@ function classicalTemplates(): Problem[] {
   return [p1, p2, p3, p4];
 }
 
-function oneQubitTemplates(): Problem[] {
+function oneQubitTemplates(pt: Pt, pc: Pc): Problem[] {
   const alpha = pick([0.6, 0.8, 1 / Math.sqrt(2), 0.5]);
   const beta = Math.sqrt(1 - alpha * alpha);
   const probs = singleQubitMeasurementProbabilities(
@@ -173,17 +175,17 @@ function oneQubitTemplates(): Problem[] {
   const p1 = probs['1'];
   const p1q: Problem = {
     id: '1q-prob',
-    category: 'One Qubit',
-    question: `If |ψ⟩ = ${alpha.toFixed(2)}|0⟩ + ${beta.toFixed(2)}|1⟩ (normalized), what is P(0)?`,
+    category: 'oneQubit',
+    question: pt('1q-prob', 'question', { alpha: alpha.toFixed(2), beta: beta.toFixed(2) }),
     latex: `P(0) = |\\alpha|^2`,
     choices: shuffle([p0, p1, 0.25, 0.75].map((v) => v.toFixed(2))),
     correct: 0,
-    hint: 'Born rule: probability is squared magnitude of amplitude.',
+    hint: pt('1q-prob', 'hint'),
     steps: [
-      { text: 'Identify α from the state.' },
-      { text: 'Compute |α|².', latex: `P(0) = ${alpha.toFixed(2)}^2 = ${p0.toFixed(2)}` },
+      { text: pt('1q-prob', 'step1') },
+      { text: pt('1q-prob', 'step2'), latex: `P(0) = ${alpha.toFixed(2)}^2 = ${p0.toFixed(2)}` },
     ],
-    solution: `P(0) = |α|² = ${p0.toFixed(2)}.`,
+    solution: pt('1q-prob', 'solution', { p0: p0.toFixed(2) }),
     verify: () => Math.abs(p0 - alpha * alpha) < 1e-6,
   };
   const sh1 = shuffleChoices(p1q.choices, 0);
@@ -191,19 +193,19 @@ function oneQubitTemplates(): Problem[] {
   p1q.correct = sh1.correct;
 
   const gate = pick(['X', 'Z', 'H'] as const);
-  const gateAction: Record<string, string> = { X: '|1⟩', Z: '−|1⟩', H: '|+⟩' };
+  const gateAction: Record<string, string> = { X: pc('ket1'), Z: pc('ketMinus1'), H: pc('ketPlus') };
   const p2: Problem = {
     id: '1q-gate',
-    category: 'One Qubit',
-    question: `Which state does ${gate} map |0⟩ to?`,
-    choices: shuffle(['|0⟩', '|1⟩', '|+⟩', '−|1⟩']),
+    category: 'oneQubit',
+    question: pt('1q-gate', 'question', { gate }),
+    choices: shuffle([pc('ket0'), pc('ket1'), pc('ketPlus'), pc('ketMinus1')]),
     correct: 0,
-    hint: 'Apply the gate matrix to |0⟩.',
+    hint: pt('1q-gate', 'hint'),
     steps: [
-      { text: `Write ${gate}|0⟩.` },
-      { text: 'Use the standard matrix for the gate.' },
+      { text: pt('1q-gate', 'step1', { gate }) },
+      { text: pt('1q-gate', 'step2') },
     ],
-    solution: `${gate}|0⟩ → ${gateAction[gate]}.`,
+    solution: pt('1q-gate', 'solution', { gate, target: gateAction[gate] }),
     verify: () => true,
   };
   p2.correct = p2.choices.indexOf(gateAction[gate]);
@@ -213,17 +215,17 @@ function oneQubitTemplates(): Problem[] {
   const bloch = blochCoordinates(fromBloch(theta, phi));
   const p3: Problem = {
     id: '1q-bloch',
-    category: 'One Qubit',
-    question: `A qubit on the Bloch sphere has θ = ${(theta * 180 / Math.PI).toFixed(0)}°. What is z = cos θ?`,
+    category: 'oneQubit',
+    question: pt('1q-bloch', 'question', { deg: (theta * 180 / Math.PI).toFixed(0) }),
     latex: `z = \\cos\\theta`,
     choices: shuffle([bloch.z, -bloch.z, bloch.x, bloch.y].map((v) => v.toFixed(2))),
     correct: 0,
-    hint: 'Bloch vector: (x, y, z) with z = cos θ.',
+    hint: pt('1q-bloch', 'hint'),
     steps: [
-      { text: 'Use z = cos θ on the Bloch sphere.' },
-      { text: 'Evaluate.', latex: `z = \\cos(${theta.toFixed(2)}) = ${bloch.z.toFixed(2)}` },
+      { text: pt('1q-bloch', 'step1') },
+      { text: pt('1q-bloch', 'step2'), latex: `z = \\cos(${theta.toFixed(2)}) = ${bloch.z.toFixed(2)}` },
     ],
-    solution: `z = cos(${theta.toFixed(2)}) ≈ ${bloch.z.toFixed(2)}.`,
+    solution: pt('1q-bloch', 'solution', { theta: theta.toFixed(2), z: bloch.z.toFixed(2) }),
     verify: () => Math.abs(bloch.z - Math.cos(theta)) < 1e-6,
   };
   const sh3 = shuffleChoices(p3.choices, 0);
@@ -235,52 +237,52 @@ function oneQubitTemplates(): Problem[] {
   const hxNorm = normalize(singleQubitState(hx[0], hx[1]));
   const p4: Problem = {
     id: '1q-hh',
-    category: 'One Qubit',
-    question: 'What does H² do to any single-qubit state?',
-    choices: ['Identity (returns the state)', 'Bit flip', 'Phase flip', 'Projects to |0⟩'],
+    category: 'oneQubit',
+    question: pt('1q-hh', 'question'),
+    choices: [pc('identity'), pc('bitFlip'), pc('phaseFlip'), pc('projectZero')],
     correct: 0,
-    hint: 'H is its own inverse up to global phase; H² = I.',
+    hint: pt('1q-hh', 'hint'),
     steps: [
-      { text: 'Recall H² = I.' },
-      { text: 'So applying H twice returns the original state.' },
+      { text: pt('1q-hh', 'step1') },
+      { text: pt('1q-hh', 'step2') },
     ],
-    solution: 'H² = I, so H is an involution.',
+    solution: pt('1q-hh', 'solution'),
     verify: () => fidelity(plus, hxNorm) > 0.99,
   };
 
   return [p1q, p2, p3, p4];
 }
 
-function linearAlgebraTemplates(): Problem[] {
+function linearAlgebraTemplates(pt: Pt, pc: Pc): Problem[] {
   const p1: Problem = {
     id: 'la-unitary',
-    category: 'Linear Algebra',
-    question: 'Which condition defines a unitary matrix U?',
-    choices: shuffle(['U†U = I', 'U = U†', 'det(U) = 0', 'U is real']),
+    category: 'linearAlgebra',
+    question: pt('la-unitary', 'question'),
+    choices: shuffle([pc('unitary'), pc('hermitian'), pc('detZero'), pc('real')]),
     correct: 0,
-    hint: 'Unitary preserves inner products.',
+    hint: pt('la-unitary', 'hint'),
     steps: [
-      { text: 'Unitary operators preserve norm.' },
-      { text: 'Matrix condition', latex: 'U^\\dagger U = I' },
+      { text: pt('la-unitary', 'step1') },
+      { text: pt('la-unitary', 'step2'), latex: 'U^\\dagger U = I' },
     ],
-    solution: 'U†U = I (equivalently UU† = I).',
+    solution: pt('la-unitary', 'solution'),
     verify: () => Gates.H.isUnitary(),
   };
-  p1.correct = p1.choices.indexOf('U†U = I');
+  p1.correct = p1.choices.indexOf(pc('unitary'));
 
   const p2: Problem = {
     id: 'la-hermitian',
-    category: 'Linear Algebra',
-    question: 'Pauli Z is Hermitian. What is its eigenvalue on |1⟩?',
+    category: 'linearAlgebra',
+    question: pt('la-hermitian', 'question'),
     latex: 'Z|1\\rangle = \\lambda|1\\rangle',
     choices: ['+1', '−1', 'i', '0'],
     correct: 1,
-    hint: 'Z = diag(1, −1).',
+    hint: pt('la-hermitian', 'hint'),
     steps: [
-      { text: 'Write Z in the computational basis.' },
-      { text: 'Apply to |1⟩.', latex: 'Z|1\\rangle = -|1\\rangle' },
+      { text: pt('la-hermitian', 'step1') },
+      { text: pt('la-hermitian', 'step2'), latex: 'Z|1\\rangle = -|1\\rangle' },
     ],
-    solution: 'Eigenvalue −1 on |1⟩.',
+    solution: pt('la-hermitian', 'solution'),
     verify: () => {
       const z1 = Gates.Z.mulVec([C.zero(), C.one()]);
       return C.eq(z1[1], C.scale(-1, C.one()));
@@ -289,99 +291,99 @@ function linearAlgebraTemplates(): Problem[] {
 
   const p3: Problem = {
     id: 'la-tensor',
-    category: 'Linear Algebra',
-    question: 'What is the dimension of the Hilbert space for n qubits?',
-    choices: shuffle(['2ⁿ', 'n²', '2n', 'n!']),
+    category: 'linearAlgebra',
+    question: pt('la-tensor', 'question'),
+    choices: shuffle([pc('dim2n'), pc('dimN2'), pc('dim2nLinear'), pc('dimFactorial')]),
     correct: 0,
-    hint: 'Each qubit adds a factor of 2.',
+    hint: pt('la-tensor', 'hint'),
     steps: [
-      { text: 'Tensor product of n copies of ℂ².' },
-      { text: 'Dimension', latex: '\\dim = 2^n' },
+      { text: pt('la-tensor', 'step1') },
+      { text: pt('la-tensor', 'step2'), latex: '\\dim = 2^n' },
     ],
-    solution: '2ⁿ-dimensional complex vector space.',
+    solution: pt('la-tensor', 'solution'),
     verify: () => true,
   };
-  p3.correct = p3.choices.indexOf('2ⁿ');
+  p3.correct = p3.choices.indexOf(pc('dim2n'));
 
   const p4: Problem = {
     id: 'la-inner',
-    category: 'Linear Algebra',
-    question: 'Are |0⟩ and |1⟩ orthogonal?',
-    choices: ['Yes', 'No'],
+    category: 'linearAlgebra',
+    question: pt('la-inner', 'question'),
+    choices: [pc('yes'), pc('no')],
     correct: 0,
-    hint: 'Compute ⟨0|1⟩.',
+    hint: pt('la-inner', 'hint'),
     steps: [
-      { text: 'Inner product of basis states.' },
-      { text: '⟨0|1⟩ = 0', latex: '\\langle 0|1\\rangle = 0' },
+      { text: pt('la-inner', 'step1') },
+      { text: pt('la-inner', 'step2'), latex: '\\langle 0|1\\rangle = 0' },
     ],
-    solution: 'Yes — computational basis is orthonormal.',
+    solution: pt('la-inner', 'solution'),
     verify: () => true,
   };
 
   return [p1, p2, p3, p4];
 }
 
-function multiQubitTemplates(): Problem[] {
+function multiQubitTemplates(pt: Pt, pc: Pc): Problem[] {
   const bell = BellStates.phiPlus();
   const p1: Problem = {
     id: 'mq-bell',
-    category: 'Multi-qubit',
-    question: 'Is |Φ⁺⟩ = (|00⟩ + |11⟩)/√2 a product state?',
-    choices: ['Yes', 'No'],
+    category: 'multiQubit',
+    question: pt('mq-bell', 'question'),
+    choices: [pc('yes'), pc('no')],
     correct: 1,
-    hint: 'Check if amplitudes factor as c₀₀·c₁₁ = c₀₁·c₁₀.',
+    hint: pt('mq-bell', 'hint'),
     steps: [
-      { text: 'Product state criterion for 2 qubits.' },
-      { text: 'Bell state fails factorization — it is entangled.' },
+      { text: pt('mq-bell', 'step1') },
+      { text: pt('mq-bell', 'step2') },
     ],
-    solution: 'No — |Φ⁺⟩ is entangled.',
+    solution: pt('mq-bell', 'solution'),
     verify: () => !isProductState(bell),
   };
 
   const p2: Problem = {
     id: 'mq-cnot',
-    category: 'Multi-qubit',
-    question: 'What does CNOT|10⟩ produce?',
+    category: 'multiQubit',
+    question: pt('mq-cnot', 'question'),
     latex: '\\text{CNOT}|a,b\\rangle = |a, b\\oplus a\\rangle',
     choices: shuffle(['|10⟩', '|11⟩', '|00⟩', '|01⟩']),
     correct: 0,
-    hint: 'Control is first qubit (1); target flips when control is 1.',
+    hint: pt('mq-cnot', 'hint'),
     steps: [
-      { text: 'Control = 1, target = 0.' },
-      { text: 'Flip target → |11⟩.', latex: '\\text{CNOT}|10\\rangle = |11\\rangle' },
+      { text: pt('mq-cnot', 'step1') },
+      { text: pt('mq-cnot', 'step2'), latex: '\\text{CNOT}|10\\rangle = |11\\rangle' },
     ],
-    solution: 'CNOT|10⟩ = |11⟩.',
+    solution: pt('mq-cnot', 'solution'),
     verify: () => true,
   };
   p2.correct = p2.choices.indexOf('|11⟩');
 
   const p3: Problem = {
     id: 'mq-swap',
-    category: 'Multi-qubit',
-    question: 'How many CNOT gates in the standard SWAP decomposition?',
-    choices: ['1', '2', '3', '4'],
+    category: 'multiQubit',
+    question: pt('mq-swap', 'question'),
+    choices: [pc('cnotCount1'), pc('cnotCount2'), pc('cnotCount3'), pc('cnotCount4')],
     correct: 2,
-    hint: 'SWAP = CNOT · (CNOT with middle qubit) · CNOT pattern.',
+    hint: pt('mq-swap', 'hint'),
     steps: [
-      { text: 'Standard circuit: CNOT₁₂ · CNOT₂₁ · CNOT₁₂.' },
-      { text: 'Three CNOTs suffice.' },
+      { text: pt('mq-swap', 'step1') },
+      { text: pt('mq-swap', 'step2') },
     ],
-    solution: '3 CNOT gates.',
+    solution: pt('mq-swap', 'solution'),
     verify: () => true,
   };
 
   const p4: Problem = {
     id: 'mq-phi',
-    category: 'Multi-qubit',
-    question: 'Measuring both qubits of |Φ⁺⟩ in Z basis: P(00)?',
-    choices: shuffle(['0.5', '0.25', '1', '0']),
+    category: 'multiQubit',
+    question: pt('mq-phi', 'question'),
+    choices: shuffle([pc('prob05'), pc('prob025'), pc('prob1'), pc('prob0')]),
     correct: 0,
-    hint: 'Only |00⟩ and |11⟩ have nonzero amplitude, equal weight.',
+    hint: pt('mq-phi', 'hint'),
     steps: [
-      { text: 'Amplitudes: (|00⟩ + |11⟩)/√2.' },
-      { text: 'P(00) = |1/√2|² = 1/2.', latex: 'P(00) = \\frac{1}{2}' },
+      { text: pt('mq-phi', 'step1') },
+      { text: pt('mq-phi', 'step2'), latex: 'P(00) = \\frac{1}{2}' },
     ],
-    solution: 'P(00) = 1/2.',
+    solution: pt('mq-phi', 'solution'),
     verify: () => Math.abs(C.mag2(bell.amplitudes[0]) - 0.5) < 1e-6,
   };
   const sh4 = shuffleChoices(p4.choices, 0);
@@ -391,171 +393,176 @@ function multiQubitTemplates(): Problem[] {
   return [p1, p2, p3, p4];
 }
 
-function protocolTemplates(): Problem[] {
+function protocolTemplates(pt: Pt, pc: Pc): Problem[] {
   const p1: Problem = {
     id: 'pr-bb84',
-    category: 'Protocols',
-    question: 'BB84 requires an authenticated classical channel?',
-    choices: ['Yes', 'No'],
+    category: 'protocols',
+    question: pt('pr-bb84', 'question'),
+    choices: [pc('yes'), pc('no')],
     correct: 0,
-    hint: 'Basis sifting and eavesdropper detection use classical communication.',
+    hint: pt('pr-bb84', 'hint'),
     steps: [
-      { text: 'Quantum states carry key material.' },
-      { text: 'Classical post-processing compares bases and estimates error rate.' },
+      { text: pt('pr-bb84', 'step1') },
+      { text: pt('pr-bb84', 'step2') },
     ],
-    solution: 'Yes — authenticated classical channel is required.',
+    solution: pt('pr-bb84', 'solution'),
     verify: () => true,
   };
 
   const p2: Problem = {
     id: 'pr-chsh',
-    category: 'Protocols',
-    question: 'Classical (LHV) bound on CHSH parameter S?',
-    choices: shuffle(['≤ 2', '≤ 2√2', '≤ 4', '≤ 1']),
+    category: 'protocols',
+    question: pt('pr-chsh', 'question'),
+    choices: shuffle([pc('chsh2'), pc('chsh2sqrt2'), pc('chsh4'), pc('chsh1')]),
     correct: 0,
-    hint: 'Tsirelson bound is 2√2 quantum; classical is 2.',
+    hint: pt('pr-chsh', 'hint'),
     steps: [
-      { text: 'CHSH: S = E(a,b) + E(a,b′) + E(a′,b) − E(a′,b′).' },
-      { text: 'Classical |S| ≤ 2.', latex: '|S| \\leq 2' },
+      { text: pt('pr-chsh', 'step1') },
+      { text: pt('pr-chsh', 'step2'), latex: '|S| \\leq 2' },
     ],
-    solution: '|S| ≤ 2 classically.',
+    solution: pt('pr-chsh', 'solution'),
     verify: () => true,
   };
-  p2.correct = p2.choices.indexOf('≤ 2');
+  p2.correct = p2.choices.indexOf(pc('chsh2'));
 
   const p3: Problem = {
     id: 'pr-tele',
-    category: 'Protocols',
-    question: 'Quantum teleportation transmits the quantum state using only classical bits (2) plus shared entanglement?',
-    choices: ['Yes', 'No'],
+    category: 'protocols',
+    question: pt('pr-tele', 'question'),
+    choices: [pc('yes'), pc('no')],
     correct: 0,
-    hint: 'No faster-than-light; 2 classical bits + 1 ebit.',
+    hint: pt('pr-tele', 'hint'),
     steps: [
-      { text: 'Alice measures in Bell basis → 2 classical bits.' },
-      { text: 'Bob applies correction based on bits.' },
+      { text: pt('pr-tele', 'step1') },
+      { text: pt('pr-tele', 'step2') },
     ],
-    solution: 'Yes — 2 classical bits + 1 shared Bell pair.',
+    solution: pt('pr-tele', 'solution'),
     verify: () => true,
   };
 
   const p4: Problem = {
     id: 'pr-sd',
-    category: 'Protocols',
-    question: 'Superdense coding sends how many classical bits using 1 qubit + 1 ebit?',
-    choices: ['1', '2', '3', '4'],
+    category: 'protocols',
+    question: pt('pr-sd', 'question'),
+    choices: [pc('sdBits1'), pc('sdBits2'), pc('sdBits3'), pc('sdBits4')],
     correct: 1,
-    hint: 'Encode 00, 01, 10, 11 via four Pauli operations on shared Bell state.',
+    hint: pt('pr-sd', 'hint'),
     steps: [
-      { text: 'Alice encodes 2 bits via Pauli on her half of Bell pair.' },
-      { text: 'Bob performs Bell measurement → 2 bits recovered.' },
+      { text: pt('pr-sd', 'step1') },
+      { text: pt('pr-sd', 'step2') },
     ],
-    solution: '2 classical bits.',
+    solution: pt('pr-sd', 'solution'),
     verify: () => true,
   };
 
   return [p1, p2, p3, p4];
 }
 
-function algorithmTemplates(): Problem[] {
+function algorithmTemplates(pt: Pt, pc: Pc): Problem[] {
   const n = pick([4, 6, 8, 10]);
   const p1: Problem = {
     id: 'alg-grover',
-    category: 'Algorithms',
-    question: `Grover search over N = 2^${n} items: query complexity?`,
+    category: 'algorithms',
+    question: pt('alg-grover', 'question', { n }),
     latex: 'O(\\sqrt{N})',
-    choices: shuffle(['O(√N)', 'O(log N)', 'O(N)', 'O(N²)']),
+    choices: shuffle([pc('groverSqrt'), pc('groverLog'), pc('groverN'), pc('groverN2')]),
     correct: 0,
-    hint: 'Quadratic speedup over classical O(N).',
+    hint: pt('alg-grover', 'hint'),
     steps: [
-      { text: 'Grover iterate amplifies marked state amplitude.' },
-      { text: '~π/4 · √N iterations.', latex: `O(\\sqrt{2^{${n}}}) = O(2^{${n / 2}})` },
+      { text: pt('alg-grover', 'step1') },
+      { text: pt('alg-grover', 'step2'), latex: `O(\\sqrt{2^{${n}}}) = O(2^{${n / 2}})` },
     ],
-    solution: 'O(√N) oracle queries.',
+    solution: pt('alg-grover', 'solution'),
     verify: () => true,
   };
-  p1.correct = p1.choices.indexOf('O(√N)');
+  p1.correct = p1.choices.indexOf(pc('groverSqrt'));
 
   const p2: Problem = {
     id: 'alg-dj',
-    category: 'Algorithms',
-    question: 'Deutsch–Jozsa: queries to distinguish constant vs balanced (n-bit)?',
-    choices: shuffle(['1', 'n', '2ⁿ⁻¹ + 1', '2ⁿ']),
+    category: 'algorithms',
+    question: pt('alg-dj', 'question'),
+    choices: shuffle([pc('query1'), pc('queryN'), pc('query2n'), pc('query2nFull')]),
     correct: 0,
-    hint: 'Quantum algorithm needs exactly one oracle query.',
+    hint: pt('alg-dj', 'hint'),
     steps: [
-      { text: 'Prepare uniform superposition, apply oracle, measure.' },
-      { text: 'Single query suffices.', latex: '1 \\text{ query}' },
+      { text: pt('alg-dj', 'step1') },
+      { text: pt('alg-dj', 'step2'), latex: '1 \\text{ query}' },
     ],
-    solution: '1 query (quantum) vs 2ⁿ⁻¹ + 1 worst-case classically.',
+    solution: pt('alg-dj', 'solution'),
     verify: () => true,
   };
-  p2.correct = p2.choices.indexOf('1');
+  p2.correct = p2.choices.indexOf(pc('query1'));
 
   const p3: Problem = {
     id: 'alg-shor',
-    category: 'Algorithms',
-    question: "Shor's algorithm factors N by finding what property of a^x mod N?",
-    choices: shuffle(['Period', 'Minimum', 'Maximum', 'Parity only']),
+    category: 'algorithms',
+    question: pt('alg-shor', 'question'),
+    choices: shuffle([pc('period'), pc('minimum'), pc('maximum'), pc('parityOnly')]),
     correct: 0,
-    hint: 'Order r where a^r ≡ 1 (mod N).',
+    hint: pt('alg-shor', 'hint'),
     steps: [
-      { text: 'Choose random a coprime to N.' },
-      { text: 'Find period r of f(x) = a^x mod N.', latex: 'a^r \\equiv 1 \\pmod{N}' },
+      { text: pt('alg-shor', 'step1') },
+      { text: pt('alg-shor', 'step2'), latex: 'a^r \\equiv 1 \\pmod{N}' },
     ],
-    solution: 'Period (order) r of modular exponentiation.',
+    solution: pt('alg-shor', 'solution'),
     verify: () => true,
   };
-  p3.correct = p3.choices.indexOf('Period');
+  p3.correct = p3.choices.indexOf(pc('period'));
 
   const p4: Problem = {
     id: 'alg-deutsch',
-    category: 'Algorithms',
-    question: 'Deutsch algorithm (1 bit): maximum classical queries to determine if f is constant?',
-    choices: ['1', '2', '3', '4'],
+    category: 'algorithms',
+    question: pt('alg-deutsch', 'question'),
+    choices: [pc('query1'), pc('deutschClassical2'), pc('deutschClassical3'), pc('deutschClassical4')],
     correct: 1,
-    hint: 'Worst case: query f(0), still ambiguous, need f(1).',
+    hint: pt('alg-deutsch', 'hint'),
     steps: [
-      { text: 'Classically, one query leaves two consistent functions.' },
-      { text: 'Second query is required in worst case.' },
+      { text: pt('alg-deutsch', 'step1') },
+      { text: pt('alg-deutsch', 'step2') },
     ],
-    solution: '2 queries classically vs 1 quantum.',
+    solution: pt('alg-deutsch', 'solution'),
     verify: () => true,
   };
 
   return [p1, p2, p3, p4];
 }
 
-const GENERATORS: Record<Category, () => Problem[]> = {
-  Classical: classicalTemplates,
-  'One Qubit': oneQubitTemplates,
-  'Linear Algebra': linearAlgebraTemplates,
-  'Multi-qubit': multiQubitTemplates,
-  Protocols: protocolTemplates,
-  Algorithms: algorithmTemplates,
+const GENERATORS: Record<CategoryKey, (pt: Pt, pc: Pc) => Problem[]> = {
+  classical: classicalTemplates,
+  oneQubit: oneQubitTemplates,
+  linearAlgebra: linearAlgebraTemplates,
+  multiQubit: multiQubitTemplates,
+  protocols: protocolTemplates,
+  algorithms: algorithmTemplates,
 };
 
-function generateFromCategory(cat: Category): Problem {
-  const templates = GENERATORS[cat]();
+function generateFromCategory(cat: CategoryKey, pt: Pt, pc: Pc): Problem {
+  const templates = GENERATORS[cat](pt, pc);
   const problem = pick(templates);
   if (problem.verify && !problem.verify()) {
-    return generateFromCategory(cat);
+    return generateFromCategory(cat, pt, pc);
   }
   return { ...problem, id: `${problem.id}-${Date.now()}` };
 }
 
-function generateMixedSet(count: number): Problem[] {
+function generateMixedSet(count: number, pt: Pt, pc: Pc): Problem[] {
   const problems: Problem[] = [];
-  const cats = shuffle([...CATEGORIES]);
+  const cats = shuffle([...CATEGORY_KEYS]);
   for (let i = 0; i < count; i++) {
-    problems.push(generateFromCategory(cats[i % cats.length]));
+    problems.push(generateFromCategory(cats[i % cats.length], pt, pc));
   }
   return problems;
 }
 
 export default function PracticeIndex() {
-  const t = useT();
-  const [category, setCategory] = useState<Category | 'Mixed'>('Mixed');
-  const [set, setSet] = useState(() => generateMixedSet(5));
+  const { t } = useLocale();
+  const pt = usePracticeT();
+  const ui = usePracticeUi();
+  const categoryLabel = usePracticeCategory();
+  const pc = useCallback((key: string) => t(`practice.choices.${key}`), [t]);
+
+  const [category, setCategory] = useState<CategoryKey | 'Mixed'>('Mixed');
+  const [set, setSet] = useState(() => generateMixedSet(5, pt, pc));
   const [idx, setIdx] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -565,11 +572,11 @@ export default function PracticeIndex() {
 
   const problem = set[idx];
 
-  const newSet = useCallback((cat: Category | 'Mixed' = category) => {
+  const newSet = useCallback((cat: CategoryKey | 'Mixed' = category) => {
     const problems =
       cat === 'Mixed'
-        ? generateMixedSet(5)
-        : Array.from({ length: 5 }, () => generateFromCategory(cat));
+        ? generateMixedSet(5, pt, pc)
+        : Array.from({ length: 5 }, () => generateFromCategory(cat, pt, pc));
     setSet(problems);
     setIdx(0);
     setSelected(null);
@@ -577,7 +584,7 @@ export default function PracticeIndex() {
     setDone(false);
     setShowHint(false);
     setStepVisible(0);
-  }, [category]);
+  }, [category, pt, pc]);
 
   const submit = (choice: number) => {
     if (selected !== null) return;
@@ -607,43 +614,43 @@ export default function PracticeIndex() {
   if (done) {
     return (
       <div>
-        <h1>{t('practice.ui.title')}</h1>
+        <h1>{ui('title')}</h1>
         <p className="card">
-          {t('practice.ui.score')} <strong>{score}</strong> / {set.length}
+          {ui('score')} <strong>{score}</strong> / {set.length}
         </p>
-        <button className="btn btn-primary" onClick={() => newSet()}>{t('practice.ui.newRandomSet')}</button>
+        <button className="btn btn-primary" onClick={() => newSet()}>{ui('newRandomSet')}</button>
       </div>
     );
   }
 
   return (
     <div>
-      <h1>{t('practice.ui.title')}</h1>
-      <p>{t('practice.ui.intro')}</p>
+      <h1>{ui('title')}</h1>
+      <p>{ui('intro')}</p>
 
       <div className="btn-group" style={{ flexWrap: 'wrap', marginBottom: '1rem' }}>
         <button
           className={`btn ${category === 'Mixed' ? 'btn-primary' : ''}`}
           onClick={() => { setCategory('Mixed'); newSet('Mixed'); }}
         >
-          {t('practice.ui.mixed')}
+          {ui('mixed')}
         </button>
-        {CATEGORIES.map((cat) => (
+        {CATEGORY_KEYS.map((cat) => (
           <button
             key={cat}
             className={`btn ${category === cat ? 'btn-primary' : ''}`}
             onClick={() => { setCategory(cat); newSet(cat); }}
           >
-            {cat}
+            {categoryLabel(cat)}
           </button>
         ))}
       </div>
 
       <p>
-        {t('practice.ui.questionOf', { current: idx + 1, total: set.length })} · <span className="tag">{problem.category}</span>
+        {ui('questionOf', { current: idx + 1, total: set.length })} · <span className="tag">{categoryLabel(problem.category)}</span>
         {verified !== null && (
           <span className="tag" style={{ marginLeft: '0.5rem', borderColor: verified ? 'var(--success)' : 'var(--danger)' }}>
-            {verified ? t('practice.ui.verified') : t('practice.ui.check')}
+            {verified ? ui('verified') : ui('check')}
           </span>
         )}
       </p>
@@ -654,24 +661,24 @@ export default function PracticeIndex() {
 
         <div className="btn-group" style={{ marginBottom: '1rem' }}>
           <button className="btn" onClick={() => setShowHint(!showHint)}>
-            {showHint ? t('practice.ui.hideHint') : t('practice.ui.hint')}
+            {showHint ? ui('hideHint') : ui('hint')}
           </button>
           {stepVisible < problem.steps.length && (
             <button className="btn" onClick={() => setStepVisible((v) => v + 1)}>
-              {t('practice.ui.revealStep', { n: stepVisible + 1 })}
+              {ui('revealStep', { n: stepVisible + 1 })}
             </button>
           )}
         </div>
 
         {showHint && (
           <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginBottom: '1rem' }}>
-            <strong>Hint:</strong> {problem.hint}
+            <strong>{ui('hint')}:</strong> {problem.hint}
           </p>
         )}
 
         {problem.steps.slice(0, stepVisible).map((step, i) => (
           <div key={i} style={{ marginBottom: '0.75rem', paddingLeft: '0.5rem', borderLeft: '2px solid var(--accent)' }}>
-            <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-muted)' }}>{t('practice.ui.step', { n: i + 1 })}</p>
+            <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-muted)' }}>{ui('step', { n: i + 1 })}</p>
             <p>{step.text}</p>
             {step.latex && <Katex display>{step.latex}</Katex>}
           </div>
@@ -702,25 +709,25 @@ export default function PracticeIndex() {
         {selected !== null && (
           <>
             <p className={selected === problem.correct ? 'correct' : 'incorrect'}>
-              {selected === problem.correct ? t('practice.ui.correct') : t('practice.ui.incorrect')}
+              {selected === problem.correct ? ui('correct') : ui('incorrect')}
             </p>
-            <Expandable title={t('practice.ui.fullSolution')}>
+            <Expandable title={ui('fullSolution')}>
               <p>{problem.solution}</p>
               {problem.steps.map((step, i) => (
                 <div key={i}>
-                  <p><strong>{t('practice.ui.step', { n: i + 1 })}:</strong> {step.text}</p>
+                  <p><strong>{ui('step', { n: i + 1 })}:</strong> {step.text}</p>
                   {step.latex && <Katex display>{step.latex}</Katex>}
                 </div>
               ))}
             </Expandable>
             <button className="btn btn-primary" onClick={next} style={{ marginTop: '1rem' }}>
-              {idx + 1 >= set.length ? t('practice.ui.finish') : t('practice.ui.next')}
+              {idx + 1 >= set.length ? ui('finish') : ui('next')}
             </button>
           </>
         )}
       </div>
 
-      <button className="btn" onClick={() => newSet()}>Shuffle new set</button>
+      <button className="btn" onClick={() => newSet()}>{ui('shuffleNewSet')}</button>
     </div>
   );
 }

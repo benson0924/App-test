@@ -145,6 +145,10 @@ export const reference: TranslationTree = {
     "complexity": "計算量クラス",
     "classical": "古典計算（第 I 部）"
   },
+  "misconceptions": {
+    "myth": "迷思：",
+    "correction": "正しい説明："
+  },
   "complexity": {
     "title": "計算量リファレンス",
     "intro": "基礎量子アルゴリズムのクエリ・時間計算量の比較。定数は省略；特記なき場合は耐故障モデルを仮定。",

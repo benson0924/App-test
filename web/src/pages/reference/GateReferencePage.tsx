@@ -4,12 +4,9 @@ import Expandable from '@/components/Expandable';
 import { useT } from '@/context/LocaleContext';
 
 interface GateInfo {
+  id: string;
   symbol: string;
-  name: string;
   matrix?: string;
-  action: string;
-  bloch: string;
-  inverse: string;
   param?: number;
 }
 
@@ -32,149 +29,47 @@ function getMatrix(name: string, param?: number): { re: number; im: number }[][]
 }
 
 const SINGLE_GATES: GateInfo[] = [
-  {
-    symbol: 'I',
-    name: 'Identity',
-    matrix: '\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix}',
-    action: 'I|0⟩ = |0⟩, I|1⟩ = |1⟩ — no change',
-    bloch: 'Identity rotation: no movement on Bloch sphere',
-    inverse: 'I† = I',
-  },
-  {
-    symbol: 'X',
-    name: 'Pauli X (NOT)',
-    matrix: '\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}',
-    action: 'Bit flip: X|0⟩ = |1⟩, X|1⟩ = |0⟩',
-    bloch: 'Rotation by π about x-axis: |0⟩ ↔ |1⟩',
-    inverse: 'X† = X (X² = I)',
-  },
-  {
-    symbol: 'Y',
-    name: 'Pauli Y',
-    matrix: '\\begin{bmatrix}0&-i\\\\i&0\\end{bmatrix}',
-    action: 'Y|0⟩ = i|1⟩, Y|1⟩ = −i|0⟩',
-    bloch: 'Rotation by π about y-axis',
-    inverse: 'Y† = Y (Y² = I)',
-  },
-  {
-    symbol: 'Z',
-    name: 'Pauli Z',
-    matrix: '\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}',
-    action: 'Phase flip: Z|0⟩ = |0⟩, Z|1⟩ = −|1⟩',
-    bloch: 'Rotation by π about z-axis',
-    inverse: 'Z† = Z (Z² = I)',
-  },
-  {
-    symbol: 'H',
-    name: 'Hadamard',
-    matrix: '\\frac{1}{\\sqrt{2}}\\begin{bmatrix}1&1\\\\1&-1\\end{bmatrix}',
-    action: 'H|0⟩ = |+⟩, H|1⟩ = |−⟩',
-    bloch: 'π rotation about (x+z)/√2 axis; maps z ↔ x',
-    inverse: 'H† = H (H² = I)',
-  },
-  {
-    symbol: 'S',
-    name: 'Phase (S gate)',
-    matrix: '\\begin{bmatrix}1&0\\\\0&i\\end{bmatrix}',
-    action: 'S|0⟩ = |0⟩, S|1⟩ = i|1⟩',
-    bloch: 'Rotation by π/2 about z-axis',
-    inverse: 'S† = S³ = ZS (S² = Z)',
-  },
-  {
-    symbol: 'T',
-    name: 'π/8 gate',
-    matrix: '\\begin{bmatrix}1&0\\\\0&e^{i\\pi/4}\\end{bmatrix}',
-    action: 'T|0⟩ = |0⟩, T|1⟩ = e^{iπ/4}|1⟩',
-    bloch: 'Rotation by π/4 about z-axis',
-    inverse: 'T† = T⁷ (T² = S, T⁴ = Z)',
-  },
-  {
-    symbol: 'R_x(θ)',
-    name: 'Rotation about x',
-    matrix: 'e^{-i\\theta X/2}',
-    action: 'R_x(θ)|0⟩ = cos(θ/2)|0⟩ − i sin(θ/2)|1⟩',
-    bloch: 'Rotation by θ about x-axis',
-    inverse: 'R_x(θ)† = R_x(−θ)',
-    param: Math.PI / 2,
-  },
-  {
-    symbol: 'R_y(θ)',
-    name: 'Rotation about y',
-    matrix: 'e^{-i\\theta Y/2}',
-    action: 'R_y(θ)|0⟩ = cos(θ/2)|0⟩ + sin(θ/2)|1⟩',
-    bloch: 'Rotation by θ about y-axis',
-    inverse: 'R_y(θ)† = R_y(−θ)',
-    param: Math.PI / 2,
-  },
-  {
-    symbol: 'R_z(θ)',
-    name: 'Rotation about z',
-    matrix: 'e^{-i\\theta Z/2}',
-    action: 'R_z(θ)|0⟩ = e^{−iθ/2}|0⟩, R_z(θ)|1⟩ = e^{iθ/2}|1⟩',
-    bloch: 'Rotation by θ about z-axis (global phase on |0⟩)',
-    inverse: 'R_z(θ)† = R_z(−θ)',
-    param: Math.PI / 2,
-  },
+  { id: 'I', symbol: 'I', matrix: '\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix}' },
+  { id: 'X', symbol: 'X', matrix: '\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}' },
+  { id: 'Y', symbol: 'Y', matrix: '\\begin{bmatrix}0&-i\\\\i&0\\end{bmatrix}' },
+  { id: 'Z', symbol: 'Z', matrix: '\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}' },
+  { id: 'H', symbol: 'H', matrix: '\\frac{1}{\\sqrt{2}}\\begin{bmatrix}1&1\\\\1&-1\\end{bmatrix}' },
+  { id: 'S', symbol: 'S', matrix: '\\begin{bmatrix}1&0\\\\0&i\\end{bmatrix}' },
+  { id: 'T', symbol: 'T', matrix: '\\begin{bmatrix}1&0\\\\0&e^{i\\pi/4}\\end{bmatrix}' },
+  { id: 'Rx', symbol: 'R_x(θ)', matrix: 'e^{-i\\theta X/2}', param: Math.PI / 2 },
+  { id: 'Ry', symbol: 'R_y(θ)', matrix: 'e^{-i\\theta Y/2}', param: Math.PI / 2 },
+  { id: 'Rz', symbol: 'R_z(θ)', matrix: 'e^{-i\\theta Z/2}', param: Math.PI / 2 },
 ];
 
 const TWO_QUBIT: GateInfo[] = [
-  {
-    symbol: 'CNOT',
-    name: 'Controlled-NOT',
-    matrix: '\\begin{bmatrix}1&0&0&0\\\\0&1&0&0\\\\0&0&0&1\\\\0&0&1&0\\end{bmatrix}',
-    action: 'CNOT|a,b⟩ = |a, b⊕a⟩ — flips target if control is 1',
-    bloch: 'Entangling; not a single-qubit Bloch rotation',
-    inverse: 'CNOT† = CNOT (CNOT² = I on target)',
-  },
-  {
-    symbol: 'CZ',
-    name: 'Controlled-Z',
-    matrix: '\\text{diag}(1,1,1,-1)',
-    action: 'CZ|11⟩ = −|11⟩; others unchanged — adds π phase when both 1',
-    bloch: 'Entangling phase gate; CZ = (I⊗H) CNOT (I⊗H)',
-    inverse: 'CZ† = CZ (CZ² = I)',
-  },
-  {
-    symbol: 'SWAP',
-    name: 'Swap',
-    matrix: '\\text{permute } |01\\rangle \\leftrightarrow |10\\rangle',
-    action: 'SWAP|a,b⟩ = |b,a⟩',
-    bloch: 'Exchanges qubit states; 3 CNOT decomposition',
-    inverse: 'SWAP† = SWAP (SWAP² = I)',
-  },
+  { id: 'CNOT', symbol: 'CNOT', matrix: '\\begin{bmatrix}1&0&0&0\\\\0&1&0&0\\\\0&0&0&1\\\\0&0&1&0\\end{bmatrix}' },
+  { id: 'CZ', symbol: 'CZ', matrix: '\\text{diag}(1,1,1,-1)' },
+  { id: 'SWAP', symbol: 'SWAP', matrix: '\\text{permute } |01\\rangle \\leftrightarrow |10\\rangle' },
 ];
 
 const THREE_QUBIT: GateInfo[] = [
-  {
-    symbol: 'Toffoli',
-    name: 'CCNOT (Toffoli)',
-    matrix: '8\\times 8 \\text{ identity except } |111\\rangle \\leftrightarrow |110\\rangle',
-    action: 'Flips target iff both controls are |1⟩',
-    bloch: 'Universal classical logic; reversible AND',
-    inverse: 'Toffoli† = Toffoli (self-inverse)',
-  },
+  { id: 'Toffoli', symbol: 'Toffoli', matrix: '8\\times 8 \\text{ identity except } |111\\rangle \\leftrightarrow |110\\rangle' },
 ];
 
 function GateTable({ gates }: { gates: GateInfo[] }) {
+  const t = useT();
   return (
     <table className="data-table">
       <thead>
         <tr>
-          <th>Symbol</th>
-          <th>Matrix</th>
-          <th>Action</th>
-          <th>Bloch</th>
-          <th>Inverse</th>
+          <th>{t('reference.gates.colSymbol')}</th>
+          <th>{t('reference.gates.colMatrix')}</th>
+          <th>{t('reference.gates.colAction')}</th>
+          <th>{t('reference.gates.colBloch')}</th>
+          <th>{t('reference.gates.colInverse')}</th>
         </tr>
       </thead>
       <tbody>
         {gates.map((g) => {
-          const key = g.symbol.replace(/\(.*\)/, '').replace('R_x', 'Rx').replace('R_y', 'Ry').replace('R_z', 'Rz');
-          const gateKey = key.startsWith('R') ? key.split('(')[0] : key;
-          const m = getMatrix(gateKey === 'Toffoli' ? 'Toffoli' : gateKey, g.param);
+          const m = getMatrix(g.id === 'Toffoli' ? 'Toffoli' : g.id, g.param);
           return (
             <tr key={g.symbol}>
-              <td><strong>{g.symbol}</strong><br /><span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{g.name}</span></td>
+              <td><strong>{g.symbol}</strong><br /><span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{t(`reference.gates.${g.id}.name`)}</span></td>
               <td>
                 {m ? (
                   <table className="data-table" style={{ margin: 0 }}>
@@ -188,9 +83,9 @@ function GateTable({ gates }: { gates: GateInfo[] }) {
                   <Katex>{g.matrix ?? g.symbol}</Katex>
                 )}
               </td>
-              <td>{g.action}</td>
-              <td style={{ fontSize: '0.875rem' }}>{g.bloch}</td>
-              <td style={{ fontSize: '0.875rem' }}>{g.inverse}</td>
+              <td>{t(`reference.gates.${g.id}.action`)}</td>
+              <td style={{ fontSize: '0.875rem' }}>{t(`reference.gates.${g.id}.bloch`)}</td>
+              <td style={{ fontSize: '0.875rem' }}>{t(`reference.gates.${g.id}.inverse`)}</td>
             </tr>
           );
         })}
