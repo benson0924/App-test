@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import {
   C,
   fromBloch,
@@ -19,6 +20,8 @@ const PRESETS: { name: string; theta: number; phi: number }[] = [
 ];
 
 export default function BlochSphereLab() {
+  const labT = useLabT('bloch-sphere');
+  const sharedT = useLabSharedT();
   const [theta, setTheta] = useState(Math.PI / 4);
   const [phi, setPhi] = useState(Math.PI / 6);
 
@@ -31,7 +34,7 @@ export default function BlochSphereLab() {
 
   return (
     <div className="lab-panel">
-      <h3>3D Bloch Sphere</h3>
+      <h3>{labT('title')}</h3>
       <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
         Adjust θ and φ, or pick a preset. All representations stay synchronized.
       </p>

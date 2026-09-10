@@ -1,7 +1,10 @@
 import { useMemo, useState } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { modExp, findPeriod } from 'quantum-core';
 
 export default function PeriodFindingLab() {
+  const labT = useLabT('period-finding');
+  const sharedT = useLabSharedT();
   const [a, setA] = useState(7);
   const [N, setN] = useState(15);
 
@@ -15,7 +18,7 @@ export default function PeriodFindingLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Period Finding (mod N)</h3>
+      <h3>{labT('title')}</h3>
       <div className="grid-2">
         <label>
           Base a

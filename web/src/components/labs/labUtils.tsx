@@ -1,4 +1,5 @@
 import { C, stateLabel, type StateVector } from 'quantum-core';
+import { useLabSharedT } from '@/i18n/hooks';
 
 export function formatAmplitude(c: { re: number; im: number }): string {
   const re = Math.abs(c.re) < 1e-10 ? 0 : c.re;
@@ -10,13 +11,14 @@ export function formatAmplitude(c: { re: number; im: number }): string {
 }
 
 export function StateVectorTable({ state }: { state: StateVector }) {
+  const sharedT = useLabSharedT();
   return (
     <table className="data-table">
       <thead>
         <tr>
-          <th>|ψ⟩</th>
-          <th>Amplitude</th>
-          <th>|amp|²</th>
+          <th>{sharedT('stateColumn')}</th>
+          <th>{sharedT('amplitude')}</th>
+          <th>{sharedT('probSquared')}</th>
         </tr>
       </thead>
       <tbody>

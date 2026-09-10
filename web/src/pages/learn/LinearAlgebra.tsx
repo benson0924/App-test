@@ -1,10 +1,10 @@
+import { useChapterMeta, LearnSection } from '@/components/LocalizedContent';
+import { useT } from '@/context/LocaleContext';
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
-import Section from '@/components/Section';
 import Checkpoint from '@/components/Checkpoint';
 import WorkedExample from '@/components/WorkedExample';
-import Expandable from '@/components/Expandable';
 import {
   C,
   Gates,
@@ -280,19 +280,15 @@ function LabLink({ id, title }: { id: string; title: string }) {
 }
 
 export default function LinearAlgebra() {
+  const { tag, title, intro } = useChapterMeta('linearAlgebra');
+  const t = useT();
   return (
     <article>
-      <span className="tag">Chapter 3</span>
-      <h1>Linear Algebra for Quantum Computing</h1>
-      <p style={{ color: 'var(--text-muted)' }}>
-        Quantum mechanics is linear algebra over complex numbers. This chapter develops the Dirac
-        notation — kets, bras, inner products, projectors, and unitary operators — that we use to
-        describe states, measurements, and reversible gates throughout the rest of the textbook.
-      </p>
+      <span className="tag">{tag}</span>
+      <h1>{title}</h1>
+      <p style={{ color: 'var(--text-muted)' }}>{intro}</p>
 
-      <Section
-        id="3.1"
-        title="3.1 Kets — Vector Representation"
+      <LearnSection chapter="linearAlgebra" sectionId="3.1"
         prev={{ title: 'Chapter 2: One Qubit', path: '/learn/one-qubit' }}
         next={{ title: '3.2 Bras', path: `${BASE}#3.2` }}
       >
@@ -339,21 +335,9 @@ export default function LinearAlgebra() {
           hint="Count the basis states |0⟩ and |1⟩."
         />
 
-        <Expandable title="Global phase is unphysical">
-          <p>
-            Multiplying a ket by any non-zero complex scalar{' '}
-            <Katex>{`e^{i\\gamma}`}</Katex> changes the vector but not any observable probability.
-            States <Katex>{`|\\psi\\rangle`}</Katex> and{' '}
-            <Katex>{`e^{i\\gamma}|\\psi\\rangle`}</Katex> are physically equivalent. We usually
-            fix the global phase by requiring the first non-zero amplitude to be real and positive,
-            or by imposing the normalization constraint below.
-          </p>
-        </Expandable>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="3.2"
-        title="3.2 Bras — Conjugate Transpose"
+      <LearnSection chapter="linearAlgebra" sectionId="3.2"
         prev={{ title: '3.1 Kets', path: `${BASE}#3.1` }}
         next={{ title: '3.3 Inner Products', path: `${BASE}#3.3` }}
       >
@@ -389,31 +373,10 @@ export default function LinearAlgebra() {
           hint="Take the conjugate transpose of |0⟩ = (1, 0)ᵀ."
         />
 
-        <Expandable title="Why conjugate?">
-          <p>
-            Complex conjugation ensures the inner product{' '}
-            <Katex>{`\\langle\\psi|\\psi\\rangle`}</Katex> is a non-negative real number — the
-            squared norm of the state. Without conjugation,{' '}
-            <Katex>{`\\psi^\\mathsf{T}\\psi`}</Katex> could be complex, which would not serve as
-            a probability weight.
-          </p>
-          <Katex display>{`\\langle\\psi|\\psi\\rangle = |\\alpha|^2 + |\\beta|^2 \\geq 0`}</Katex>
-        </Expandable>
 
-        <Expandable title="Matrix–vector multiplication preview">
-          <p>
-            A gate matrix <Katex>{`U`}</Katex> maps kets to kets:{' '}
-            <Katex>{`|\\psi'\\rangle = U|\\psi\\rangle`}</Katex>. In components,{' '}
-            <Katex>{`\\psi'_i = \\sum_j U_{ij} \\psi_j`}</Katex>. The bra transforms contravariantly:{' '}
-            <Katex>{`\\langle\\psi'| = \\langle\\psi|U^\\dagger`}</Katex>. Keeping track of whether
-            the adjoint acts on the left or right prevents many sign errors in derivations.
-          </p>
-        </Expandable>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="3.3"
-        title="3.3 Inner Products, Norm, and Orthogonality"
+      <LearnSection chapter="linearAlgebra" sectionId="3.3"
         prev={{ title: '3.2 Bras', path: `${BASE}#3.2` }}
         next={{ title: '3.4 Projection & Measurement', path: `${BASE}#3.4` }}
       >
@@ -456,19 +419,9 @@ export default function LinearAlgebra() {
           hint="Compute ⟨+|−⟩; |−⟩ = (|0⟩ − |1⟩)/√2."
         />
 
-        <Expandable title="Properties of the inner product">
-          <Katex display>{`\\langle\\phi|\\psi\\rangle = \\langle\\psi|\\phi\\rangle^*`}</Katex>
-          <Katex display>{`\\langle\\psi|(\\alpha|\\phi\\rangle + \\beta|\\chi\\rangle) = \\alpha\\langle\\psi|\\phi\\rangle + \\beta\\langle\\psi|\\chi\\rangle`}</Katex>
-          <p>
-            Conjugate symmetry and linearity in the second argument make the inner product a
-            sesquilinear form — the standard geometry of complex Hilbert spaces.
-          </p>
-        </Expandable>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="3.4"
-        title="3.4 Projection and Measurement"
+      <LearnSection chapter="linearAlgebra" sectionId="3.4"
         prev={{ title: '3.3 Inner Products', path: `${BASE}#3.3` }}
         next={{ title: '3.5 Outer Products', path: `${BASE}#3.5` }}
       >
@@ -517,19 +470,9 @@ export default function LinearAlgebra() {
 
         <LabLink id="measurement" title="Measurement Lab" />
 
-        <Expandable title="General projective measurement">
-          <p>
-            For an orthonormal basis <Katex>{`\\{|m\\rangle\\}`}</Katex>, the projectors{' '}
-            <Katex>{`P_m = |m\\rangle\\langle m|`}</Katex> satisfy{' '}
-            <Katex>{`\\sum_m P_m = I`}</Katex> and <Katex>{`P_m P_{m'} = \\delta_{mm'} P_m`}</Katex>.
-            Measuring in the X basis uses projectors onto |+⟩ and |−⟩ instead of |0⟩ and |1⟩.
-          </p>
-        </Expandable>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="3.5"
-        title="3.5 Outer Products and Completeness"
+      <LearnSection chapter="linearAlgebra" sectionId="3.5"
         prev={{ title: '3.4 Projection & Measurement', path: `${BASE}#3.4` }}
         next={{ title: '3.6 Unitary Matrices', path: `${BASE}#3.6` }}
       >
@@ -570,19 +513,9 @@ export default function LinearAlgebra() {
 
         <LabLink id="tensor-product" title="Tensor Product Lab" />
 
-        <Expandable title="Spectral decomposition preview">
-          <p>
-            Hermitian operators (observables) decompose as{' '}
-            <Katex>{`A = \\sum_k \\lambda_k |k\\rangle\\langle k|`}</Katex> with real eigenvalues{' '}
-            <Katex>{`\\lambda_k`}</Katex>. Unitary operators have eigenvalues on the unit circle.
-            The outer-product framework unifies measurement projectors and gate spectral theory.
-          </p>
-        </Expandable>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="3.6"
-        title="3.6 Unitary Matrices"
+      <LearnSection chapter="linearAlgebra" sectionId="3.6"
         prev={{ title: '3.5 Outer Products', path: `${BASE}#3.5` }}
         next={{ title: 'Chapter 4: Multiple Qubits', path: '/learn/multiple-qubits' }}
       >
@@ -623,19 +556,7 @@ export default function LinearAlgebra() {
 
         <LabLink id="unitary-checker" title="Unitary Checker" />
 
-        <Expandable title="Full proof: unitaries preserve inner products">
-          <p>
-            For unitary <Katex>{`U`}</Katex> and any kets{' '}
-            <Katex>{`|\\phi\\rangle, |\\psi\\rangle`}</Katex>:
-          </p>
-          <Katex display>{`\\langle U\\phi|U\\psi\\rangle = \\langle\\phi|U^\\dagger U|\\psi\\rangle = \\langle\\phi|\\psi\\rangle`}</Katex>
-          <p>
-            Unitary maps are <strong>isometries</strong> of Hilbert space — they preserve lengths
-            and angles. Orthonormal bases map to orthonormal bases. This is why composing gates
-            (multiplying unitaries) always yields another valid gate.
-          </p>
-        </Expandable>
-      </Section>
+      </LearnSection>
 
       <div className="section-nav">
         <Link to="/learn">← All Chapters</Link>

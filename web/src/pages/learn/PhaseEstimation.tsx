@@ -1,10 +1,10 @@
+import { useChapterMeta, LearnSection } from '@/components/LocalizedContent';
+import { useT } from '@/context/LocaleContext';
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
-import Section from '@/components/Section';
 import Checkpoint from '@/components/Checkpoint';
 import WorkedExample from '@/components/WorkedExample';
-import Expandable from '@/components/Expandable';
 import { phaseEstimation } from 'quantum-core';
 
 function LabLink({ id, title }: { id: string; title: string }) {
@@ -68,15 +68,17 @@ function PhaseEstimationDemo() {
 }
 
 export default function PhaseEstimation() {
+  const { tag, title, intro } = useChapterMeta('phaseEstimation');
+  const t = useT();
   return (
     <article>
-      <h1>Chapter 10: Quantum Phase Estimation</h1>
+      <h1>{title}</h1>
       <p>
         Quantum Phase Estimation (QPE) reads out the eigenvalue phase of a unitary operator — the
         subroutine that connects the QFT to Shor&apos;s algorithm and quantum chemistry simulations.
       </p>
 
-      <Section id="10.1" title="10.1 Problem Statement" prev={{ title: 'Quantum Fourier Transform', path: '/learn/qft' }}>
+      <LearnSection chapter="phaseEstimation" sectionId="10.1" prev={{ title: 'Quantum Fourier Transform', path: '/learn/qft' }}>
         <p>
           Given a unitary U with eigenstate |u⟩ and eigenvalue e<sup>2πiφ</sup>:
         </p>
@@ -86,18 +88,11 @@ export default function PhaseEstimation() {
           of precision using m ancillary control qubits and O(m) controlled applications of U.
         </p>
 
-        <Expandable title="Why phases matter">
-          <p>
-            In Shor&apos;s algorithm, the modular multiplication unitary U|y⟩ = |ay mod N⟩ has eigenstates
-            whose phases encode 1/r, where r is the period of a<sup>x</sup> mod N. QPE extracts r, enabling
-            factoring.
-          </p>
-        </Expandable>
 
         <LabLink id="phase-estimation" title="Phase Estimation" />
-      </Section>
+      </LearnSection>
 
-      <Section id="10.2" title="10.2 The QPE Circuit">
+      <LearnSection chapter="phaseEstimation" sectionId="10.2">
         <p>
           The standard circuit uses m control qubits and one target qubit prepared in |u⟩:
         </p>
@@ -119,9 +114,9 @@ export default function PhaseEstimation() {
           answer="inverse QFT"
           hint="Converts phase kickback into binary readout."
         />
-      </Section>
+      </LearnSection>
 
-      <Section id="10.3" title="10.3 Binary Fraction Readout">
+      <LearnSection chapter="phaseEstimation" sectionId="10.3">
         <p>
           The measurement outcome is interpreted as a binary fraction:
         </p>
@@ -131,16 +126,9 @@ export default function PhaseEstimation() {
           the binary point. This is exactly the inverse QFT extracting each bit of the phase.
         </p>
 
-        <Expandable title="Phase kickback connection">
-          <p>
-            Each controlled-U<sup>2^j</sup> kicks back phase e<sup>2πiφ·2^j</sup> onto control qubit j
-            when the target is in |u⟩. The inverse QFT reverses the QFT on these phases, concentrating
-            amplitude on the basis state whose binary label best approximates φ.
-          </p>
-        </Expandable>
-      </Section>
+      </LearnSection>
 
-      <Section id="10.4" title="10.4 Worked Example: φ = 1/3">
+      <LearnSection chapter="phaseEstimation" sectionId="10.4">
         <WorkedExample
           title="Estimating φ = 1/3 with m = 6 qubits"
           steps={[
@@ -157,9 +145,9 @@ export default function PhaseEstimation() {
           Run the demo above with φ = 1/3 and m = 6 to see the simulated estimate, binary string, and error
           from our <code>quantum-core</code> phase estimation routine.
         </p>
-      </Section>
+      </LearnSection>
 
-      <Section id="10.5" title="10.5 Precision vs Qubit Count">
+      <LearnSection chapter="phaseEstimation" sectionId="10.5">
         <p>
           With m precision qubits, QPE approximates φ to m binary digits (under ideal conditions):
         </p>
@@ -177,22 +165,14 @@ export default function PhaseEstimation() {
           </tbody>
         </table>
 
-        <Expandable title="Success probability and repetitions">
-          <p>
-            QPE succeeds with high probability when the target is exactly an eigenstate. For Shor,
-            eigenstates are approximated; the algorithm repeats O(log N) times and uses continued
-            fractions to recover r from measured phases. Total cost: O(n² log N) gates for factoring
-            an n-bit number N.
-          </p>
-        </Expandable>
 
         <Checkpoint
           question="How many bits of φ does m precision qubits provide (ideally)?"
           answer="m"
         />
-      </Section>
+      </LearnSection>
 
-      <Section id="10.6" title="10.6 Role in Shor's Algorithm" next={{ title: "Shor's Algorithm", path: '/learn/shor' }}>
+      <LearnSection chapter="phaseEstimation" sectionId="10.6" next={{ title: "Shor's Algorithm", path: '/learn/shor' }}>
         <p>
           Shor&apos;s factoring algorithm reduces to: find period r of f(x) = a<sup>x</sup> mod N, then
           compute gcd(a<sup>r/2</sup> ± 1, N). The modular multiplication unitary
@@ -202,20 +182,13 @@ export default function PhaseEstimation() {
           has eigenphases s/r for integers s. QPE estimates s/r; continued fractions extract r.
         </p>
 
-        <Expandable title="Modular multiplication unitary">
-          <p>
-            Implementing controlled-U<sup>2^j</sup> efficiently requires modular exponentiation circuits —
-            the dominant gate cost in Shor. QPE wraps this arithmetic in a phase-estimation shell, turning
-            period structure into measurable binary fractions.
-          </p>
-        </Expandable>
 
         <LabLink id="phase-estimation" title="Phase Estimation" />
         <p>
           Next: <Link to="/learn/shor">Chapter 11 — Shor&apos;s Algorithm</Link> ·{' '}
           <Link to="/playground/period-finding">Period Explorer</Link>
         </p>
-      </Section>
+      </LearnSection>
     </article>
   );
 }

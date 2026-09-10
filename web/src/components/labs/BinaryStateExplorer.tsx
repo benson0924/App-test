@@ -1,7 +1,10 @@
 import { useState, useMemo } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { allBitStrings } from 'quantum-core';
 
 export default function BinaryStateExplorer() {
+  const labT = useLabT('binary-states');
+  const sharedT = useLabSharedT();
   const [n, setN] = useState(3);
 
   const bitStrings = useMemo(() => allBitStrings(n), [n]);
@@ -9,7 +12,7 @@ export default function BinaryStateExplorer() {
 
   return (
     <div className="lab-panel">
-      <h3>Binary State Explorer</h3>
+      <h3>{labT('title')}</h3>
       <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
         A classical register with <em>n</em> bits can represent <strong>2<sup>n</sup></strong> distinct states.
       </p>

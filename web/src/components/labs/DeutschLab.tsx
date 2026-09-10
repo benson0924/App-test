@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { runDeutsch } from 'quantum-core';
 
 const ORACLES = [
@@ -9,6 +10,8 @@ const ORACLES = [
 ] as const;
 
 export default function DeutschLab() {
+  const labT = useLabT('deutsch');
+  const sharedT = useLabSharedT();
   const [oracleIdx, setOracleIdx] = useState(0);
   const [result, setResult] = useState<ReturnType<typeof runDeutsch> | null>(null);
 
@@ -19,7 +22,7 @@ export default function DeutschLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Deutsch Algorithm</h3>
+      <h3>{labT('title')}</h3>
       <p>One query distinguishes constant from balanced functions on one bit.</p>
       <div className="btn-group">
         {ORACLES.map((o, i) => (

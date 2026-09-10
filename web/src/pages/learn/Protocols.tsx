@@ -1,10 +1,10 @@
+import { useChapterMeta, LearnSection } from '@/components/LocalizedContent';
+import { useT } from '@/context/LocaleContext';
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
-import Section from '@/components/Section';
 import Checkpoint from '@/components/Checkpoint';
 import WorkedExample from '@/components/WorkedExample';
-import Expandable from '@/components/Expandable';
 import { chshExperiment, runBB84 } from 'quantum-core';
 
 function LabLink({ id, title }: { id: string; title: string }) {
@@ -139,16 +139,18 @@ function BB84Demo() {
 }
 
 export default function Protocols() {
+  const { tag, title, intro } = useChapterMeta('protocols');
+  const t = useT();
   return (
     <article>
-      <h1>Chapter 7: Quantum Protocols</h1>
+      <h1>{title}</h1>
       <p>
         Entanglement and quantum channels enable communication primitives impossible classically —
         but never faster-than-light signaling. This chapter covers EPR paradox and hidden variables,
         the CHSH test, superdense coding, teleportation, and BB84 key distribution.
       </p>
 
-      <Section id="7.1" title="7.1 EPR and Local Hidden Variables" prev={{ title: 'Entanglement', path: '/learn/entanglement' }}>
+      <LearnSection chapter="protocols" sectionId="7.1" prev={{ title: 'Entanglement', path: '/learn/entanglement' }}>
         <p>
           The Einstein–Podolsky–Rosen (EPR) argument (1935) questioned whether quantum mechanics is complete.
           Consider the singlet state shared between Alice and Bob:
@@ -160,14 +162,6 @@ export default function Protocols() {
           without &quot;spooky action at a distance&quot;?
         </p>
 
-        <Expandable title="Local hidden variable models">
-          <p>
-            An LHV model assigns each particle definite properties λ before measurement. Outcomes are
-            functions A(a, λ) and B(b, λ) where a, b are measurement settings. <strong>Locality</strong> means
-            Alice&apos;s outcome cannot depend on Bob&apos;s setting b, and vice versa.
-          </p>
-          <Katex display>{`E(a,b) = \\int \\rho(\\lambda)\\, A(a,\\lambda)\\, B(b,\\lambda)\\, d\\lambda`}</Katex>
-        </Expandable>
 
         <WorkedExample
           title="Perfect anti-correlations in the singlet"
@@ -178,23 +172,15 @@ export default function Protocols() {
           ]}
         />
 
-        <Expandable title="No-signaling">
-          <p>
-            Although correlations are non-classical, Alice <em>cannot</em> send a message to Bob by choosing
-            her measurement basis. Bob&apos;s marginal outcome statistics are independent of Alice&apos;s setting —
-            only the <em>correlations</em> change. This is the <strong>no-signaling</strong> principle, preserved
-            by quantum mechanics and required by relativity.
-          </p>
-        </Expandable>
 
         <Checkpoint
           question="Can Alice signal Bob by choosing her measurement angle on a shared EPR pair?"
           answer="no"
           hint="Marginal statistics at Bob are unchanged."
         />
-      </Section>
+      </LearnSection>
 
-      <Section id="7.2" title="7.2 CHSH Inequality and Tsirelson Bound">
+      <LearnSection chapter="protocols" sectionId="7.2">
         <p>
           Bell (1964) and CHSH (1969) showed that LHV models constrain correlation functions. Define
           the CHSH parameter:
@@ -213,13 +199,6 @@ export default function Protocols() {
 
         <CHSHDemo />
 
-        <Expandable title="No-signaling vs Bell violation">
-          <p>
-            CHSH violation proves correlations cannot arise from any local hidden variable model — but it
-            does <em>not</em> enable signaling. The no-signaling condition limits how much correlation can
-            deviate from classical; Tsirelson&apos;s bound 2√2 is below the no-signaling limit of 4.
-          </p>
-        </Expandable>
 
         <Checkpoint
           question="What is the classical upper bound on |S|?"
@@ -227,9 +206,9 @@ export default function Protocols() {
         />
 
         <LabLink id="chsh" title="Bell/CHSH Experiment" />
-      </Section>
+      </LearnSection>
 
-      <Section id="7.3" title="7.3 Superdense Coding">
+      <LearnSection chapter="protocols" sectionId="7.3">
         <p>
           Superdense coding (Bennett &amp; Wiesner, 1992) transmits <strong>two classical bits</strong> by
           sending <strong>one qubit</strong>, given a pre-shared ebit (entangled bit).
@@ -254,18 +233,11 @@ export default function Protocols() {
           two qubits (each qubit carries at most one bit when measured in a fixed basis).
         </p>
 
-        <Expandable title="No-signaling in superdense coding">
-          <p>
-            The ebit must be established before encoding — typically by Alice and Bob meeting or using
-            a quantum channel. The classical bits are not transmitted until Alice sends her qubit; the
-            entanglement alone carries no usable classical information (no-signaling).
-          </p>
-        </Expandable>
 
         <LabLink id="superdense" title="Superdense Coding" />
-      </Section>
+      </LearnSection>
 
-      <Section id="7.4" title="7.4 Quantum Teleportation">
+      <LearnSection chapter="protocols" sectionId="7.4">
         <p>
           Teleportation (Bennett et al., 1993) transfers an unknown qubit state |ψ⟩ from Alice to Bob using
           one ebit and <strong>two classical bits</strong> — without physically moving the original particle
@@ -299,13 +271,6 @@ export default function Protocols() {
         <h3>Correction table</h3>
         <TeleportCorrectionTable />
 
-        <Expandable title="No-cloning and no-signaling">
-          <p>
-            Teleportation destroys Alice&apos;s original state (by measurement) — consistent with the
-            no-cloning theorem. The two classical bits carry no information about |ψ⟩ until Alice performs
-            her measurement; Bob cannot decode before receiving them. No information travels faster than light.
-          </p>
-        </Expandable>
 
         <Checkpoint
           question="How many classical bits does teleportation require?"
@@ -313,9 +278,9 @@ export default function Protocols() {
         />
 
         <LabLink id="teleportation" title="Quantum Teleportation" />
-      </Section>
+      </LearnSection>
 
-      <Section id="7.5" title="7.5 BB84 Quantum Key Distribution" next={{ title: 'Quantum Algorithms', path: '/learn/algorithms' }}>
+      <LearnSection chapter="protocols" sectionId="7.5" next={{ title: 'Quantum Algorithms', path: '/learn/algorithms' }}>
         <p>
           BB84 (Bennett &amp; Brassard, 1984) allows Alice and Bob to establish a shared secret key
           with information-theoretic security against passive eavesdropping — detecting Eve via elevated
@@ -346,22 +311,7 @@ export default function Protocols() {
 
         <BB84Demo />
 
-        <Expandable title="Eve's intercept–resend attack">
-          <p>
-            If Eve intercepts each qubit, measures in a random basis, and resends, she guesses wrong half
-            the time. When Eve&apos;s basis ≠ Alice&apos;s, she randomizes the state — Bob&apos;s sifted key
-            shows ~25% bit errors (50% wrong basis × 50% random outcome). Alice and Bob detect this and abort.
-          </p>
-        </Expandable>
 
-        <Expandable title="Security sketch and no-signaling">
-          <p>
-            BB84 security against passive eavesdropping is information-theoretic with ideal devices.
-            Real deployments add authentication, error correction, and privacy amplification. The quantum
-            channel enables key distribution; it does not allow instantaneous key extraction — classical
-            communication is required for sifting and error estimation (no-signaling throughout).
-          </p>
-        </Expandable>
 
         <Checkpoint
           question="What happens to the error rate when Eve intercepts BB84 qubits?"
@@ -370,7 +320,7 @@ export default function Protocols() {
         />
 
         <LabLink id="bb84" title="BB84 Simulator" />
-      </Section>
+      </LearnSection>
     </article>
   );
 }

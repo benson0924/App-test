@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import {
   C,
   getSingleQubitGate,
@@ -21,6 +22,8 @@ function formatMatrix(data: { re: number; im: number }[][]): string {
 }
 
 export default function GateExplorerLab() {
+  const labT = useLabT('gate-explorer');
+  const sharedT = useLabSharedT();
   const [theta, setTheta] = useState(Math.PI / 3);
   const [phi, setPhi] = useState(Math.PI / 4);
   const [selectedGate, setSelectedGate] = useState<GateName>('H');
@@ -50,7 +53,7 @@ export default function GateExplorerLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Quantum Gate Explorer</h3>
+      <h3>{labT('title')}</h3>
       <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
         Choose a gate and apply it to the current state. See matrix–vector multiplication and the Bloch vector update.
       </p>

@@ -1,8 +1,11 @@
 import { useState, useMemo } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { C } from 'quantum-core';
 import Katex from '@/components/Math';
 
 export default function ComplexPlaneLab() {
+  const labT = useLabT('complex-plane');
+  const sharedT = useLabSharedT();
   const [r, setR] = useState(1);
   const [phi, setPhi] = useState(0);
 
@@ -17,7 +20,7 @@ export default function ComplexPlaneLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Complex Number Explorer</h3>
+      <h3>{labT('title')}</h3>
       <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
         Drag the sliders to explore a complex number in rectangular and polar form.
       </p>

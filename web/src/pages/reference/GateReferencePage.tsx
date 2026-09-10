@@ -1,6 +1,7 @@
 import { Gates } from 'quantum-core';
 import Katex from '@/components/Math';
 import Expandable from '@/components/Expandable';
+import { useT } from '@/context/LocaleContext';
 
 interface GateInfo {
   symbol: string;
@@ -199,24 +200,22 @@ function GateTable({ gates }: { gates: GateInfo[] }) {
 }
 
 export default function GateReferencePage() {
+  const t = useT();
   return (
     <article>
-      <h1>Gate Reference</h1>
-      <p>
-        Complete gate tables with symbols, matrices (from <code>quantum-core</code>),
-        actions, Bloch-sphere interpretation, and inverses.
-      </p>
+      <h1>{t('reference.gates.title')}</h1>
+      <p>{t('reference.gates.intro')}</p>
 
-      <h2>Single-qubit gates</h2>
+      <h2>{t('reference.gates.singleQubit')}</h2>
       <GateTable gates={SINGLE_GATES} />
 
-      <h2>Two-qubit gates</h2>
+      <h2>{t('reference.gates.twoQubit')}</h2>
       <GateTable gates={TWO_QUBIT} />
 
-      <h2>Three-qubit gates</h2>
+      <h2>{t('reference.gates.threeQubit')}</h2>
       <GateTable gates={THREE_QUBIT} />
 
-      <h2>Common identities</h2>
+      <h2>{t('reference.gates.commonIdentities')}</h2>
       <div className="card">
         <Katex display>{`HXH = Z, \\quad HZH = X, \\quad H^2 = I`}</Katex>
         <Katex display>{`T^2 = S, \\quad S^2 = Z, \\quad T^4 = Z`}</Katex>
@@ -226,19 +225,14 @@ export default function GateReferencePage() {
         <Katex display>{`R_x(\\theta) = e^{-i\\theta X/2}, \\quad R_y(\\theta) = e^{-i\\theta Y/2}, \\quad R_z(\\theta) = e^{-i\\theta Z/2}`}</Katex>
       </div>
 
-      <Expandable title="Pauli group relations">
+      <Expandable title={t('reference.gates.pauliRelations')}>
         <Katex display>{`XY = iZ, \\quad YZ = iX, \\quad ZX = iY`}</Katex>
         <Katex display>{`X^2 = Y^2 = Z^2 = I, \\quad \\{X,Y\\} = \\{Y,Z\\} = \\{Z,X\\} = 0`}</Katex>
       </Expandable>
 
-      <Expandable title="Universal gate sets">
-        <p>
-          <strong>Established:</strong> {`{H, S, T, CNOT}`} is a common universal set for fault-tolerant
-          computation (T gate requires magic-state distillation in FT architectures).
-        </p>
-        <p>
-          <strong>Established:</strong> {`{Rx, Ry, Rz, CNOT}`} is universal for approximate compilation on NISQ devices.
-        </p>
+      <Expandable title={t('reference.gates.universalSets')}>
+        <p>{t('reference.gates.universalEstablished1')}</p>
+        <p>{t('reference.gates.universalEstablished2')}</p>
       </Expandable>
     </article>
   );

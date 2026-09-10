@@ -1,8 +1,11 @@
 import { useMemo, useState } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { BellStates, basisState, tensorProduct, isProductState, C } from 'quantum-core';
 import { StateVectorTable } from './labUtils';
 
 export default function EntanglementLab() {
+  const labT = useLabT('entanglement');
+  const sharedT = useLabSharedT();
   const [entangled, setEntangled] = useState(true);
   const state = useMemo(() => {
     if (entangled) return BellStates.phiPlus();
@@ -14,7 +17,7 @@ export default function EntanglementLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Entanglement Measurement</h3>
+      <h3>{labT('title')}</h3>
       <div className="btn-group">
         <button className={`btn ${entangled ? 'btn-primary' : ''}`} onClick={() => setEntangled(true)}>Bell |Φ⁺⟩</button>
         <button className={`btn ${!entangled ? 'btn-primary' : ''}`} onClick={() => setEntangled(false)}>Product state</button>

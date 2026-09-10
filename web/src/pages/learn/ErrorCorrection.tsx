@@ -1,10 +1,10 @@
+import { useChapterMeta, LearnSection } from '@/components/LocalizedContent';
+import { useT } from '@/context/LocaleContext';
 import { useState, useMemo, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
-import Section from '@/components/Section';
 import Checkpoint from '@/components/Checkpoint';
 import WorkedExample from '@/components/WorkedExample';
-import Expandable from '@/components/Expandable';
 import {
   C,
   zeroState,
@@ -36,7 +36,6 @@ function PracticeProblem({ prompt, children }: { prompt: ReactNode; children: Re
   return (
     <div className="lab-panel" style={{ marginTop: '1rem' }}>
       <p><strong>Practice problem.</strong> {prompt}</p>
-      <Expandable title="Reveal solution">{children}</Expandable>
     </div>
   );
 }
@@ -347,9 +346,11 @@ function binom(n: number, k: number): number {
 }
 
 export default function ErrorCorrection() {
+  const { tag, title, intro } = useChapterMeta('errorCorrection');
+  const t = useT();
   return (
     <article>
-      <h1>Chapter 5: Quantum Error Correction</h1>
+      <h1>{title}</h1>
       <p>
         Real quantum hardware is noisy. Gates misfire, qubits decohere, and environment interactions
         leak information. Quantum error correction (QEC) encodes fragile logical information into
@@ -358,9 +359,7 @@ export default function ErrorCorrection() {
         to stabilizer language and the distinction between correction and mitigation.
       </p>
 
-      <Section
-        id="5.1"
-        title="5.1 Why quantum error correction?"
+      <LearnSection chapter="errorCorrection" sectionId="5.1"
         prev={{ title: 'Quantum Circuits', path: '/learn/circuits' }}
         next={{ title: '5.2 Bit-flip code', path: `${BASE}#5.2` }}
       >
@@ -421,14 +420,6 @@ export default function ErrorCorrection() {
           hint="X, Y, or Z — pick the one that swaps |0⟩ and |1⟩."
         />
 
-        <Expandable title="Why not clone?">
-          <p>
-            The no-cloning theorem states there is no unitary that copies an arbitrary unknown qubit.
-            Repetition therefore requires preparing correlated copies through CNOT encoding — and
-            syndrome extraction must be designed so measuring parities does not reveal the logical
-            0/1 content.
-          </p>
-        </Expandable>
 
         <PracticeProblem prompt="A physical qubit has error rate p = 0.1 per time step. Why is naive repetition (copying the same classical bit three times) impossible quantum mechanically, and what replaces it?">
           <p>
@@ -437,11 +428,9 @@ export default function ErrorCorrection() {
             which bit flipped without measuring the logical value.
           </p>
         </PracticeProblem>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="5.2"
-        title="5.2 Three-qubit bit-flip code"
+      <LearnSection chapter="errorCorrection" sectionId="5.2"
         prev={{ title: '5.1 Why QEC?', path: `${BASE}#5.1` }}
         next={{ title: '5.3 Phase-flip & Shor code', path: `${BASE}#5.3` }}
       >
@@ -493,15 +482,6 @@ export default function ErrorCorrection() {
           hint="Distinct syndromes for each single-qubit X."
         />
 
-        <Expandable title="Encoding circuit">
-          <Katex display>
-            {`|\\psi\\rangle \\mapsto \\text{CNOT}_{0\\to 1}\\,\\text{CNOT}_{0\\to 2}\\,|\\psi\\rangle|00\\rangle`}
-          </Katex>
-          <p>
-            If the input on qubit 0 is α|0⟩ + β|1⟩, the output is α|000⟩ + β|111⟩ — a superposition
-            of valid codewords, not a classical triple copy.
-          </p>
-        </Expandable>
 
         <LabLink id="error-correction" title="Error Correction Simulator" />
 
@@ -512,11 +492,9 @@ export default function ErrorCorrection() {
             error, not the logical bit value.
           </p>
         </PracticeProblem>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="5.3"
-        title="5.3 Phase-flip code, Shor code & stabilizers"
+      <LearnSection chapter="errorCorrection" sectionId="5.3"
         prev={{ title: '5.2 Bit-flip code', path: `${BASE}#5.2` }}
         next={{ title: '5.4 Mitigation vs correction', path: `${BASE}#5.4` }}
       >
@@ -560,22 +538,6 @@ export default function ErrorCorrection() {
           ]}
         />
 
-        <Expandable title="Stabilizer formalism (introduction)">
-          <p>
-            A stabilizer code is the simultaneous +1 eigenspace of an abelian group of Pauli operators
-            {' {S₁, …, S_{n−k}} '}. For the bit-flip code, S₁ = Z₀Z₁ and S₂ = Z₁Z₂ stabilize
-            |000⟩ and |111⟩. Measuring each Sᵢ (via ancilla coupling) gives ±1 outcomes; the
-            bit pattern is the syndrome. Logical operators are Pauli strings that commute with all
-            stabilizers but are not in the group — e.g. X̄ = X₀X₁X₂ for the bit-flip code.
-          </p>
-          <Katex display>
-            {`S_i |\\psi\\rangle = |\\psi\\rangle \\;\\forall i,\\quad |\\psi\\rangle \\in \\mathcal{C}`}
-          </Katex>
-          <p>
-            Modern codes (surface code, color code) are stabilizer codes with local checks on a 2D
-            lattice — the leading path toward fault-tolerant quantum computing.
-          </p>
-        </Expandable>
 
         <Checkpoint
           question="What gate conjugation turns the bit-flip code into the phase-flip code?"
@@ -592,11 +554,9 @@ export default function ErrorCorrection() {
             stabilizer, flipping its measurement outcome — that is the syndrome bit.
           </p>
         </PracticeProblem>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="5.4"
-        title="5.4 Error mitigation vs correction"
+      <LearnSection chapter="errorCorrection" sectionId="5.4"
         prev={{ title: '5.3 Phase-flip & Shor', path: `${BASE}#5.3` }}
         next={{ title: 'Entanglement', path: '/learn/entanglement' }}
       >
@@ -637,14 +597,6 @@ export default function ErrorCorrection() {
           ]}
         />
 
-        <Expandable title="Fault tolerance in one paragraph">
-          <p>
-            A fault-tolerant quantum computer assumes errors can occur anywhere — including in
-            syndrome circuits and recovery gates — yet encoded computation still succeeds if
-            physical error rates are low enough. Threshold theorems (~10⁻³ to 10⁻² depending on
-            architecture) motivate the race for better physical qubits and control electronics.
-          </p>
-        </Expandable>
 
         <Checkpoint
           question="Does QEC require measuring the logical qubit value directly?"
@@ -665,7 +617,7 @@ export default function ErrorCorrection() {
             threshold, not post-processing alone.
           </p>
         </PracticeProblem>
-      </Section>
+      </LearnSection>
 
       <div className="section-nav">
         <Link to="/learn/circuits">← Quantum Circuits</Link>

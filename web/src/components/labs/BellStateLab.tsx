@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { BellStates, applyCircuit, zeroState, createCircuit } from 'quantum-core';
 import { StateVectorTable } from './labUtils';
 
@@ -10,6 +11,8 @@ const BELL = [
 ] as const;
 
 export default function BellStateLab() {
+  const labT = useLabT('bell-states');
+  const sharedT = useLabSharedT();
   const [mode, setMode] = useState<'direct' | 'circuit'>('circuit');
   const [bellIdx, setBellIdx] = useState(0);
 
@@ -26,7 +29,7 @@ export default function BellStateLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Bell State Generator</h3>
+      <h3>{labT('title')}</h3>
       <div className="btn-group">
         <button className={`btn ${mode === 'circuit' ? 'btn-primary' : ''}`} onClick={() => setMode('circuit')}>From H + CNOT</button>
         <button className={`btn ${mode === 'direct' ? 'btn-primary' : ''}`} onClick={() => setMode('direct')}>Direct state</button>

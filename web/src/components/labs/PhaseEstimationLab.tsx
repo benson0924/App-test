@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { phaseEstimation } from 'quantum-core';
 
 export default function PhaseEstimationLab() {
+  const labT = useLabT('phase-estimation');
+  const sharedT = useLabSharedT();
   const [phi, setPhi] = useState(0.25);
   const [precision, setPrecision] = useState(4);
   const [result, setResult] = useState<ReturnType<typeof phaseEstimation> | null>(null);
@@ -10,7 +13,7 @@ export default function PhaseEstimationLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Quantum Phase Estimation</h3>
+      <h3>{labT('title')}</h3>
       <label>
         True phase φ: {phi.toFixed(4)} (fraction of 2π)
         <input type="range" min={0} max={1} step={0.01} value={phi} onChange={(e) => setPhi(Number(e.target.value))} />

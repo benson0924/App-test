@@ -1,22 +1,19 @@
 import { Link } from 'react-router-dom';
+import { useT } from '@/context/LocaleContext';
 
-const PAGES = [
-  { path: '/reference/gates', title: 'Gate Reference', desc: 'Single- and multi-qubit gate matrices.' },
-  { path: '/reference/formulas', title: 'Formula Sheet', desc: 'Key equations across chapters.' },
-  { path: '/reference/complexity', title: 'Complexity', desc: 'Classical vs quantum query/time bounds.' },
-  { path: '/reference/glossary', title: 'Glossary', desc: 'Terminology from navigation data.' },
-  { path: '/reference/misconceptions', title: 'Misconceptions', desc: 'Common myths and corrections.' },
-];
+const PAGE_KEYS = ['gates', 'formulas', 'complexity', 'glossary', 'misconceptions'] as const;
 
 export default function ReferenceIndex() {
+  const t = useT();
+
   return (
     <div>
-      <h1>Reference</h1>
+      <h1>{t('reference.index.title')}</h1>
       <div className="grid-2">
-        {PAGES.map((p) => (
-          <Link key={p.path} to={p.path} className="card" style={{ textDecoration: 'none' }}>
-            <h3>{p.title}</h3>
-            <p>{p.desc}</p>
+        {PAGE_KEYS.map((key) => (
+          <Link key={key} to={`/reference/${key === 'gates' ? 'gates' : key}`} className="card" style={{ textDecoration: 'none' }}>
+            <h3>{t(`reference.index.${key}.title`)}</h3>
+            <p>{t(`reference.index.${key}.desc`)}</p>
           </Link>
         ))}
       </div>

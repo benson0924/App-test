@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import Katex from '@/components/Math';
 import Expandable from '@/components/Expandable';
+import { useT } from '@/context/LocaleContext';
 import {
   C,
   Gates,
@@ -552,6 +553,7 @@ function generateMixedSet(count: number): Problem[] {
 }
 
 export default function PracticeIndex() {
+  const t = useT();
   const [category, setCategory] = useState<Category | 'Mixed'>('Mixed');
   const [set, setSet] = useState(() => generateMixedSet(5));
   const [idx, setIdx] = useState(0);
@@ -605,29 +607,26 @@ export default function PracticeIndex() {
   if (done) {
     return (
       <div>
-        <h1>Practice Hub</h1>
+        <h1>{t('practice.ui.title')}</h1>
         <p className="card">
-          Score: <strong>{score}</strong> / {set.length}
+          {t('practice.ui.score')} <strong>{score}</strong> / {set.length}
         </p>
-        <button className="btn btn-primary" onClick={() => newSet()}>New random set</button>
+        <button className="btn btn-primary" onClick={() => newSet()}>{t('practice.ui.newRandomSet')}</button>
       </div>
     );
   }
 
   return (
     <div>
-      <h1>Practice Hub</h1>
-      <p>
-        Randomized problems with hints, step-by-step reveals, and full solutions.
-        Answers verified with <code>quantum-core</code> where applicable.
-      </p>
+      <h1>{t('practice.ui.title')}</h1>
+      <p>{t('practice.ui.intro')}</p>
 
       <div className="btn-group" style={{ flexWrap: 'wrap', marginBottom: '1rem' }}>
         <button
           className={`btn ${category === 'Mixed' ? 'btn-primary' : ''}`}
           onClick={() => { setCategory('Mixed'); newSet('Mixed'); }}
         >
-          Mixed
+          {t('practice.ui.mixed')}
         </button>
         {CATEGORIES.map((cat) => (
           <button
@@ -641,10 +640,10 @@ export default function PracticeIndex() {
       </div>
 
       <p>
-        Question {idx + 1} of {set.length} · <span className="tag">{problem.category}</span>
+        {t('practice.ui.questionOf', { current: idx + 1, total: set.length })} · <span className="tag">{problem.category}</span>
         {verified !== null && (
           <span className="tag" style={{ marginLeft: '0.5rem', borderColor: verified ? 'var(--success)' : 'var(--danger)' }}>
-            {verified ? '✓ verified' : '⚠ check'}
+            {verified ? t('practice.ui.verified') : t('practice.ui.check')}
           </span>
         )}
       </p>
@@ -655,11 +654,11 @@ export default function PracticeIndex() {
 
         <div className="btn-group" style={{ marginBottom: '1rem' }}>
           <button className="btn" onClick={() => setShowHint(!showHint)}>
-            {showHint ? 'Hide hint' : 'Hint'}
+            {showHint ? t('practice.ui.hideHint') : t('practice.ui.hint')}
           </button>
           {stepVisible < problem.steps.length && (
             <button className="btn" onClick={() => setStepVisible((v) => v + 1)}>
-              Reveal step {stepVisible + 1}
+              {t('practice.ui.revealStep', { n: stepVisible + 1 })}
             </button>
           )}
         </div>
@@ -672,7 +671,7 @@ export default function PracticeIndex() {
 
         {problem.steps.slice(0, stepVisible).map((step, i) => (
           <div key={i} style={{ marginBottom: '0.75rem', paddingLeft: '0.5rem', borderLeft: '2px solid var(--accent)' }}>
-            <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-muted)' }}>Step {i + 1}</p>
+            <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-muted)' }}>{t('practice.ui.step', { n: i + 1 })}</p>
             <p>{step.text}</p>
             {step.latex && <Katex display>{step.latex}</Katex>}
           </div>
@@ -703,19 +702,19 @@ export default function PracticeIndex() {
         {selected !== null && (
           <>
             <p className={selected === problem.correct ? 'correct' : 'incorrect'}>
-              {selected === problem.correct ? 'Correct!' : 'Incorrect.'}
+              {selected === problem.correct ? t('practice.ui.correct') : t('practice.ui.incorrect')}
             </p>
-            <Expandable title="Full solution">
+            <Expandable title={t('practice.ui.fullSolution')}>
               <p>{problem.solution}</p>
               {problem.steps.map((step, i) => (
                 <div key={i}>
-                  <p><strong>Step {i + 1}:</strong> {step.text}</p>
+                  <p><strong>{t('practice.ui.step', { n: i + 1 })}:</strong> {step.text}</p>
                   {step.latex && <Katex display>{step.latex}</Katex>}
                 </div>
               ))}
             </Expandable>
             <button className="btn btn-primary" onClick={next} style={{ marginTop: '1rem' }}>
-              {idx + 1 >= set.length ? 'Finish' : 'Next'}
+              {idx + 1 >= set.length ? t('practice.ui.finish') : t('practice.ui.next')}
             </button>
           </>
         )}

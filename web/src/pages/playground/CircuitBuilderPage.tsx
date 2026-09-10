@@ -4,6 +4,7 @@ import {
   exportOpenQASM, measureComputational, probabilities, stateLabel, C,
   type Circuit, type StateVector,
 } from 'quantum-core';
+import { useT } from '@/context/LocaleContext';
 import { StateVectorTable } from '../../components/labs/labUtils';
 
 type GateDef = {
@@ -39,10 +40,10 @@ interface PlacedGate {
   param?: number;
 }
 
-const PRESETS: { name: string; n: number; gates: Omit<PlacedGate, 'id'>[] }[] = [
-  { name: 'Bell |Φ⁺⟩', n: 2, gates: [{ name: 'H', qubits: [0], column: 0 }, { name: 'CNOT', qubits: [0, 1], column: 1 }] },
-  { name: 'GHZ (3)', n: 3, gates: [{ name: 'H', qubits: [0], column: 0 }, { name: 'CNOT', qubits: [0, 1], column: 1 }, { name: 'CNOT', qubits: [0, 2], column: 2 }] },
-  { name: 'Teleport (partial)', n: 3, gates: [{ name: 'H', qubits: [1], column: 0 }, { name: 'CNOT', qubits: [1, 2], column: 1 }, { name: 'CNOT', qubits: [0, 1], column: 2 }, { name: 'H', qubits: [0], column: 3 }] },
+const PRESET_GATES = [
+  { key: 'presetBell' as const, n: 2, gates: [{ name: 'H', qubits: [0], column: 0 }, { name: 'CNOT', qubits: [0, 1], column: 1 }] },
+  { key: 'presetGhz' as const, n: 3, gates: [{ name: 'H', qubits: [0], column: 0 }, { name: 'CNOT', qubits: [0, 1], column: 1 }, { name: 'CNOT', qubits: [0, 2], column: 2 }] },
+  { key: 'presetTeleport' as const, n: 3, gates: [{ name: 'H', qubits: [1], column: 0 }, { name: 'CNOT', qubits: [1, 2], column: 1 }, { name: 'CNOT', qubits: [0, 1], column: 2 }, { name: 'H', qubits: [0], column: 3 }] },
 ];
 
 let gid = 0;
@@ -52,6 +53,7 @@ const ROW_H = 56;
 const PAD = 48;
 
 export default function CircuitBuilderPage() {
+  const t = useT();
   const [numQubits, setNumQubits] = useState(2);
   const [gates, setGates] = useState<PlacedGate[]>([]);
   const [dragGate, setDragGate] = useState<GateDef | null>(null);
@@ -114,7 +116,7 @@ export default function CircuitBuilderPage() {
     setMeasureCounts(null);
   };
 
-  const loadPreset = (p: typeof PRESETS[0]) => {
+  const loadPreset = (p: { n: number; gates: Omit<PlacedGate, 'id'>[] }) => {
     setNumQubits(p.n);
     setGates(p.gates.map((g) => ({ ...g, id: `g${++gid}` })));
     setState(zeroState(p.n));
@@ -141,17 +143,20 @@ export default function CircuitBuilderPage() {
 
   const qasm = exportOpenQASM(circuit);
 
+  const PRESETS = useMemo(() => PRESET_GATES.map((p) => ({
+    name: t(`playground.circuitBuilder.${p.key}`),
+    n: p.n,
+    gates: p.gates,
+  })), [t]);
+
   return (
     <div className="circuit-builder-page">
-      <h1>Quantum Circuit Builder</h1>
-      <p>
-        Drag gates onto the circuit grid. Run step-by-step to watch the statevector evolve,
-        or simulate the full circuit. Export equivalent OpenQASM 3.0.
-      </p>
+      <h1>{t('playground.circuitBuilder.title')}</h1>
+      <p>{t('playground.circuitBuilder.intro')}</p>
 
       <div className="grid-2" style={{ marginBottom: '1rem' }}>
         <div className="lab-panel">
-          <label>Qubits: {numQubits}</label>
+          <label>{t('playground.circuitBuilder.qubitsLabel', { n: numQubits })}</label>
           <input type="range" min={1} max={5} value={numQubits} onChange={(e) => {
             const n = Number(e.target.value);
             setNumQubits(n);
@@ -160,16 +165,16 @@ export default function CircuitBuilderPage() {
           }} />
           {dragGate?.param && (
             <>
-              <label>Rotation θ: {(rotation * 180 / Math.PI).toFixed(0)}°</label>
+              <label>{t('playground.circuitBuilder.rotationTheta', { deg: (rotation * 180 / Math.PI).toFixed(0) })}</label>
               <input type="range" min={0} max={2 * Math.PI} step={0.05} value={rotation} onChange={(e) => setRotation(Number(e.target.value))} />
             </>
           )}
           <p style={{ fontSize: '0.85rem', margin: '0.5rem 0 0' }}>
-            Depth: <strong>{depth}</strong> · Gates: <strong>{gateCount}</strong>
+            {t('playground.circuitBuilder.depthGates', { depth, gates: gateCount })}
           </p>
         </div>
         <div className="lab-panel">
-          <strong>Presets</strong>
+          <strong>{t('playground.circuitBuilder.presets')}</strong>
           <div className="btn-group" style={{ marginTop: '0.5rem' }}>
             {PRESETS.map((p) => (
               <button key={p.name} className="btn" onClick={() => loadPreset(p)}>{p.name}</button>
@@ -186,7 +191,7 @@ export default function CircuitBuilderPage() {
             draggable
             onDragStart={() => setDragGate(g)}
             onDragEnd={() => setDragGate(null)}
-            title={`Drag ${g.label} onto circuit`}
+            title={t('playground.circuitBuilder.dragGate', { gate: g.label })}
           >
             {g.label}
           </div>
@@ -262,11 +267,13 @@ export default function CircuitBuilderPage() {
       </div>
 
       <div className="btn-group">
-        <button className="btn btn-primary" onClick={runFull}>Run</button>
-        <button className="btn" onClick={runStep}>Step</button>
-        <button className="btn" onClick={measure}>Measure (1024 shots)</button>
-        <button className="btn" onClick={clear}>Clear</button>
-        <button className="btn" onClick={() => setShowQasm(!showQasm)}>{showQasm ? 'Hide' : 'Show'} OpenQASM</button>
+        <button className="btn btn-primary" onClick={runFull}>{t('playground.circuitBuilder.run')}</button>
+        <button className="btn" onClick={runStep}>{t('playground.circuitBuilder.step')}</button>
+        <button className="btn" onClick={measure}>{t('playground.circuitBuilder.measure1024')}</button>
+        <button className="btn" onClick={clear}>{t('playground.circuitBuilder.clear')}</button>
+        <button className="btn" onClick={() => setShowQasm(!showQasm)}>
+          {showQasm ? t('playground.circuitBuilder.hideQasm') : t('playground.circuitBuilder.showQasm')}
+        </button>
       </div>
 
       {showQasm && (
@@ -275,11 +282,11 @@ export default function CircuitBuilderPage() {
 
       <div className="grid-2" style={{ marginTop: '1.5rem' }}>
         <div>
-          <h3>Statevector |ψ⟩</h3>
+          <h3>{t('playground.circuitBuilder.statevector')}</h3>
           <StateVectorTable state={state} />
         </div>
         <div>
-          <h3>Probability distribution</h3>
+          <h3>{t('playground.circuitBuilder.probDistribution')}</h3>
           <div className="histogram-bar" style={{ height: 140, marginBottom: '2rem' }}>
             {probs.map((p, i) => (
               <div key={i} className="bar" style={{ height: `${Math.max(p * 100, 1)}%`, opacity: p > 0.001 ? 1 : 0.3 }}>
@@ -292,7 +299,7 @@ export default function CircuitBuilderPage() {
           </div>
           {measureCounts && (
             <>
-              <h3>Measurement histogram</h3>
+              <h3>{t('playground.circuitBuilder.measurementHistogram')}</h3>
               <div className="histogram-bar" style={{ height: 120 }}>
                 {Object.entries(measureCounts).sort().map(([label, count]) => (
                   <div key={label} className="bar" style={{ height: `${(count / 1024) * 100}%`, background: 'var(--success)' }}>

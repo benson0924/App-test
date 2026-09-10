@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 
 /** Classical simulation of Simon's period-finding structure for f(x)=f(x⊕s). */
 function simonFindPeriod(n: number, secret: number): number {
@@ -13,6 +14,8 @@ function simonFindPeriod(n: number, secret: number): number {
 }
 
 export default function SimonLab() {
+  const labT = useLabT('simon');
+  const sharedT = useLabSharedT();
   const [n, setN] = useState(3);
   const [secret, setSecret] = useState(5);
   const [samples, setSamples] = useState<[number, number][]>([]);
@@ -32,7 +35,7 @@ export default function SimonLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Simon&apos;s Algorithm (Demo)</h3>
+      <h3>{labT('title')}</h3>
       <p>Oracle hides period s: f(x) = f(x ⊕ s). Collect collisions to recover s.</p>
       <label>
         n: {n}

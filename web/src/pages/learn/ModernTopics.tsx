@@ -1,7 +1,7 @@
+import { useChapterMeta, LearnSection } from '@/components/LocalizedContent';
+import { useT } from '@/context/LocaleContext';
 import type { ReactNode } from 'react';
-import Section from '@/components/Section';
 import Checkpoint from '@/components/Checkpoint';
-import Expandable from '@/components/Expandable';
 import Katex from '@/components/Math';
 
 type Evidence = 'Established' | 'Peer-reviewed' | 'Industry claim' | 'Open question';
@@ -30,16 +30,18 @@ function Ev({ type, children }: { type: Evidence; children: ReactNode }) {
 }
 
 export default function ModernTopics() {
+  const { tag, title, intro } = useChapterMeta('modern');
+  const t = useT();
   return (
     <article>
-      <h1>Chapter 12: Modern Topics (2026)</h1>
+      <h1>{title}</h1>
       <p>
         A research-informed snapshot of quantum computing as of <strong>September 2026</strong>.
         Claims are tagged by evidence strength so you can distinguish textbook physics from
         vendor roadmaps and genuinely open problems.
       </p>
 
-      <Section id="12.1" title="Hardware Platforms" prev={{ title: "Shor's Algorithm", path: '/learn/shor' }}>
+      <LearnSection chapter="modern" sectionId="12.1" prev={{ title: "Shor's Algorithm", path: '/learn/shor' }}>
         <p>
           Physical qubits are implemented on several competing platforms. Each trades off coherence,
           gate speed, connectivity, fabrication complexity, and control overhead differently.
@@ -92,25 +94,15 @@ export default function ModernTopics() {
           independent benchmarking against other platforms is still maturing.
         </Ev>
 
-        <Expandable title="Other platforms: spin qubits &amp; topological proposals">
-          <p>
-            <Label type="Established" /> Semiconductor spin qubits (Si/SiGe, donors) and topological
-            Majorana proposals pursue long-lived qubits with CMOS-compatible fabrication.
-          </p>
-          <p>
-            <Label type="Open question" /> Topological protection at scale has not been experimentally
-            confirmed; treat Majorana-based claims with extra scrutiny until reproducible evidence accumulates.
-          </p>
-        </Expandable>
 
         <Checkpoint
           question="Does a higher physical qubit count automatically mean a more powerful quantum computer?"
           answer="no"
           hint="Consider error rates, connectivity, and whether qubits are logical or physical."
         />
-      </Section>
+      </LearnSection>
 
-      <Section id="12.2" title="Logical Qubits &amp; Surface Codes">
+      <LearnSection chapter="modern" sectionId="12.2">
         <p>
           Fault-tolerant quantum computation requires <em>logical</em> qubits encoded with redundancy so
           errors can be detected and corrected faster than they accumulate.
@@ -134,18 +126,9 @@ export default function ModernTopics() {
           optimistic assumptions.
         </Ev>
 
-        <Expandable title="Resource estimate sketch (Shor on RSA-2048)">
-          <p>Order-of-magnitude planning numbers from the literature (not a guarantee):</p>
-          <ul>
-            <li>~4000–8000 logical qubits for modular exponentiation (algorithm-dependent)</li>
-            <li>Physical qubits per logical qubit: 1000–10000+ depending on code distance and cycle time</li>
-            <li>Total physical qubits: 10⁶–10⁸ range in published estimates</li>
-          </ul>
-          <p><Label type="Peer-reviewed" /> See recent surface-code resource papers for updated constants.</p>
-        </Expandable>
-      </Section>
+      </LearnSection>
 
-      <Section id="12.3" title="Noise Channels &amp; Decoherence (T₁, T₂)">
+      <LearnSection chapter="modern" sectionId="12.3">
         <p>
           Real qubits interact with their environment. Open-system dynamics are modeled by completely positive
           trace-preserving (CPTP) maps — <em>quantum channels</em>.
@@ -164,22 +147,15 @@ export default function ModernTopics() {
           reported fidelities of 99.5%–99.9% for single-qubit and 99%–99.9% for two-qubit gates on leading platforms.
         </Ev>
 
-        <Expandable title="Channel–circuit error propagation">
-          <p>
-            A circuit with depth D and per-gate error rate p suffers roughly O(D·p) accumulated error
-            without correction. Coherence limits also cap circuit depth via T₂.
-          </p>
-          <Katex display>{`\\epsilon_{\\text{circuit}} \\lesssim 1 - (1-p)^D \\approx Dp \\quad \\text{for small } p`}</Katex>
-        </Expandable>
 
         <Checkpoint
           question="Can T2 be longer than 2 times T1?"
           answer="no"
           hint="Think about the relationship between energy relaxation and pure dephasing."
         />
-      </Section>
+      </LearnSection>
 
-      <Section id="12.4" title="Error Mitigation vs. Error Correction">
+      <LearnSection chapter="modern" sectionId="12.4">
         <Ev type="Established">
           <strong>Error mitigation</strong> (zero-noise extrapolation, probabilistic error cancellation,
           symmetry verification, readout error mitigation) reduces <em>bias</em> in noisy expectation values
@@ -215,9 +191,9 @@ export default function ModernTopics() {
           answer="no"
           hint="Mitigation post-processes measurement statistics; it does not encode redundancy."
         />
-      </Section>
+      </LearnSection>
 
-      <Section id="12.5" title="Classical Simulation Limits (2ⁿ)">
+      <LearnSection chapter="modern" sectionId="12.5">
         <Ev type="Established">
           Exact simulation of an n-qubit pure state requires storing 2ⁿ complex amplitudes — memory and
           time scale exponentially in n for generic circuits.
@@ -235,9 +211,9 @@ export default function ModernTopics() {
           Claims of &quot;quantum supremacy&quot; or &quot;utility advantage&quot; must specify the classical comparison,
           verification method, and problem size — cross-check against independent classical simulations where published.
         </Ev>
-      </Section>
+      </LearnSection>
 
-      <Section id="12.6" title="Resource Estimation">
+      <LearnSection chapter="modern" sectionId="12.6">
         <p>
           Before running Shor on RSA or large chemistry, practitioners estimate qubit count, gate count,
           wall-clock time, and error budget — often using the surface code as a reference architecture.
@@ -250,17 +226,9 @@ export default function ModernTopics() {
           Open-source tools (e.g., Azure Quantum Resource Estimator, various academic calculators) implement
           updated gate counts from algorithm papers plus code-cycle times from hardware assumptions.
         </Ev>
-        <Expandable title="Key inputs to any resource estimate">
-          <ul>
-            <li>Algorithm: qubits, T-count, T-depth, parallelization</li>
-            <li>Code: family, distance, cycle time, physical error rate</li>
-            <li>Classical co-processing: magic-state distillation factories, routing</li>
-            <li>Success probability and error budget per logical operation</li>
-          </ul>
-        </Expandable>
-      </Section>
+      </LearnSection>
 
-      <Section id="12.7" title="Quantum Networking">
+      <LearnSection chapter="modern" sectionId="12.7">
         <Ev type="Established">
           Quantum networks distribute entanglement or secret keys between nodes. Components include quantum
           memories, repeaters, and quantum-classical interfaces.
@@ -274,9 +242,9 @@ export default function ModernTopics() {
           deployment by 2030 remains unclear.
         </Ev>
         <Katex display>{`|\\Phi^+\\rangle_{AB} \\xrightarrow{\\text{swap}} |\\Phi^+\\rangle_{BC} \\quad \\text{(entanglement routing)}`}</Katex>
-      </Section>
+      </LearnSection>
 
-      <Section id="12.8" title="Post-Quantum Cryptography">
+      <LearnSection chapter="modern" sectionId="12.8">
         <Ev type="Established">
           Shor's algorithm breaks RSA and elliptic-curve cryptography on a sufficiently large fault-tolerant
           machine. Harvest-now-decrypt-later threats motivate migration regardless of current hardware size.
@@ -294,9 +262,9 @@ export default function ModernTopics() {
           answer="no"
           hint="PQC algorithms are classical cryptographic standards."
         />
-      </Section>
+      </LearnSection>
 
-      <Section id="12.9" title="Software Ecosystem">
+      <LearnSection chapter="modern" sectionId="12.9">
         <Ev type="Established">
           <strong>Qiskit</strong> (IBM): dominant open SDK, transpilation, simulators, cloud backends, pulse-level control.
         </Ev>
@@ -310,20 +278,13 @@ export default function ModernTopics() {
           <strong>OpenQASM 3</strong>: interoperable circuit description language; adoption across vendors growing.
           QIR (LLVM-based) targets compiler toolchains.
         </Ev>
-        <Expandable title="This textbook's quantum-core">
-          <p>
-            Our in-browser <code>quantum-core</code> library provides pedagogical state-vector simulation,
-            gate matrices, and algorithm demos. It is not a production SDK — use Qiskit/Cirq for hardware
-            submission and large-scale simulation.
-          </p>
-        </Expandable>
         <Ev type="Industry claim">
           Vendor-specific cloud pricing, queue times, and claimed &quot;quantum advantage&quot; for customer workloads
           should be validated on your own problem instances.
         </Ev>
-      </Section>
+      </LearnSection>
 
-      <Section id="12.10" title="Fault Tolerance Status (2026)">
+      <LearnSection chapter="modern" sectionId="12.10">
         <Ev type="Established">
           Threshold theorems prove that if physical gate error rates are below a constant threshold, arbitrary
           long quantum computation is possible with polylog overhead in qubits and time.
@@ -338,9 +299,9 @@ export default function ModernTopics() {
         <Ev type="Open question">
           Which code family (surface, color, LDPC, bosonic) and platform wins on total system cost remains undecided.
         </Ev>
-      </Section>
+      </LearnSection>
 
-      <Section id="12.11" title="Quantum Advantage Benchmarks" next={{ title: 'Reference', path: '/reference' }}>
+      <LearnSection chapter="modern" sectionId="12.11" next={{ title: 'Reference', path: '/reference' }}>
         <Ev type="Established">
           Different benchmarks measure different things: random circuit sampling (RCS), quantum approximate
           optimization (QAOA), variational quantum eigensolver (VQE), quantum machine learning, and bespoke
@@ -359,22 +320,13 @@ export default function ModernTopics() {
           at economically meaningful scales is unknown as of September 2026.
         </Ev>
 
-        <Expandable title="Checklist for reading a quantum advantage claim">
-          <ol>
-            <li>What exact problem and input size?</li>
-            <li>What metric (time, energy, solution quality)?</li>
-            <li>What classical algorithm was compared — best known or strawman?</li>
-            <li>Was the quantum result verified independently?</li>
-            <li>Does success require error mitigation only, or hypothetical fault tolerance?</li>
-          </ol>
-        </Expandable>
 
         <Checkpoint
           question="Does random circuit sampling prove that quantum computers solve all NP problems efficiently?"
           answer="no"
           hint="RCS is a specific sampling task; BQP vs NP is still unknown."
         />
-      </Section>
+      </LearnSection>
 
       <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '2rem' }}>
         Research cutoff: September 2026. Re-verify hardware and industry claims against peer-reviewed primary sources.

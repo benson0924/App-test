@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import type { ComponentType } from 'react';
-import { labs } from '@/data/navigation';
+import { useT } from '@/context/LocaleContext';
+import { useLocalizedLabs } from '@/data/localizedNavigation';
 import BinaryStateExplorer from '@/components/labs/BinaryStateExplorer';
 import LogicGateSimulator from '@/components/labs/LogicGateSimulator';
 import BinaryAdderLab from '@/components/labs/BinaryAdderLab';
@@ -59,15 +60,17 @@ const LAB_COMPONENTS: Record<string, ComponentType> = {
 
 export default function LabPage() {
   const { labId } = useParams<{ labId: string }>();
+  const t = useT();
+  const labs = useLocalizedLabs();
   const lab = labs.find((l) => l.id === labId);
   const LabComponent = labId ? LAB_COMPONENTS[labId] : undefined;
 
   if (!lab) {
     return (
       <div>
-        <h1>Lab not found</h1>
-        <p>Unknown lab id: <code>{labId}</code></p>
-        <Link to="/playground">← Back to Playground</Link>
+        <h1>{t('playground.labPage.notFound')}</h1>
+        <p>{t('playground.labPage.unknownId')} <code>{labId}</code></p>
+        <Link to="/playground">{t('playground.labPage.backToPlayground')}</Link>
       </div>
     );
   }
@@ -77,15 +80,15 @@ export default function LabPage() {
       <div>
         <h1>{lab.title}</h1>
         <span className="tag">{lab.chapter}</span>
-        <p style={{ marginTop: '1rem' }}>This lab is coming soon.</p>
-        <Link to="/playground">← Back to Playground</Link>
+        <p style={{ marginTop: '1rem' }}>{t('playground.labPage.comingSoon')}</p>
+        <Link to="/playground">{t('playground.labPage.backToPlayground')}</Link>
       </div>
     );
   }
 
   return (
     <div>
-      <p><Link to="/playground">← All Labs</Link> · <span className="tag">{lab.chapter}</span></p>
+      <p><Link to="/playground">{t('playground.labPage.allLabs')}</Link> · <span className="tag">{lab.chapter}</span></p>
       <h1>{lab.title}</h1>
       <LabComponent />
     </div>

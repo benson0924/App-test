@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
+import { useT } from './context/LocaleContext';
 import LearnChapterLayout from './components/LearnChapterLayout';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -32,9 +33,10 @@ import LabPage from './pages/playground/LabPage';
 import CircuitBuilderPage from './pages/playground/CircuitBuilderPage';
 
 function PageLoader() {
+  const t = useT();
   return (
     <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-      Loading…
+      {t('common.loading')}
     </div>
   );
 }

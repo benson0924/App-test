@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import {
   C,
   singleQubitState,
@@ -10,6 +11,8 @@ import {
 import Katex from '@/components/Math';
 
 export default function QubitStateLab() {
+  const labT = useLabT('qubit-state');
+  const sharedT = useLabSharedT();
   const [alphaRe, setAlphaRe] = useState('1');
   const [alphaIm, setAlphaIm] = useState('0');
   const [betaRe, setBetaRe] = useState('0');
@@ -38,7 +41,7 @@ export default function QubitStateLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Single-Qubit State Explorer</h3>
+      <h3>{labT('title')}</h3>
       <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
         Edit amplitudes α and β. The ket, column vector, measurement probabilities, and Bloch coordinates update live.
       </p>

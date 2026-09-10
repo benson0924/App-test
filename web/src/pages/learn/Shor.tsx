@@ -1,10 +1,10 @@
+import { useChapterMeta, LearnSection } from '@/components/LocalizedContent';
+import { useT } from '@/context/LocaleContext';
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
-import Section from '@/components/Section';
 import Checkpoint from '@/components/Checkpoint';
 import WorkedExample from '@/components/WorkedExample';
-import Expandable from '@/components/Expandable';
 import { modExp, findPeriod, gcd, shorFactor } from 'quantum-core';
 
 function LabLink({ id, title }: { id: string; title: string }) {
@@ -151,16 +151,18 @@ function ShorFactor15Stepper() {
 }
 
 export default function Shor() {
+  const { tag, title, intro } = useChapterMeta('shor');
+  const t = useT();
   return (
     <article>
-      <h1>Chapter 11: Shor&apos;s Algorithm</h1>
+      <h1>{title}</h1>
       <p>
         Shor&apos;s algorithm (1994) factors large composite integers in polynomial time on a
         fault-tolerant quantum computer — threatening RSA and Diffie–Hellman. The quantum core is
         period finding via QPE; everything else is classical number theory.
       </p>
 
-      <Section id="11.1" title="11.1 Reduction to Period Finding" prev={{ title: 'Phase Estimation', path: '/learn/phase-estimation' }}>
+      <LearnSection chapter="shor" sectionId="11.1" prev={{ title: 'Phase Estimation', path: '/learn/phase-estimation' }}>
         <p>
           To factor composite N, pick random a with 1 &lt; a &lt; N and gcd(a, N) = 1. If gcd(a, N) &gt; 1,
           we already found a factor classically. Otherwise, find the smallest r &gt; 0 such that:
@@ -192,9 +194,9 @@ export default function Shor() {
         </div>
 
         <LabLink id="period-finding" title="Period Explorer" />
-      </Section>
+      </LearnSection>
 
-      <Section id="11.2" title="11.2 From Period to Factors">
+      <LearnSection chapter="shor" sectionId="11.2">
         <p>
           Given period r with a<sup>r</sup> ≡ 1 (mod N), we have a<sup>r</sup> − 1 ≡ 0 (mod N), so N divides
           (a<sup>r/2</sup> − 1)(a<sup>r/2</sup> + 1). If a<sup>r/2</sup> ≢ −1 (mod N), then neither factor
@@ -213,22 +215,15 @@ export default function Shor() {
           ]}
         />
 
-        <Expandable title="Why a^{r/2} ≡ −1 causes failure">
-          <p>
-            If a<sup>r/2</sup> ≡ −1 (mod N), then a<sup>r/2</sup> + 1 ≡ 0 (mod N), so gcd(a<sup>r/2</sup> + 1, N) = N
-            — a trivial factor. Similarly gcd(a<sup>r/2</sup> − 1, N) = 1. About half of valid periods
-            yield useful factors; the rest require retrying with a different a.
-          </p>
-        </Expandable>
 
         <Checkpoint
           question="What gcd computation extracts a factor from period r?"
           answer="gcd(a^{r/2} ± 1, N)"
           hint="±1 from the a^r − 1 factorization."
         />
-      </Section>
+      </LearnSection>
 
-      <Section id="11.3" title="11.3 Factoring 15: Interactive Walkthrough">
+      <LearnSection chapter="shor" sectionId="11.3">
         <p>
           The canonical demo factors N = 15 with a = 2. The period of 2<sup>x</sup> mod 15 is r = 4,
           yielding factors 3 and 5.
@@ -247,9 +242,9 @@ export default function Shor() {
         />
 
         <LabLink id="shor" title="Shor's Algorithm Demo" />
-      </Section>
+      </LearnSection>
 
-      <Section id="11.4" title="11.4 Complexity">
+      <LearnSection chapter="shor" sectionId="11.4">
         <p>
           On a fault-tolerant quantum computer with O(n) qubits and poly(n) gates:
         </p>
@@ -278,37 +273,16 @@ export default function Shor() {
           answer="polynomial"
           hint="Poly(n) = poly(log N)."
         />
-      </Section>
+      </LearnSection>
 
-      <Section id="11.5" title="11.5 Cryptographic Impact" next={{ title: 'Modern Topics', path: '/learn/modern' }}>
+      <LearnSection chapter="shor" sectionId="11.5" next={{ title: 'Modern Topics', path: '/learn/modern' }}>
         <p>
           RSA, Diffie–Hellman, and elliptic-curve cryptography (via Shor&apos;s discrete-log variant)
           rely on the hardness of factoring or discrete logarithms. A large-scale fault-tolerant quantum
           computer running Shor would break these systems.
         </p>
 
-        <Expandable title="Post-quantum cryptography (PQC)">
-          <p>
-            NIST standardized post-quantum algorithms (2024) based on lattice problems, hash signatures,
-            and code-based schemes — mathematical assumptions Shor does not attack. Migration to PQC
-            is underway in government and industry standards.
-          </p>
-          <p>
-            <strong>Important nuance:</strong> Today&apos;s NISQ devices cannot run full Shor on
-            cryptographically relevant key sizes (2048-bit RSA). &quot;Harvest now, decrypt later&quot;
-            threats motivate proactive migration, not panic about immediate breaks.
-          </p>
-        </Expandable>
 
-        <Expandable title="Period finding — the quantum heart">
-          <p>
-            The quantum subroutine estimates the period r of f(x) = a<sup>x</sup> mod N using QPE on the
-            modular multiplication unitary. The QFT converts periodic structure in x into peaks at multiples
-            of N/r; continued fractions recover r from a measured phase. See{' '}
-            <Link to="/learn/qft">Chapter 9 (QFT)</Link> and{' '}
-            <Link to="/learn/phase-estimation">Chapter 10 (QPE)</Link>.
-          </p>
-        </Expandable>
 
         <h3>Related labs</h3>
         <ul>
@@ -317,7 +291,7 @@ export default function Shor() {
           <li><Link to="/playground/phase-estimation">Phase Estimation</Link></li>
           <li><Link to="/playground/qft">QFT Visualizer</Link></li>
         </ul>
-      </Section>
+      </LearnSection>
     </article>
   );
 }

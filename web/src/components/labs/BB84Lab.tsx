@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { runBB84 } from 'quantum-core';
 
 export default function BB84Lab() {
+  const labT = useLabT('bb84');
+  const sharedT = useLabSharedT();
   const [numQubits, setNumQubits] = useState(16);
   const [eve, setEve] = useState(false);
   const [result, setResult] = useState<ReturnType<typeof runBB84> | null>(null);
@@ -10,7 +13,7 @@ export default function BB84Lab() {
 
   return (
     <div className="lab-panel">
-      <h3>BB84 Key Distribution</h3>
+      <h3>{labT('title')}</h3>
       <label>
         Qubits: {numQubits}
         <input type="range" min={8} max={64} step={8} value={numQubits} onChange={(e) => setNumQubits(Number(e.target.value))} />

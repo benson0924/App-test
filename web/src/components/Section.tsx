@@ -1,6 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import { getSectionMeta, linkHref, type ConceptLink } from '@/data/curriculum';
+import { useT } from '@/context/LocaleContext';
+import { useLocalizedCurriculum } from '@/data/localizedCurriculum';
 
 interface SectionProps {
   id: string;
@@ -39,11 +41,18 @@ export default function Section({
   showConceptLinks = true,
 }: SectionProps) {
   const { pathname } = useLocation();
+  const t = useT();
+  const { localizeLink } = useLocalizedCurriculum();
   const resolvedChapterPath = chapterPath ?? (pathname.startsWith('/learn/') && pathname !== '/learn' ? pathname : undefined);
   const meta = resolvedChapterPath ? getSectionMeta(resolvedChapterPath, id) : undefined;
-  const prerequisites = meta?.prerequisites ?? [];
-  const nextConcepts = meta?.nextConcepts ?? [];
-  const labs = meta?.labs ?? [];
+  const prerequisites = (meta?.prerequisites ?? []).map(localizeLink);
+  const nextConcepts = (meta?.nextConcepts ?? []).map(localizeLink);
+  const labs = (meta?.labs ?? []).map((l) => ({
+    ...l,
+    title: t(`curriculum.labs.${l.id}`) !== `curriculum.labs.${l.id}` ? t(`curriculum.labs.${l.id}`) : l.title,
+  }));
+  const localizedPrev = prev ? localizeLink(prev) : undefined;
+  const localizedNext = next ? localizeLink(next) : undefined;
 
   return (
     <section id={id} className="chapter-section">
@@ -51,19 +60,19 @@ export default function Section({
       {children}
 
       {showConceptLinks && prerequisites.length > 0 && (
-        <ConceptLinks label="Prerequisites" links={prerequisites} />
+        <ConceptLinks label={t('common.section.prerequisites')} links={prerequisites} />
       )}
       {showConceptLinks && nextConcepts.length > 0 && (
-        <ConceptLinks label="Next related concepts" links={nextConcepts} />
+        <ConceptLinks label={t('common.section.nextConcepts')} links={nextConcepts} />
       )}
       {labs.length > 0 && (
-        <ConceptLinks label="Interactive labs" links={labs.map((l) => ({ title: l.title, path: `/playground/${l.id}` }))} />
+        <ConceptLinks label={t('common.section.interactiveLabs')} links={labs.map((l) => ({ title: l.title, path: `/playground/${l.id}` }))} />
       )}
 
-      {(prev || next) && (
+      {(localizedPrev || localizedNext) && (
         <div className="section-nav">
-          {prev ? <Link to={linkHref(prev)}>← {prev.title}</Link> : <span />}
-          {next ? <Link to={linkHref(next)}>{next.title} →</Link> : <span />}
+          {localizedPrev ? <Link to={linkHref(localizedPrev)}>← {localizedPrev.title}</Link> : <span />}
+          {localizedNext ? <Link to={linkHref(localizedNext)}>{localizedNext.title} →</Link> : <span />}
         </div>
       )}
     </section>

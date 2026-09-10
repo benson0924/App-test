@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { BellStates, applyCircuit, createCircuit, zeroState, measureComputational } from 'quantum-core';
 
 export default function SuperdenseLab() {
+  const labT = useLabT('superdense');
+  const sharedT = useLabSharedT();
   const [bits, setBits] = useState<[number, number]>([0, 0]);
   const [log, setLog] = useState<string[]>([]);
 
@@ -31,7 +34,7 @@ export default function SuperdenseLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Superdense Coding</h3>
+      <h3>{labT('title')}</h3>
       <p>Send two classical bits using one qubit and one shared ebit.</p>
       <div className="btn-group">
         {[0, 1].map((b0) =>

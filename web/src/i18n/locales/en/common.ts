@@ -45,7 +45,7 @@ export const common: TranslationTree = {
   },
   chapterShell: {
     tableOfContents: 'Chapter table of contents',
-    readingProgress: '{progress}% through chapter',
+    readingProgress: '{{progress}}% through chapter',
     prevChapter: 'Previous chapter',
     nextChapter: 'Next chapter',
   },

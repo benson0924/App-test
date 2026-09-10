@@ -1,10 +1,10 @@
+import { useChapterMeta, LearnSection } from '@/components/LocalizedContent';
+import { useT } from '@/context/LocaleContext';
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
-import Section from '@/components/Section';
 import Checkpoint from '@/components/Checkpoint';
 import WorkedExample from '@/components/WorkedExample';
-import Expandable from '@/components/Expandable';
 import {
   allBitStrings,
   binaryToDecimal,
@@ -362,20 +362,15 @@ function ComplexityGraph() {
 }
 
 export default function ClassicalComputing() {
+  const { tag, title, intro } = useChapterMeta('classical');
+  const t = useT();
   return (
     <article>
-      <span className="tag">Chapter 1</span>
-      <h1>Classical Computing</h1>
-      <p style={{ color: 'var(--text-muted)' }}>
-        Before qubits and superposition, we need a precise picture of how classical computers represent
-        information, manipulate it with logic, and reason about computational cost. This chapter builds
-        that foundation — and highlights concepts (reversibility, error correction, complexity) that
-        reappear in quantum form later.
-      </p>
+      <span className="tag">{tag}</span>
+      <h1>{title}</h1>
+      <p style={{ color: 'var(--text-muted)' }}>{intro}</p>
 
-      <Section
-        id="states-and-information"
-        title="1.1 States and Information"
+      <LearnSection chapter="classical" sectionId="states-and-information"
         next={{ title: '1.2 Binary Numbers', path: `${BASE}#binary-numbers` }}
       >
         <p>
@@ -412,11 +407,9 @@ export default function ClassicalComputing() {
           Try the interactive explorer above, or open the{' '}
           <Link to="/playground/binary-states">Binary State Explorer</Link> lab.
         </p>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="binary-numbers"
-        title="1.2 Binary Numbers"
+      <LearnSection chapter="classical" sectionId="binary-numbers"
         prev={{ title: '1.1 States and Information', path: `${BASE}#states-and-information` }}
         next={{ title: '1.3 Logic Gates', path: `${BASE}#logic-gates` }}
       >
@@ -451,11 +444,9 @@ export default function ClassicalComputing() {
           Practice conversions in the{' '}
           <Link to="/playground/binary-states">Binary State Explorer</Link> lab.
         </p>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="logic-gates"
-        title="1.3 Logic Gates"
+      <LearnSection chapter="classical" sectionId="logic-gates"
         prev={{ title: '1.2 Binary Numbers', path: `${BASE}#binary-numbers` }}
         next={{ title: '1.4 Boolean Algebra', path: `${BASE}#boolean-algebra` }}
       >
@@ -487,11 +478,9 @@ export default function ClassicalComputing() {
           Explore gate combinations in the{' '}
           <Link to="/playground/logic-gates">Logic Gate Simulator</Link> lab.
         </p>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="boolean-algebra"
-        title="1.4 Boolean Algebra"
+      <LearnSection chapter="classical" sectionId="boolean-algebra"
         prev={{ title: '1.3 Logic Gates', path: `${BASE}#logic-gates` }}
         next={{ title: '1.5 Adders', path: `${BASE}#adders` }}
       >
@@ -524,15 +513,9 @@ export default function ClassicalComputing() {
           hint="Negation distributes by flipping AND to OR."
         />
 
-        <Expandable title="Additional Boolean identities">
-          <Katex display>{`A \\land A = A, \\quad A \\lor A = A, \\quad A \\land 1 = A, \\quad A \\lor 0 = A`}</Katex>
-          <Katex display>{`A \\land (B \\lor C) = (A \\land B) \\lor (A \\land C)`}</Katex>
-        </Expandable>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="adders"
-        title="1.5 Adders"
+      <LearnSection chapter="classical" sectionId="adders"
         prev={{ title: '1.4 Boolean Algebra', path: `${BASE}#boolean-algebra` }}
         next={{ title: '1.6 Reversible Computation', path: `${BASE}#reversible-computation` }}
       >
@@ -565,11 +548,9 @@ export default function ClassicalComputing() {
           Step through addition interactively in the{' '}
           <Link to="/playground/binary-adder">Binary Adder</Link> lab.
         </p>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="reversible-computation"
-        title="1.6 Reversible Computation"
+      <LearnSection chapter="classical" sectionId="reversible-computation"
         prev={{ title: '1.5 Adders', path: `${BASE}#adders` }}
         next={{ title: '1.7 Classical Error Correction', path: `${BASE}#classical-error-correction` }}
       >
@@ -603,11 +584,9 @@ export default function ClassicalComputing() {
           answer="1"
           hint="Target flips when both controls are 1."
         />
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="classical-error-correction"
-        title="1.7 Classical Error Correction"
+      <LearnSection chapter="classical" sectionId="classical-error-correction"
         prev={{ title: '1.6 Reversible Computation', path: `${BASE}#reversible-computation` }}
         next={{ title: '1.8 Complexity', path: `${BASE}#complexity` }}
       >
@@ -644,11 +623,9 @@ export default function ClassicalComputing() {
           Compare classical and quantum approaches in the{' '}
           <Link to="/playground/error-correction">Error Correction Simulator</Link> lab (later chapter).
         </p>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="complexity"
-        title="1.8 Complexity"
+      <LearnSection chapter="classical" sectionId="complexity"
         prev={{ title: '1.7 Classical Error Correction', path: `${BASE}#classical-error-correction` }}
         next={{ title: '1.9 Turing Machines', path: `${BASE}#turing-machines` }}
       >
@@ -686,11 +663,9 @@ export default function ClassicalComputing() {
           See the full complexity reference at{' '}
           <Link to="/reference/complexity">Complexity Classes</Link>.
         </p>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="turing-machines"
-        title="1.9 Turing Machines"
+      <LearnSection chapter="classical" sectionId="turing-machines"
         prev={{ title: '1.8 Complexity', path: `${BASE}#complexity` }}
         next={{ title: 'Chapter 2: One Qubit', path: '/learn/one-qubit' }}
       >
@@ -740,15 +715,7 @@ export default function ClassicalComputing() {
           hint="The control is finite; only the tape is unbounded."
         />
 
-        <Expandable title="Quantum circuits as a new model">
-          <p>
-            Quantum computers are not Turing machines with randomness — they extend the model with
-            amplitudes, unitary evolution, and projective measurement. The class BQP captures what
-            efficient quantum algorithms compute; it sits inside PSPACE and may extend beyond P for
-            specific structured problems.
-          </p>
-        </Expandable>
-      </Section>
+      </LearnSection>
 
       <div className="section-nav">
         <Link to="/learn">← All Chapters</Link>

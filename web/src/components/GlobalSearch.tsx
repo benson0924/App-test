@@ -1,20 +1,24 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { searchIndex, chapters } from '@/data/curriculum';
-import { labs } from '@/data/navigation';
-
-const fullIndex = [
-  ...searchIndex,
-  ...labs.map((l) => ({ title: l.title, path: `/playground/${l.id}`, type: 'lab' as const, snippet: l.chapter })),
-  { title: 'Circuit Builder', path: '/playground/circuit-builder', type: 'lab' as const },
-  { title: 'Practice Problems', path: '/practice', type: 'chapter' as const },
-  { title: 'Gate Reference', path: '/reference/gates', type: 'chapter' as const },
-];
+import { useT } from '@/context/LocaleContext';
+import { useLocalizedCurriculum } from '@/data/localizedCurriculum';
+import { useLocalizedLabs } from '@/data/localizedNavigation';
 
 export default function GlobalSearch() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
+  const t = useT();
+  const { searchIndex, localizedChapters } = useLocalizedCurriculum();
+  const labs = useLocalizedLabs();
+
+  const fullIndex = useMemo(() => [
+    ...searchIndex,
+    ...labs.map((l) => ({ title: l.title, path: `/playground/${l.id}`, type: 'lab' as const, snippet: l.chapter })),
+    { title: t('home.buttons.circuitBuilder'), path: '/playground/circuit-builder', type: 'lab' as const },
+    { title: t('practice.ui.title'), path: '/practice', type: 'chapter' as const },
+    { title: t('reference.index.gates.title'), path: '/reference/gates', type: 'chapter' as const },
+  ], [searchIndex, labs, t]);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -23,7 +27,7 @@ export default function GlobalSearch() {
       item.title.toLowerCase().includes(q) ||
       ('snippet' in item && item.snippet?.toLowerCase().includes(q))
     ).slice(0, 12);
-  }, [query]);
+  }, [query, fullIndex]);
 
   const openSearch = useCallback(() => {
     setOpen(true);
@@ -41,16 +45,16 @@ export default function GlobalSearch() {
 
   return (
     <>
-      <button className="btn search-trigger" onClick={openSearch} aria-label="Search">
-        🔍 Search…
+      <button className="btn search-trigger" onClick={openSearch} aria-label={t('common.search.label')}>
+        🔍 {t('common.search.label')}…
       </button>
       {open && (
         <div className="search-overlay" onClick={() => setOpen(false)} role="presentation">
-          <div className="search-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="Search">
+          <div className="search-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-label={t('common.search.label')}>
             <input
               ref={inputRef}
               type="search"
-              placeholder="Search chapters, sections, labs…"
+              placeholder={t('common.search.placeholder')}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="search-input"
@@ -64,10 +68,10 @@ export default function GlobalSearch() {
                   </Link>
                 </li>
               ))}
-              {results.length === 0 && <li style={{ color: 'var(--text-muted)', padding: '0.75rem' }}>No results</li>}
+              {results.length === 0 && <li style={{ color: 'var(--text-muted)', padding: '0.75rem' }}>{t('common.search.noResults')}</li>}
             </ul>
             <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: '0.75rem 0 0' }}>
-              {chapters.length} chapters · {labs.length + 1} labs · Press Esc to close
+              {localizedChapters.length} chapters · {labs.length + 1} labs · Esc
             </p>
           </div>
         </div>

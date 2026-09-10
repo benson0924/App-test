@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { shorFactor, modExp, findPeriod, gcd } from 'quantum-core';
 
 export default function ShorLab() {
+  const labT = useLabT('shor');
+  const sharedT = useLabSharedT();
   const [N, setN] = useState(15);
   const [a, setA] = useState(7);
   const [result, setResult] = useState<ReturnType<typeof shorFactor> | null>(null);
@@ -30,7 +33,7 @@ export default function ShorLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Shor&apos;s Algorithm Demo (N = 15)</h3>
+      <h3>{labT('title')}</h3>
       <p>Classical period finding demo of the quantum factoring pipeline.</p>
       <div className="btn-group">
         <button className={`btn ${N === 15 ? 'btn-primary' : ''}`} onClick={() => setN(15)}>N = 15</button>

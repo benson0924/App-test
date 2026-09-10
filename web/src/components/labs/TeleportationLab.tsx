@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import {
   applyCircuit,
   createCircuit,
@@ -17,6 +18,8 @@ import Katex from '@/components/Math';
 const STEP_LABELS = ['Setup', 'Bell pair', 'Alice gates', 'Measure', 'Bob corrects', 'Complete'];
 
 export default function TeleportationLab() {
+  const labT = useLabT('teleportation');
+  const sharedT = useLabSharedT();
   const [theta, setTheta] = useState(Math.PI / 3);
   const [phi, setPhi] = useState(0.8);
   const [stepIdx, setStepIdx] = useState(0);
@@ -143,7 +146,7 @@ export default function TeleportationLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Quantum Teleportation</h3>
+      <h3>{labT('title')}</h3>
       <p style={{ fontSize: '0.875rem' }}>
         Transfer unknown |ψ⟩ using shared entanglement + 2 classical bits. Qubit 0 = message, 1 = Alice, 2 = Bob.
       </p>

@@ -1,10 +1,10 @@
+import { useChapterMeta, LearnSection } from '@/components/LocalizedContent';
+import { useT } from '@/context/LocaleContext';
 import { useState, useMemo, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
-import Section from '@/components/Section';
 import Checkpoint from '@/components/Checkpoint';
 import WorkedExample from '@/components/WorkedExample';
-import Expandable from '@/components/Expandable';
 import {
   C,
   Gates,
@@ -42,7 +42,6 @@ function PracticeProblem({ prompt, children }: { prompt: ReactNode; children: Re
   return (
     <div className="lab-panel" style={{ marginTop: '1rem' }}>
       <p><strong>Practice problem.</strong> {prompt}</p>
-      <Expandable title="Reveal solution">{children}</Expandable>
     </div>
   );
 }
@@ -300,9 +299,11 @@ function CircuitMetricsDemo() {
 }
 
 export default function QuantumCircuits() {
+  const { tag, title, intro } = useChapterMeta('quantumCircuits');
+  const t = useT();
   return (
     <article>
-      <h1>Chapter 6: Quantum Circuits</h1>
+      <h1>{title}</h1>
       <p>
         The quantum circuit model is the standard programming picture for quantum algorithms: qubits
         are wires, time flows left to right (or top to bottom in some diagrams), unitary gates
@@ -311,9 +312,7 @@ export default function QuantumCircuits() {
         metrics to simulation and hardware constraints.
       </p>
 
-      <Section
-        id="6.1"
-        title="6.1 Circuit model conventions"
+      <LearnSection chapter="quantumCircuits" sectionId="6.1"
         prev={{ title: 'Multiple Qubits', path: '/learn/multiple-qubits' }}
         next={{ title: '6.2 Bell walkthrough', path: `${BASE}#6.2` }}
       >
@@ -352,13 +351,6 @@ export default function QuantumCircuits() {
           ]}
         />
 
-        <Expandable title="Tensor product wire ordering">
-          <p>
-            For n qubits, basis states are |q₀q₁…q<sub>n−1</sub>⟩ with qubit 0 often the top wire. The
-            state index in simulators is usually binary q₀q₁… written as an integer. Always check
-            documentation for qubit index convention when porting circuits between tools.
-          </p>
-        </Expandable>
 
         <Checkpoint
           question="In a left-to-right diagram, which gate applies first to |ψ_in⟩?"
@@ -373,11 +365,9 @@ export default function QuantumCircuits() {
             Control is |1⟩, so target flips: |10⟩ → |11⟩.
           </p>
         </PracticeProblem>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="6.2"
-        title="6.2 Bell circuit walkthrough"
+      <LearnSection chapter="quantumCircuits" sectionId="6.2"
         prev={{ title: '6.1 Conventions', path: `${BASE}#6.1` }}
         next={{ title: '6.3 Gate set', path: `${BASE}#6.3` }}
       >
@@ -425,11 +415,9 @@ export default function QuantumCircuits() {
             |10⟩ are zero — maximally entangled support on the even parity subspace.
           </p>
         </PracticeProblem>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="6.3"
-        title="6.3 Gate set: I, X, Y, Z, H, S, T, rotations, CNOT, CZ, SWAP, Toffoli"
+      <LearnSection chapter="quantumCircuits" sectionId="6.3"
         prev={{ title: '6.2 Bell walkthrough', path: `${BASE}#6.2` }}
         next={{ title: '6.4 State readout', path: `${BASE}#6.4` }}
       >
@@ -457,13 +445,6 @@ export default function QuantumCircuits() {
 
         <GateSetExplorer />
 
-        <Expandable title="Universality: {H, T, CNOT}">
-          <p>
-            Any n-qubit unitary can be approximated to arbitrary precision using H, T, and CNOT
-            (Solovay–Kitaev theorem). Clifford gates {'{H, S, CNOT, CZ}'} are efficiently simulable
-            classically (Gottesman–Knill) — adding T makes the set computationally universal.
-          </p>
-        </Expandable>
 
         <WorkedExample
           title="Decompose SWAP from CNOTs"
@@ -487,11 +468,9 @@ export default function QuantumCircuits() {
             S|1⟩ = i|1⟩; S²|1⟩ = −|1⟩ = Z|1⟩. So SS = Z (up to global phase on other basis states, S² = Z exactly).
           </p>
         </PracticeProblem>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="6.4"
-        title="6.4 State vector & probability readout"
+      <LearnSection chapter="quantumCircuits" sectionId="6.4"
         prev={{ title: '6.3 Gate set', path: `${BASE}#6.3` }}
         next={{ title: '6.5 Depth & OpenQASM', path: `${BASE}#6.5` }}
       >
@@ -530,13 +509,6 @@ export default function QuantumCircuits() {
           hint="A list of 2^n amplitudes."
         />
 
-        <Expandable title="Weak vs strong measurement">
-          <p>
-            Strong projective measurement collapses the state. Weak measurements extract partial
-            information with less disturbance — used in some experiments and error-monitoring schemes.
-            This course uses projective measurement in the Z (computational) basis unless noted.
-          </p>
-        </Expandable>
 
         <PracticeProblem prompt="A 2-qubit state has amplitude 1/2 on |00⟩, 1/2 on |01⟩, and 0 on |10⟩, |11⟩. What is P(00) and is qubit 1 independent of qubit 0?">
           <p>
@@ -544,11 +516,9 @@ export default function QuantumCircuits() {
             independent (knowing q₀=0 gives P(q₁=0)=P(q₁=1)=1/2 but the joint is not product).
           </p>
         </PracticeProblem>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="6.5"
-        title="6.5 Circuit depth, gate count & OpenQASM"
+      <LearnSection chapter="quantumCircuits" sectionId="6.5"
         prev={{ title: '6.4 State readout', path: `${BASE}#6.4` }}
         next={{ title: 'Error Correction', path: '/learn/error-correction' }}
       >
@@ -573,34 +543,7 @@ export default function QuantumCircuits() {
           hint="Hilbert space size 2^n."
         />
 
-        <Expandable title="OpenQASM 3 example — Bell pair">
-          <pre style={{ fontSize: '0.8rem', overflow: 'auto', margin: 0 }}>{`OPENQASM 3.0;
-include "stdgates.inc";
 
-qubit[2] q;
-bit[2] c;
-
-h q[0];
-cx q[0], q[1];
-
-// Measure both qubits
-c[0] = measure q[0];
-c[1] = measure q[1];`}</pre>
-          <p style={{ marginTop: '0.75rem', fontSize: '0.9rem' }}>
-            OpenQASM is a common interchange format. qreg/creg declare quantum and classical registers;
-            gate names match hardware-native or standard libraries. Export from the{' '}
-            <Link to="/playground/circuit-builder">Circuit Builder</Link> when available.
-          </p>
-        </Expandable>
-
-        <Expandable title="Hardware vs ideal simulation">
-          <p>
-            Real devices add decoherence, readout errors, and limited qubit connectivity — SWAP chains
-            inflate depth. This textbook simulates ideal unitary evolution; labs may inject noise
-            separately. Always compare circuit depth to coherence time T₂ and gate fidelity when
-            estimating success probability.
-          </p>
-        </Expandable>
 
         <WorkedExample
           title="Parallel vs serial H gates"
@@ -620,7 +563,7 @@ c[1] = measure q[1];`}</pre>
             wires).
           </p>
         </PracticeProblem>
-      </Section>
+      </LearnSection>
 
       <div className="section-nav">
         <Link to="/learn/multiple-qubits">← Multiple Qubits</Link>

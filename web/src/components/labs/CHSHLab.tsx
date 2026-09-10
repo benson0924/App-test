@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { chshExperiment } from 'quantum-core';
 
 export default function CHSHLab() {
+  const labT = useLabT('chsh');
+  const sharedT = useLabSharedT();
   const [trials, setTrials] = useState(1000);
   const [result, setResult] = useState<ReturnType<typeof chshExperiment> | null>(null);
 
@@ -12,7 +15,7 @@ export default function CHSHLab() {
 
   return (
     <div className="lab-panel">
-      <h3>CHSH Bell Test</h3>
+      <h3>{labT('title')}</h3>
       <p>Simulate correlations for a singlet-like source. Classical bound |S| ≤ 2; quantum mechanics can reach |S| ≈ 2√2.</p>
       <label>
         Trials: {trials}

@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { basisState, tensorProduct, C } from 'quantum-core';
 import { StateVectorTable } from './labUtils';
 
@@ -17,6 +18,8 @@ function qubitState(bit: number | 'plus') {
 }
 
 export default function TensorProductLab() {
+  const labT = useLabT('tensor-product');
+  const sharedT = useLabSharedT();
   const [preset, setPreset] = useState(0);
   const state = useMemo(() => {
     const p = PRESETS[preset];
@@ -25,7 +28,7 @@ export default function TensorProductLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Tensor Product Calculator</h3>
+      <h3>{labT('title')}</h3>
       <p>Explore how two single-qubit states combine into a two-qubit product state |ψ⟩ ⊗ |φ⟩.</p>
       <div className="btn-group">
         {PRESETS.map((p, i) => (

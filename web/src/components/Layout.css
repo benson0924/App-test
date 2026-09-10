@@ -85,6 +85,43 @@
   border-top: 1px solid var(--border);
 }
 
+.lang-switcher {
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.lang-switcher-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+}
+
+.lang-switcher-select {
+  width: 100%;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.875rem;
+  font-family: inherit;
+}
+
+.lang-switcher-compact .lang-switcher-select {
+  width: auto;
+  min-width: 7rem;
+}
+
+html[lang='zh-Hant-TW'] body,
+html[lang='zh-TW'] body {
+  font-family: 'Noto Sans TC', var(--font-sans);
+}
+
+html[lang='ja'] body {
+  font-family: 'Noto Sans JP', var(--font-sans);
+}
+
 .mobile-header {
   display: none;
   align-items: center;

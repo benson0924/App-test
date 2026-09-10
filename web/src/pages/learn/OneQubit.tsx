@@ -1,10 +1,10 @@
+import { useChapterMeta, LearnSection } from '@/components/LocalizedContent';
+import { useT } from '@/context/LocaleContext';
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
 import Checkpoint from '@/components/Checkpoint';
 import WorkedExample from '@/components/WorkedExample';
-import Expandable from '@/components/Expandable';
-import Section from '@/components/Section';
 import { LabLink, MisconceptionAlert, PracticeBlock } from '@/components/ChapterHelpers';
 import ComplexPlaneLab from '@/components/labs/ComplexPlaneLab';
 import QubitStateLab from '@/components/labs/QubitStateLab';
@@ -130,9 +130,11 @@ function RelativePhaseDemo() {
 }
 
 export default function OneQubit() {
+  const { tag, title, intro } = useChapterMeta('oneQubit');
+  const t = useT();
   return (
     <article>
-      <h1>Chapter 2: The Qubit</h1>
+      <h1>{title}</h1>
       <p>
         A qubit is the fundamental unit of quantum information. Unlike a classical bit, it is described
         by complex amplitudes that can interfere. This chapter develops the language of superposition,
@@ -145,7 +147,7 @@ export default function OneQubit() {
         correction="A qubit is a normalized vector in ℂ². Measurement returns one classical outcome with probabilities |α|² and |β|². The amplitudes encode phase information that affects interference and non-Z measurements."
       />
 
-      <Section id="what-is-a-qubit" title="2.1 What Is a Qubit?">
+      <LearnSection chapter="oneQubit" sectionId="what-is-a-qubit">
         <p>
           A classical bit lives in the set {'{0, 1}'}. A <strong>qubit</strong> lives in a two-dimensional
           complex vector space with orthonormal basis |0⟩ and |1⟩. The general pure state is a
@@ -170,19 +172,12 @@ export default function OneQubit() {
           ]}
         />
 
-        <Expandable title="Why two complex numbers?">
-          <p>
-            Two real numbers would not suffice: quantum mechanics requires complex Hilbert spaces so that
-            unitary evolution can implement rotations and interference. The Born rule uses |α|², but
-            gates combine amplitudes with complex phases before squaring.
-          </p>
-        </Expandable>
 
         <Checkpoint question="How many real parameters describe a pure qubit, ignoring global phase?" answer="2" hint="Think Bloch sphere angles θ and φ." />
         <LabLink id="qubit-state" title="Single-Qubit State Explorer" />
-      </Section>
+      </LearnSection>
 
-      <Section id="complex-amplitudes" title="2.2 Complex Amplitudes">
+      <LearnSection chapter="oneQubit" sectionId="complex-amplitudes">
         <p>
           Write z = a + bi with conjugate z* = a − bi, magnitude |z| = √(a² + b²), and polar form
           z = re<sup>iφ</sup>. Euler's identity e<sup>iφ</sup> = cos φ + i sin φ connects rotation to phase.
@@ -202,9 +197,9 @@ export default function OneQubit() {
 
         <ComplexPlaneLab />
         <LabLink id="complex-plane" title="Complex Number Explorer" />
-      </Section>
+      </LearnSection>
 
-      <Section id="measurement" title="2.3 Measurement">
+      <LearnSection chapter="oneQubit" sectionId="measurement">
         <p>
           Measuring in the Z basis yields outcome 0 with probability P(0) = |α|² and outcome 1 with
           P(1) = |β|². After observing 0, the state collapses to |0⟩; after 1, to |1⟩. This is the
@@ -223,17 +218,13 @@ export default function OneQubit() {
           ]}
         />
 
-        <Expandable title="Full projection calculation for P(0)">
-          <Katex display>{`\\langle 0|\\psi\\rangle = \\alpha, \\quad P(0) = |\\alpha|^2`}</Katex>
-          <p>Similarly ⟨1|ψ⟩ = β. The projector |0⟩⟨0| gives P(0) = ⟨ψ|0⟩⟨0|ψ⟩ = |α|².</p>
-        </Expandable>
 
         <Checkpoint question="After measuring |ψ⟩ and obtaining 1, what is the post-measurement state?" answer="|1⟩" />
         <MeasurementLab />
         <LabLink id="measurement" title="Measurement Simulator" />
-      </Section>
+      </LearnSection>
 
-      <Section id="other-bases" title="2.4 Other Measurement Bases">
+      <LearnSection chapter="oneQubit" sectionId="other-bases">
         <p>
           The X basis uses |+⟩ = (|0⟩ + |1⟩)/√2 and |−⟩ = (|0⟩ − |1⟩)/√2. The Y basis uses
           |i⟩ = (|0⟩ + i|1⟩)/√2 and |−i⟩ = (|0⟩ − i|1⟩)/√2. Rewrite any state in the chosen basis
@@ -254,9 +245,9 @@ export default function OneQubit() {
 
         <BasisProbabilityPanel />
         <LabLink id="measurement" title="Measurement Simulator (basis selector)" />
-      </Section>
+      </LearnSection>
 
-      <Section id="global-relative-phase" title="2.5 Global and Relative Phase">
+      <LearnSection chapter="oneQubit" sectionId="global-relative-phase">
         <p>
           Multiplying |ψ⟩ by e<sup>iγ</sup> does not change any measurement probability in any basis.
           Relative phase between |0⟩ and |1⟩ components <em>does</em> matter: |+⟩ and (|0⟩ + i|1⟩)/√2
@@ -270,9 +261,9 @@ export default function OneQubit() {
         <Checkpoint question="Do |+⟩ and |−⟩ have the same Z-basis probabilities?" answer="yes" hint="Both are uniform superpositions with equal magnitude." />
         <QubitStateLab />
         <LabLink id="qubit-state" title="Single-Qubit State Explorer" />
-      </Section>
+      </LearnSection>
 
-      <Section id="bloch-sphere" title="2.6 The Bloch Sphere">
+      <LearnSection chapter="oneQubit" sectionId="bloch-sphere">
         <p>
           Every pure qubit (up to global phase) maps to a point on the unit sphere with
           θ ∈ [0, π] and φ ∈ [0, 2π):
@@ -303,9 +294,9 @@ export default function OneQubit() {
 
         <BlochSphereLab />
         <LabLink id="bloch-sphere" title="3D Bloch Sphere" />
-      </Section>
+      </LearnSection>
 
-      <Section id="one-qubit-gates" title="2.7 One-Qubit Gates">
+      <LearnSection chapter="oneQubit" sectionId="one-qubit-gates">
         <p>
           Gates are 2×2 unitary matrices. Pauli X flips |0⟩ ↔ |1⟩; Z adds a phase to |1⟩; H creates
           superposition. Important identities: X² = Y² = Z² = H² = I, S² = Z, T² = S.
@@ -314,18 +305,11 @@ export default function OneQubit() {
         <Katex display>{`X|0\\rangle = |1\\rangle, \\quad H|0\\rangle = |+\\rangle, \\quad Z|1\\rangle = -|1\\rangle`}</Katex>
         <Katex display>{`X = \\begin{pmatrix} 0 & 1 \\\\ 1 & 0 \\end{pmatrix}, \\quad H = \\tfrac{1}{\\sqrt{2}}\\begin{pmatrix} 1 & 1 \\\\ 1 & -1 \\end{pmatrix}`}</Katex>
 
-        <Expandable title="Geometric action on the Bloch sphere">
-          <ul>
-            <li>X, Y, Z are 180° rotations about their respective axes.</li>
-            <li>H maps Z-axis to X-axis (and back, since H² = I).</li>
-            <li>S is 90° rotation about Z; T is 45° about Z.</li>
-          </ul>
-        </Expandable>
 
         <Checkpoint question="What is H|+⟩?" answer="|0⟩" hint="H is its own inverse: H² = I." />
         <GateExplorerLab />
         <LabLink id="gate-explorer" title="Quantum Gate Explorer" />
-      </Section>
+      </LearnSection>
 
       <PracticeBlock problems={[
         { q: 'Normalize (2|0⟩ + 3i|1⟩) and find P(0) in the Z basis.', a: 'Norm is √13. P(0) = 4/13.' },

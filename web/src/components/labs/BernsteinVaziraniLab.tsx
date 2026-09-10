@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { runBernsteinVazirani } from 'quantum-core';
 
 export default function BernsteinVaziraniLab() {
+  const labT = useLabT('bernstein-vazirani');
+  const sharedT = useLabSharedT();
   const [n, setN] = useState(3);
   const [secret, setSecret] = useState([1, 0, 1]);
   const [found, setFound] = useState<number[] | null>(null);
@@ -13,7 +16,7 @@ export default function BernsteinVaziraniLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Bernstein–Vazirani</h3>
+      <h3>{labT('title')}</h3>
       <p>Find hidden string s where f(x) = s·x mod 2 in one query.</p>
       <label>
         n: {n}

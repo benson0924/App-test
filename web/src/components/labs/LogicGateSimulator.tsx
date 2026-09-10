@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { LogicGates, type Bit } from 'quantum-core';
 
 type GateName = 'NOT' | 'AND' | 'OR' | 'XOR' | 'NAND' | 'NOR';
@@ -18,6 +19,8 @@ function evalGate(gate: GateName, a: Bit, b: Bit): Bit {
 }
 
 export default function LogicGateSimulator() {
+  const labT = useLabT('logic-gates');
+  const sharedT = useLabSharedT();
   const [gate, setGate] = useState<GateName>('AND');
   const [selectedA, setSelectedA] = useState<Bit>(0);
   const [selectedB, setSelectedB] = useState<Bit>(0);
@@ -45,7 +48,7 @@ export default function LogicGateSimulator() {
 
   return (
     <div className="lab-panel">
-      <h3>Logic Gate Simulator</h3>
+      <h3>{labT('title')}</h3>
       <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
         Select a gate, then click a row in the truth table to set inputs and see the output.
       </p>

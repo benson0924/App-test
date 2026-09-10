@@ -1,10 +1,10 @@
+import { useChapterMeta, LearnSection } from '@/components/LocalizedContent';
+import { useT } from '@/context/LocaleContext';
 import { useState, useMemo, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
-import Section from '@/components/Section';
 import Checkpoint from '@/components/Checkpoint';
 import WorkedExample from '@/components/WorkedExample';
-import Expandable from '@/components/Expandable';
 import {
   C,
   BellStates,
@@ -35,7 +35,6 @@ function PracticeProblem({ prompt, children }: { prompt: ReactNode; children: Re
   return (
     <div className="lab-panel" style={{ marginTop: '1rem' }}>
       <p><strong>Practice problem.</strong> {prompt}</p>
-      <Expandable title="Reveal solution">{children}</Expandable>
     </div>
   );
 }
@@ -202,11 +201,13 @@ function CorrelationDemo() {
 }
 
 export default function Entanglement() {
+  const { tag, title, intro } = useChapterMeta('entanglement');
+  const t = useT();
   const phiPsiOverlap = C.mag2(innerProduct(BellStates.phiPlus(), BellStates.psiMinus()));
 
   return (
     <article>
-      <h1>Chapter 7: Entanglement &amp; Bell Correlations</h1>
+      <h1>{title}</h1>
       <p>
         When two qubits are entangled, their joint state cannot be factored into individual descriptions.
         Measurements on separated particles show correlations that Einstein, Podolsky, and Rosen found
@@ -215,9 +216,7 @@ export default function Entanglement() {
         partial trace.
       </p>
 
-      <Section
-        id="7.1"
-        title="7.1 EPR & local hidden variables"
+      <LearnSection chapter="entanglement" sectionId="7.1"
         prev={{ title: 'Error Correction', path: '/learn/error-correction' }}
         next={{ title: '7.2 Bell states', path: `${BASE}#7.2` }}
       >
@@ -267,13 +266,6 @@ export default function Entanglement() {
           ]}
         />
 
-        <Expandable title="What EPR did not claim">
-          <p>
-            EPR questioned completeness of quantum theory, not its empirical success. They did not
-            propose a practical faster-than-light phone. Modern quantum information treats entanglement
-            as correlation without controllable communication — verified by no-signaling theorems.
-          </p>
-        </Expandable>
 
         <Checkpoint
           question="Can entanglement alone send a message faster than light?"
@@ -289,11 +281,9 @@ export default function Entanglement() {
             correlation statistics without nonlocal influence.
           </p>
         </PracticeProblem>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="7.2"
-        title="7.2 The four Bell states"
+      <LearnSection chapter="entanglement" sectionId="7.2"
         prev={{ title: '7.1 EPR & LHV', path: `${BASE}#7.1` }}
         next={{ title: '7.3 Correlation vs causation', path: `${BASE}#7.3` }}
       >
@@ -340,11 +330,9 @@ export default function Entanglement() {
             the odd-parity subspace (|01⟩ and |10⟩) instead.
           </p>
         </PracticeProblem>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="7.3"
-        title="7.3 Correlation vs causation"
+      <LearnSection chapter="entanglement" sectionId="7.3"
         prev={{ title: '7.2 Bell states', path: `${BASE}#7.2` }}
         next={{ title: '7.4 Partial trace', path: `${BASE}#7.4` }}
       >
@@ -382,13 +370,6 @@ export default function Entanglement() {
           ]}
         />
 
-        <Expandable title="Common misconception">
-          <p>
-            &quot;Spooky action at a distance&quot; sounds like causation, but you cannot use
-            entanglement to transmit classical bits without a classical channel. Correlation is
-            necessary for teleportation, but the classical 2-bit message carries the usable information.
-          </p>
-        </Expandable>
 
         <Checkpoint
           question="Can Alice send a message by choosing her measurement angle alone?"
@@ -402,11 +383,9 @@ export default function Entanglement() {
             Bob's Z-only marginal statistics before he measures.
           </p>
         </PracticeProblem>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="7.4"
-        title="7.4 Reduced states & partial trace"
+      <LearnSection chapter="entanglement" sectionId="7.4"
         prev={{ title: '7.3 Correlation vs causation', path: `${BASE}#7.3` }}
         next={{ title: 'Quantum Protocols', path: '/learn/protocols' }}
       >
@@ -442,13 +421,6 @@ export default function Entanglement() {
           ]}
         />
 
-        <Expandable title="Schmidt decomposition preview">
-          <p>
-            Any bipartite pure state |ψ⟩ = Σᵢ λᵢ|i_A⟩|i_B⟩ with λᵢ ≥ 0. Schmidt rank 1 iff product;
-            rank &gt; 1 iff entangled. The λᵢ² are eigenvalues of ρ_A and ρ_B — same spectrum. See
-            Multiple Qubits chapter for more.
-          </p>
-        </Expandable>
 
         <Checkpoint
           question="For |Φ⁺⟩, is the reduced state on one qubit pure or mixed?"
@@ -464,7 +436,7 @@ export default function Entanglement() {
             shows up as mixed marginals despite a pure joint state.
           </p>
         </PracticeProblem>
-      </Section>
+      </LearnSection>
 
       <div className="section-nav">
         <Link to="/learn/error-correction">← Error Correction</Link>

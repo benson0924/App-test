@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { rippleCarryAdd } from 'quantum-core';
 
 function sanitizeBinary(s: string, maxLen: number): string {
@@ -7,6 +8,8 @@ function sanitizeBinary(s: string, maxLen: number): string {
 }
 
 export default function BinaryAdderLab() {
+  const labT = useLabT('binary-adder');
+  const sharedT = useLabSharedT();
   const [width, setWidth] = useState(4);
   const [a, setA] = useState('0101');
   const [b, setB] = useState('0011');
@@ -23,7 +26,7 @@ export default function BinaryAdderLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Binary Adder (Ripple Carry)</h3>
+      <h3>{labT('title')}</h3>
       <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
         Enter two binary numbers and watch how carry bits propagate from least to most significant bit.
       </p>

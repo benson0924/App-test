@@ -1,6 +1,8 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { getChapterByPath, linkHref } from '@/data/curriculum';
+import { linkHref } from '@/data/curriculum';
+import { useT } from '@/context/LocaleContext';
+import { useLocalizedCurriculum } from '@/data/localizedCurriculum';
 
 interface ChapterShellProps {
   children: ReactNode;
@@ -10,7 +12,9 @@ interface ChapterShellProps {
 
 export default function ChapterShell({ children, outline: outlineProp }: ChapterShellProps) {
   const { pathname, hash } = useLocation();
-  const chapter = getChapterByPath(pathname);
+  const t = useT();
+  const { getLocalizedChapterByPath } = useLocalizedCurriculum();
+  const chapter = getLocalizedChapterByPath(pathname);
   const outline = outlineProp ?? chapter?.sections.map((s) => ({ id: s.id, title: s.title })) ?? [];
   const [activeId, setActiveId] = useState(hash.replace('#', '') || outline[0]?.id || '');
 
@@ -40,15 +44,15 @@ export default function ChapterShell({ children, outline: outlineProp }: Chapter
 
   return (
     <div className="chapter-layout">
-      <aside className="chapter-toc" aria-label="Chapter table of contents">
+      <aside className="chapter-toc" aria-label={t('common.chapterShell.tableOfContents')}>
         {chapter && (
           <div className="chapter-toc-header">
             <span className="tag">Ch. {chapter.chapterNumber}</span>
             <strong style={{ display: 'block', marginTop: '0.35rem' }}>{chapter.title}</strong>
-            <div className="progress-bar" aria-label={`Reading progress ${progress}%`}>
+            <div className="progress-bar" aria-label={t('common.chapterShell.readingProgress', { progress })}>
               <div className="progress-fill" style={{ width: `${progress}%` }} />
             </div>
-            <small style={{ color: 'var(--text-muted)' }}>{progress}% through chapter</small>
+            <small style={{ color: 'var(--text-muted)' }}>{t('common.chapterShell.readingProgress', { progress })}</small>
           </div>
         )}
         <nav>

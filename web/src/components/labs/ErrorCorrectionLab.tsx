@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import {
   zeroState, applyCircuit, createCircuit, applyBitFlipError,
   bitFlipSyndrome, Gates, fromAmplitudes, applySingleQubitGate,
@@ -6,6 +7,8 @@ import {
 import { StateVectorTable } from './labUtils';
 
 export default function ErrorCorrectionLab() {
+  const labT = useLabT('error-correction');
+  const sharedT = useLabSharedT();
   const [logicalBit, setLogicalBit] = useState(0);
   const [errorQubit, setErrorQubit] = useState<number | null>(null);
 
@@ -36,7 +39,7 @@ export default function ErrorCorrectionLab() {
 
   return (
     <div className="lab-panel">
-      <h3>3-Qubit Bit-Flip Code</h3>
+      <h3>{labT('title')}</h3>
       <p>Encode |0⟩ or |1⟩, inject a bit-flip error, read syndrome, and correct.</p>
       <div className="grid-2">
         <label>

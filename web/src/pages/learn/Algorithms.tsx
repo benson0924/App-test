@@ -1,10 +1,10 @@
+import { useChapterMeta, LearnSection } from '@/components/LocalizedContent';
+import { useT } from '@/context/LocaleContext';
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
-import Section from '@/components/Section';
 import Checkpoint from '@/components/Checkpoint';
 import WorkedExample from '@/components/WorkedExample';
-import Expandable from '@/components/Expandable';
 import {
   runDeutsch,
   runDeutschJozsa,
@@ -281,9 +281,11 @@ function ComplexityTable() {
 }
 
 export default function Algorithms() {
+  const { tag, title, intro } = useChapterMeta('algorithms');
+  const t = useT();
   return (
     <article>
-      <h1>Chapter 8: Quantum Algorithms</h1>
+      <h1>{title}</h1>
       <p>
         Quantum algorithms exploit interference and phase kickback to extract structure from black-box
         oracles faster than classical query complexity allows. This chapter builds from the oracle model
@@ -291,7 +293,7 @@ export default function Algorithms() {
         phase estimation in later chapters.
       </p>
 
-      <Section id="8.1" title="8.1 The Oracle Model" prev={{ title: 'Quantum Protocols', path: '/learn/protocols' }}>
+      <LearnSection chapter="algorithms" sectionId="8.1" prev={{ title: 'Quantum Protocols', path: '/learn/protocols' }}>
         <p>
           An <strong>oracle</strong> is a reversible black-box unitary that encodes a classical function{' '}
           <Katex>{`f : \\{0,1\\}^n \\to \\{0,1\\}`}</Katex>. The standard construction uses an ancilla qubit:
@@ -327,9 +329,9 @@ export default function Algorithms() {
           answer="|−⟩"
           hint="Hadamard of |1⟩."
         />
-      </Section>
+      </LearnSection>
 
-      <Section id="8.2" title="8.2 Deutsch's Algorithm">
+      <LearnSection chapter="algorithms" sectionId="8.2">
         <p>
           Deutsch&apos;s problem (1985): given f: {'{0,1}'} → {'{0,1}'}, determine whether f is{' '}
           <em>constant</em> (f(0)=f(1)) or <em>balanced</em> (f(0)≠f(1)). There are exactly four
@@ -356,18 +358,11 @@ export default function Algorithms() {
 
         <DeutschDemo />
 
-        <Expandable title="Why classical needs 2 queries in the worst case">
-          <p>
-            A classical algorithm must evaluate f(0) and f(1) to distinguish constant from balanced.
-            If it stops after one evaluation, the unseen input could still differ — the answer would be wrong.
-            Deutsch achieves certainty with a single oracle call by using superposition and interference.
-          </p>
-        </Expandable>
 
         <LabLink id="deutsch" title="Deutsch Algorithm" />
-      </Section>
+      </LearnSection>
 
-      <Section id="8.3" title="8.3 Deutsch–Jozsa Algorithm">
+      <LearnSection chapter="algorithms" sectionId="8.3">
         <p>
           Generalizing to n input bits, the <strong>promise</strong> is that f is either constant
           (same value for all 2<sup>n</sup> inputs) or balanced (exactly 2<sup>n−1</sup> zeros and
@@ -390,9 +385,9 @@ export default function Algorithms() {
         />
 
         <LabLink id="deutsch-jozsa" title="Deutsch–Jozsa" />
-      </Section>
+      </LearnSection>
 
-      <Section id="8.4" title="8.4 Bernstein–Vazirani Algorithm">
+      <LearnSection chapter="algorithms" sectionId="8.4">
         <p>
           Given oracle access to <Katex>{`f(x) = s \\cdot x \\pmod{2}`}</Katex> (inner product mod 2
           of n-bit strings), recover the hidden string s ∈ {'{0,1}'}<sup>n</sup>.
@@ -417,9 +412,9 @@ export default function Algorithms() {
         </p>
 
         <LabLink id="bernstein-vazirani" title="Bernstein–Vazirani" />
-      </Section>
+      </LearnSection>
 
-      <Section id="8.5" title="8.5 Simon's Algorithm">
+      <LearnSection chapter="algorithms" sectionId="8.5">
         <p>
           Simon&apos;s problem (1994): f: {'{0,1}'}<sup>n</sup> → {'{0,1}'}<sup>n</sup> is promised to be
           2-to-1 with a hidden period s ∈ {'{0,1}'}<sup>n</sup>, s ≠ 0, such that f(x) = f(x ⊕ s) for all x.
@@ -432,18 +427,6 @@ export default function Algorithms() {
           algorithm finds s with O(n) oracle queries plus O(n) classical post-processing.
         </p>
 
-        <Expandable title="GF(2) linear algebra behind Simon">
-          <p>
-            Measurements yield random vectors y ∈ {'{0,1}'}<sup>n</sup> satisfying y · s = 0 (mod 2).
-            Each query adds a linear constraint over GF(2). After ~n independent equations, Gaussian
-            elimination over GF(2) recovers s.
-          </p>
-          <Katex display>{`y_1 \\cdot s = 0,\\; y_2 \\cdot s = 0,\\; \\ldots \\pmod{2}`}</Katex>
-          <p>
-            This hidden-period structure over abelian groups is the direct precursor to Shor&apos;s period
-            finding over ℤ<sub>N</sub>.
-          </p>
-        </Expandable>
 
         <Checkpoint
           question="What field is Simon's post-processing linear algebra performed over?"
@@ -452,9 +435,9 @@ export default function Algorithms() {
         />
 
         <LabLink id="simon" title="Simon's Algorithm" />
-      </Section>
+      </LearnSection>
 
-      <Section id="8.6" title="8.6 Grover's Search Algorithm" next={{ title: 'Quantum Fourier Transform', path: '/learn/qft' }}>
+      <LearnSection chapter="algorithms" sectionId="8.6" next={{ title: 'Quantum Fourier Transform', path: '/learn/qft' }}>
         <p>
           Grover (1996) searches an unstructured database of N = 2<sup>n</sup> items for a marked
           entry w, using O(√N) oracle queries — a quadratic speedup over classical O(N).
@@ -477,14 +460,6 @@ export default function Algorithms() {
 
         <GroverDemo />
 
-        <Expandable title="Overshooting and optimality">
-          <p>
-            Grover search is a rotation in a two-dimensional subspace spanned by |w⟩ and |s&apos;⟩ (uniform
-            superposition with |w⟩ removed). Applying too many iterations rotates past |w⟩ — success
-            probability decreases. Grover&apos;s algorithm is provably optimal for unstructured search:
-            no quantum algorithm can do better than O(√N) queries.
-          </p>
-        </Expandable>
 
         <Checkpoint
           question="How many queries does Grover need for N items (order of growth)?"
@@ -493,9 +468,9 @@ export default function Algorithms() {
         />
 
         <LabLink id="grover" title="Grover Search" />
-      </Section>
+      </LearnSection>
 
-      <Section id="8.7" title="8.7 Complexity Comparison">
+      <LearnSection chapter="algorithms" sectionId="8.7">
         <p>
           The algorithms in this chapter illustrate different speedup types: constant-factor (Deutsch),
           polynomial (Bernstein–Vazirani), exponential in query complexity (Deutsch–Jozsa, Simon),
@@ -513,7 +488,7 @@ export default function Algorithms() {
           <li><Link to="/playground/qft">QFT Visualizer</Link></li>
           <li><Link to="/playground/phase-estimation">Phase Estimation</Link></li>
         </ul>
-      </Section>
+      </LearnSection>
     </article>
   );
 }

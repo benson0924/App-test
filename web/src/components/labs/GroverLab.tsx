@@ -1,8 +1,11 @@
 import { useState, useMemo } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { runGrover, groverStep, groverIterations, zeroState, fromAmplitudes, C } from 'quantum-core';
 import { AmplitudeBars } from './labUtils';
 
 export default function GroverLab() {
+  const labT = useLabT('grover');
+  const sharedT = useLabSharedT();
   const [n, setN] = useState(2);
   const [marked, setMarked] = useState(3);
   const [step, setStep] = useState(0);
@@ -27,7 +30,7 @@ export default function GroverLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Grover Search</h3>
+      <h3>{labT('title')}</h3>
       <label>
         Qubits n: {n}
         <input type="range" min={2} max={3} value={n} onChange={(e) => { setN(Number(e.target.value)); setStep(0); setMarked(0); }} />

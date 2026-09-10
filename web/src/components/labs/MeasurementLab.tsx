@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import {
   C,
   singleQubitState,
@@ -43,6 +44,8 @@ function simulateShots(
 }
 
 export default function MeasurementLab() {
+  const labT = useLabT('measurement');
+  const sharedT = useLabSharedT();
   const [alphaRe, setAlphaRe] = useState('0.707');
   const [alphaIm, setAlphaIm] = useState('0');
   const [betaRe, setBetaRe] = useState('0.707');
@@ -78,7 +81,7 @@ export default function MeasurementLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Measurement Simulator</h3>
+      <h3>{labT('title')}</h3>
       <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
         Set amplitudes, choose a measurement basis, and run repeated shots to build a histogram.
       </p>

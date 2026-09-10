@@ -1,10 +1,10 @@
+import { useChapterMeta, LearnSection } from '@/components/LocalizedContent';
+import { useT } from '@/context/LocaleContext';
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
-import Section from '@/components/Section';
 import Checkpoint from '@/components/Checkpoint';
 import WorkedExample from '@/components/WorkedExample';
-import Expandable from '@/components/Expandable';
 import {
   C,
   Gates,
@@ -306,20 +306,15 @@ function LabLink({ id, title }: { id: string; title: string }) {
 }
 
 export default function MultipleQubits() {
+  const { tag, title, intro } = useChapterMeta('multipleQubits');
+  const t = useT();
   return (
     <article>
-      <span className="tag">Chapter 4</span>
-      <h1>Multiple Qubits</h1>
-      <p style={{ color: 'var(--text-muted)' }}>
-        Real quantum computers manipulate registers of many qubits. This chapter explains how individual
-        qubit spaces combine via tensor products, why entanglement defies classical intuition, which
-        multi-qubit gates we use in circuits, and why some operations — like cloning an unknown state —
-        are fundamentally forbidden.
-      </p>
+      <span className="tag">{tag}</span>
+      <h1>{title}</h1>
+      <p style={{ color: 'var(--text-muted)' }}>{intro}</p>
 
-      <Section
-        id="4.1"
-        title="4.1 Tensor Products and Hilbert Space Dimension"
+      <LearnSection chapter="multipleQubits" sectionId="4.1"
         prev={{ title: 'Chapter 3: Linear Algebra', path: '/learn/linear-algebra' }}
         next={{ title: '4.2 Kronecker Product', path: `${BASE}#4.2` }}
       >
@@ -358,11 +353,9 @@ export default function MultipleQubits() {
         />
 
         <LabLink id="tensor-product" title="Tensor Product Lab" />
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="4.2"
-        title="4.2 Kronecker Product"
+      <LearnSection chapter="multipleQubits" sectionId="4.2"
         prev={{ title: '4.1 Tensor Products', path: `${BASE}#4.1` }}
         next={{ title: '4.3 Entanglement', path: `${BASE}#4.3` }}
       >
@@ -397,18 +390,9 @@ export default function MultipleQubits() {
           hint="Tensor product is ordered — swapping qubits gives a different state unless you also SWAP."
         />
 
-        <Expandable title="Kronecker product of matrices">
-          <Katex display>{`U \\otimes V = \\begin{pmatrix} u_{00}V & u_{01}V \\\\ u_{10}V & u_{11}V \\end{pmatrix}`}</Katex>
-          <p>
-            Applying <Katex>{`H \\otimes I`}</Katex> to |00⟩ puts qubit 0 in superposition while
-            leaving qubit 1 unchanged — the first step of every Bell-state preparation circuit.
-          </p>
-        </Expandable>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="4.3"
-        title="4.3 Entanglement"
+      <LearnSection chapter="multipleQubits" sectionId="4.3"
         prev={{ title: '4.2 Kronecker Product', path: `${BASE}#4.2` }}
         next={{ title: '4.4 Multi-Qubit Gates', path: `${BASE}#4.4` }}
       >
@@ -447,33 +431,13 @@ export default function MultipleQubits() {
           hint="Individual measurement outcomes are random; correlation appears only when results are compared later."
         />
 
-        <Expandable title="No faster-than-light signaling">
-          <p>
-            Although entangled measurements are correlated, neither party can control their local
-            outcome to encode a message. The no-signaling theorem guarantees that reduced density
-            matrices of each subsystem are unchanged by the distant measurement choice. Entanglement
-            is a resource for protocols (teleportation, superdense coding, QKD) that still respect
-            causality.
-          </p>
-        </Expandable>
 
-        <Expandable title="Partial measurement collapses the joint state">
-          <p>
-            Measuring qubit 0 of |Φ⁺⟩ yields |0⟩ on qubit 0 with probability ½, leaving the pair
-            in |00⟩; or |1⟩ with probability ½, leaving |11⟩. The unmeasured qubit is now in a
-            definite state correlated with the outcome — but this correlation cannot be detected
-            until the parties compare results using a classical channel.
-          </p>
-          <Katex display>{`|\\Phi^+\\rangle \\xrightarrow{\\text{measure } q_0} |00\\rangle \\text{ or } |11\\rangle`}</Katex>
-        </Expandable>
 
         <LabLink id="entanglement" title="Entanglement Measurement Lab" />
         <LabLink id="bell-states" title="Bell State Generator" />
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="4.4"
-        title="4.4 Multi-Qubit Gates"
+      <LearnSection chapter="multipleQubits" sectionId="4.4"
         prev={{ title: '4.3 Entanglement', path: `${BASE}#4.3` }}
         next={{ title: '4.5 No-Cloning Theorem', path: `${BASE}#4.5` }}
       >
@@ -510,21 +474,11 @@ export default function MultipleQubits() {
           answer="|10⟩"
         />
 
-        <Expandable title="Gate ordering matters">
-          <p>
-            Quantum circuits are ordered left-to-right (or time top-to-bottom).{' '}
-            <Katex>{`[H \\otimes I, \\mathrm{CNOT}]`}</Katex> creates a Bell state, but CNOT before
-            H on qubit 0 does not. Non-commuting gates must be applied in the correct sequence —
-            the circuit diagram is the program.
-          </p>
-        </Expandable>
 
         <LabLink id="circuit-builder" title="Quantum Circuit Builder" />
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="4.5"
-        title="4.5 No-Cloning Theorem"
+      <LearnSection chapter="multipleQubits" sectionId="4.5"
         prev={{ title: '4.4 Multi-Qubit Gates', path: `${BASE}#4.4` }}
         next={{ title: '4.6 Universal Gate Set', path: `${BASE}#4.6` }}
       >
@@ -558,18 +512,9 @@ export default function MultipleQubits() {
           hint="Known orthogonal states can be copied — the theorem applies to unknown arbitrary states."
         />
 
-        <Expandable title="Implications for quantum information">
-          <ul>
-            <li>Quantum error correction cannot simply repeat qubits — it needs entanglement and syndrome measurement.</li>
-            <li>Eavesdropping in QKD disturbs the state — copying would break security differently.</li>
-            <li>Teleportation transfers a state without cloning — the original is destroyed.</li>
-          </ul>
-        </Expandable>
-      </Section>
+      </LearnSection>
 
-      <Section
-        id="4.6"
-        title="4.6 Universal Gate Set {H, T, CNOT}"
+      <LearnSection chapter="multipleQubits" sectionId="4.6"
         prev={{ title: '4.5 No-Cloning Theorem', path: `${BASE}#4.5` }}
         next={{ title: 'Chapter 5: Quantum Circuits', path: '/learn/circuits' }}
       >
@@ -621,17 +566,9 @@ export default function MultipleQubits() {
           hint="H and CNOT generate only Clifford operations; T adds non-Clifford phases."
         />
 
-        <Expandable title="Other universal sets">
-          <p>
-            Alternative universal sets include <Katex>{`\\{H, S, \\mathrm{CNOT}, T\\}`}</Katex>,{' '}
-            <Katex>{`\\{\\mathrm{Toffoli}, H\\}`}</Katex>, and continuous-parameter sets like all
-            single-qubit rotations plus CNOT. Hardware-native gates (Rx, Rz, CZ) are compiled down
-            to a fault-tolerant set for error-corrected computation.
-          </p>
-        </Expandable>
 
         <LabLink id="gate-explorer" title="Gate Explorer" />
-      </Section>
+      </LearnSection>
 
       <div className="section-nav">
         <Link to="/learn/linear-algebra">← Linear Algebra</Link>

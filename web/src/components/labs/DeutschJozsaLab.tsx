@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { runDeutschJozsa } from 'quantum-core';
 
 function makeOracle(n: number, type: 'constant' | 'balanced') {
@@ -8,6 +9,8 @@ function makeOracle(n: number, type: 'constant' | 'balanced') {
 }
 
 export default function DeutschJozsaLab() {
+  const labT = useLabT('deutsch-jozsa');
+  const sharedT = useLabSharedT();
   const [n, setN] = useState(2);
   const [type, setType] = useState<'constant' | 'balanced'>('balanced');
   const [result, setResult] = useState<{ balanced: boolean } | null>(null);
@@ -19,7 +22,7 @@ export default function DeutschJozsaLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Deutsch–Jozsa</h3>
+      <h3>{labT('title')}</h3>
       <label>
         Input qubits n: {n}
         <input type="range" min={1} max={4} value={n} onChange={(e) => setN(Number(e.target.value))} />

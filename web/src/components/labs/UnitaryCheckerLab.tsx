@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { Gates } from 'quantum-core';
 
 const GATE_LIST = ['I', 'X', 'Y', 'Z', 'H', 'S', 'T'] as const;
 
 export default function UnitaryCheckerLab() {
+  const labT = useLabT('unitary-checker');
+  const sharedT = useLabSharedT();
   const [selected, setSelected] = useState<string>('H');
   const gate = Gates[selected as keyof typeof Gates];
   const matrix = typeof gate === 'function' ? null : gate;
@@ -11,7 +14,7 @@ export default function UnitaryCheckerLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Matrix & Unitary Checker</h3>
+      <h3>{labT('title')}</h3>
       <p>Select a single-qubit gate to inspect its matrix and verify unitarity (U†U = I).</p>
       <div className="btn-group">
         {GATE_LIST.map((g) => (

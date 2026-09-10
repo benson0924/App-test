@@ -1,8 +1,11 @@
 import { useState, useMemo } from 'react';
+import { useLabT, useLabSharedT } from '@/i18n/hooks';
 import { basisState, qft, stateLabel, C } from 'quantum-core';
 import { AmplitudeBars } from './labUtils';
 
 export default function QFTLab() {
+  const labT = useLabT('qft');
+  const sharedT = useLabSharedT();
   const [n, setN] = useState(2);
   const [inputIdx, setInputIdx] = useState(1);
   const dim = 1 << n;
@@ -15,7 +18,7 @@ export default function QFTLab() {
 
   return (
     <div className="lab-panel">
-      <h3>Quantum Fourier Transform</h3>
+      <h3>{labT('title')}</h3>
       <label>
         Qubits: {n}
         <input type="range" min={2} max={3} value={n} onChange={(e) => { setN(Number(e.target.value)); setInputIdx(0); }} />

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import Katex from '@/components/Math';
+import { useT } from '@/context/LocaleContext';
 
 function FormulaBlock({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -11,26 +12,25 @@ function FormulaBlock({ title, children }: { title: string; children: ReactNode 
 }
 
 export default function FormulaSheetPage() {
+  const t = useT();
   return (
     <article>
-      <h1>Formula Sheet</h1>
-      <p>
-        Quick reference aligned with textbook notation. Research cutoff: September 2026.
-      </p>
+      <h1>{t('reference.formulas.title')}</h1>
+      <p>{t('reference.formulas.intro')}</p>
 
-      <FormulaBlock title="Single-qubit states">
+      <FormulaBlock title={t('reference.formulas.singleQubit')}>
         <Katex display>{`|\\psi\\rangle = \\alpha|0\\rangle + \\beta|1\\rangle, \\quad |\\alpha|^2 + |\\beta|^2 = 1`}</Katex>
         <Katex display>{`|\\psi\\rangle = \\cos\\frac{\\theta}{2}|0\\rangle + e^{i\\phi}\\sin\\frac{\\theta}{2}|1\\rangle \\quad \\text{(Bloch)}`}</Katex>
         <Katex display>{`\\text{Bloch: } \\vec{r} = (\\sin\\theta\\cos\\phi, \\sin\\theta\\sin\\phi, \\cos\\theta)`}</Katex>
       </FormulaBlock>
 
-      <FormulaBlock title="Measurement">
+      <FormulaBlock title={t('reference.formulas.measurement')}>
         <Katex display>{`P(i) = |\\langle i|\\psi\\rangle|^2 \\quad \\text{(Born rule)}`}</Katex>
         <Katex display>{`\\langle A \\rangle = \\langle\\psi|A|\\psi\\rangle`}</Katex>
         <Katex display>{`\\text{Post-measurement: } |\\psi\\rangle \\mapsto \\frac{P_i|\\psi\\rangle}{\\|P_i|\\psi\\rangle\\|}`}</Katex>
       </FormulaBlock>
 
-      <FormulaBlock title="Linear algebra">
+      <FormulaBlock title={t('reference.formulas.linearAlgebra')}>
         <Katex display>{`U^\\dagger U = I \\quad \\text{(unitary)}`}</Katex>
         <Katex display>{`A = A^\\dagger \\quad \\text{(Hermitian observables)}`}</Katex>
         <Katex display>{`\\langle\\phi|\\psi\\rangle = \\sum_i \\phi_i^* \\psi_i`}</Katex>

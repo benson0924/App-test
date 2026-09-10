@@ -45,7 +45,7 @@ export const common: TranslationTree = {
   },
   chapterShell: {
     tableOfContents: '章節目錄',
-    readingProgress: '已閱讀本章 {progress}%',
+    readingProgress: '已閱讀本章 {{progress}}%',
     prevChapter: '上一章',
     nextChapter: '下一章',
   },
