@@ -17,12 +17,21 @@ This is an **independently authored** educational work. It uses standard curricu
 
 ```bash
 npm install
-npm run dev          # Web app at http://localhost:5173
-npm run build        # Production build
+npm run dev          # Web app at http://localhost:5173 (Ctrl/Cmd+K to search)
+npm run build        # Production build with code-splitting
 
-# PDF (requires TeX Live)
+# PDF (requires TeX Live) — 60-page edition
 cd book && chmod +x build.sh && ./build.sh
 ```
+
+## Highlights
+
+- **13 Learn chapters** with sticky table-of-contents, reading progress, and automatic prerequisite/next-concept links
+- **27 Playground labs** + full **Circuit Builder** (SVG drag-drop, step simulation, OpenQASM export)
+- **Global search** (Ctrl/Cmd+K) across chapters, sections, and labs
+- **Practice hub** with randomized problems, hints, and step-by-step solutions
+- **60-page PDF** synchronized with web chapters, lab cross-references, and exercises
+- **Research cutoff:** September 2026
 
 ## Project structure
 
