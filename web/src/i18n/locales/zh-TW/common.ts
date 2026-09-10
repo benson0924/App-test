@@ -52,4 +52,5 @@ export const common: TranslationTree = {
   language: {
     label: '語言',
   },
+  edition: '2026 版',
 };

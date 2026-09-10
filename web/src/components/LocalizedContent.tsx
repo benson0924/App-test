@@ -4,6 +4,7 @@ import Checkpoint from './Checkpoint';
 import WorkedExample from './WorkedExample';
 import Expandable from './Expandable';
 import Section from './Section';
+import { useLocale } from '@/context/LocaleContext';
 import { useChapterContent, useSectionContent, type ChapterKey } from '@/i18n/hooks';
 
 interface LocalizedSectionProps {
@@ -36,7 +37,13 @@ export function useLocalizedSectionTitle(chapter: ChapterKey, sectionId: string)
   return sectionId;
 }
 
-export function LocalizedSectionBody({ chapter, sectionId, children, widgets }: Omit<LocalizedSectionProps, 'title' | 'prev' | 'next' | 'showConceptLinks'>) {
+export function LocalizedSectionBody({
+  chapter,
+  sectionId,
+  children,
+  widgets,
+}: Omit<LocalizedSectionProps, 'title' | 'prev' | 'next' | 'showConceptLinks'>) {
+  const { locale } = useLocale();
   const section = useSectionContent(chapter, sectionId);
   if (!section) return <>{widgets}{children}</>;
 
@@ -45,13 +52,16 @@ export function LocalizedSectionBody({ chapter, sectionId, children, widgets }: 
   const examples = [...collectItems(section.examples), ...collectItems(section.workedExamples)];
   const expandables = collectItems(section.expandables);
 
+  if (locale === 'en') {
+    return <>{widgets}{children}</>;
+  }
+
   return (
     <>
       {widgets}
       {paragraphs.map((p, i) => (
         <p key={i}>{p}</p>
       ))}
-      {children}
       {expandables.map((ex, i) => (
         <Expandable key={i} title={String(ex.title ?? '')}>
           {collectStrings(ex.body).map((line, j) => (

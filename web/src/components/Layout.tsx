@@ -24,7 +24,7 @@ export default function Layout() {
             <span className="logo-icon">|ψ⟩</span>
             <div>
               <strong>{t('home.title').split(' — ')[0]}</strong>
-              <small>2026 Edition</small>
+              <small>{t('common.edition')}</small>
             </div>
           </Link>
         </div>

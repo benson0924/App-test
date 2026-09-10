@@ -54,3 +54,9 @@ export function useLabSharedT() {
   return (key: string, params?: Record<string, string | number>) =>
     t(`labs.shared.${key}`, params);
 }
+
+export function useWidgetT(chapter: ChapterKey, widget: string) {
+  const { t } = useLocale();
+  return (key: string, params?: Record<string, string | number>) =>
+    t(`learn.${chapter}.widgets.${widget}.${key}`, params);
+}

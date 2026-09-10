@@ -36,7 +36,7 @@ export default function BlochSphereLab() {
     <div className="lab-panel">
       <h3>{labT('title')}</h3>
       <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-        Adjust θ and φ, or pick a preset. All representations stay synchronized.
+        {sharedT('blochDesc')}
       </p>
 
       <div className="btn-group">
@@ -57,7 +57,7 @@ export default function BlochSphereLab() {
       <div className="grid-2" style={{ marginTop: '1rem' }}>
         <div>
           <label htmlFor="theta-slider">
-            θ (polar angle): {(theta * 180 / Math.PI).toFixed(1)}°
+            {sharedT('polarAngle', { deg: (theta * 180 / Math.PI).toFixed(1) })}
           </label>
           <input
             id="theta-slider"
@@ -69,7 +69,7 @@ export default function BlochSphereLab() {
             onChange={(e) => setTheta(Number(e.target.value))}
           />
           <label htmlFor="phi-slider" style={{ display: 'block', marginTop: '1rem' }}>
-            φ (azimuthal): {(phi * 180 / Math.PI).toFixed(1)}°
+            {sharedT('azimuthal', { deg: (phi * 180 / Math.PI).toFixed(1) })}
           </label>
           <input
             id="phi-slider"
