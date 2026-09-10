@@ -13,6 +13,12 @@ A unified modern textbook and interactive learning platform covering classical i
 
 This is an **independently authored** educational work. It uses standard curriculum progression (classical → qubit → algorithms) familiar from introductory texts, but prose, examples, and organization are original.
 
+## Live site
+
+**Interactive textbook:** https://benson0924.github.io/App-test/
+
+**PDF (60 pages):** [book/main.pdf](book/main.pdf) in this repository
+
 ## Quick start
 
 ```bash
