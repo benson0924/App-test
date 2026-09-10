@@ -3,8 +3,6 @@ import { useT } from '@/context/LocaleContext';
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
-import Checkpoint from '@/components/Checkpoint';
-import WorkedExample from '@/components/WorkedExample';
 import { modExp, findPeriod, gcd, shorFactor } from 'quantum-core';
 
 function LabLink({ id, title }: { id: string; title: string }) {
@@ -162,135 +160,108 @@ export default function Shor() {
         period finding via QPE; everything else is classical number theory.
       </p>
 
-      <LearnSection chapter="shor" sectionId="11.1" prev={{ title: 'Phase Estimation', path: '/learn/phase-estimation' }}>
+      <LearnSection chapter="shor" sectionId="11.1" prev={{ title: 'Phase Estimation', path: '/learn/phase-estimation' }}
+        widgets={<>
+          <Katex display>{`a^r \\equiv 1 \\pmod{N}`}</Katex>
+          <div className="card" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                    <div style={{ flex: 1, minWidth: '200px' }}>
+                      <p><strong>⚛ Quantum portion</strong></p>
+                      <ul>
+                        <li>Prepare superposition over x</li>
+                        <li>Compute a<sup>x</sup> mod N (modular exponentiation)</li>
+                        <li>QPE + QFT to extract period r</li>
+                      </ul>
+                    </div>
+                    <div style={{ flex: 1, minWidth: '200px' }}>
+                      <p><strong>⚙ Classical portion</strong></p>
+                      <ul>
+                        <li>Choose random a, check gcd</li>
+                        <li>Verify r is even, a<sup>r/2</sup> ≢ −1</li>
+                        <li>Compute gcd(a<sup>r/2</sup> ± 1, N)</li>
+                        <li>Repeat if trivial factors</li>
+                      </ul>
+                    </div>
+                  </div>
+          <LabLink id="period-finding" title="Period Explorer" />
+        </>}
+      >
         <p>
-          To factor composite N, pick random a with 1 &lt; a &lt; N and gcd(a, N) = 1. If gcd(a, N) &gt; 1,
-          we already found a factor classically. Otherwise, find the smallest r &gt; 0 such that:
-        </p>
-        <Katex display>{`a^r \\equiv 1 \\pmod{N}`}</Katex>
+                  To factor composite N, pick random a with 1 &lt; a &lt; N and gcd(a, N) = 1. If gcd(a, N) &gt; 1,
+                  we already found a factor classically. Otherwise, find the smallest r &gt; 0 such that:
+                </p>
         <p>
-          This r is the <strong>period</strong> (order) of a modulo N. Period finding is the hard quantum
-          step; factoring from r uses classical gcd arithmetic.
-        </p>
-
-        <div className="card" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <div style={{ flex: 1, minWidth: '200px' }}>
-            <p><strong>⚛ Quantum portion</strong></p>
-            <ul>
-              <li>Prepare superposition over x</li>
-              <li>Compute a<sup>x</sup> mod N (modular exponentiation)</li>
-              <li>QPE + QFT to extract period r</li>
-            </ul>
-          </div>
-          <div style={{ flex: 1, minWidth: '200px' }}>
-            <p><strong>⚙ Classical portion</strong></p>
-            <ul>
-              <li>Choose random a, check gcd</li>
-              <li>Verify r is even, a<sup>r/2</sup> ≢ −1</li>
-              <li>Compute gcd(a<sup>r/2</sup> ± 1, N)</li>
-              <li>Repeat if trivial factors</li>
-            </ul>
-          </div>
-        </div>
-
-        <LabLink id="period-finding" title="Period Explorer" />
+                  This r is the <strong>period</strong> (order) of a modulo N. Period finding is the hard quantum
+                  step; factoring from r uses classical gcd arithmetic.
+                </p>
       </LearnSection>
 
-      <LearnSection chapter="shor" sectionId="11.2">
+      <LearnSection chapter="shor" sectionId="11.2"
+        widgets={<>
+          <Katex display>{`p = \\gcd(a^{r/2}-1, N), \\quad q = \\gcd(a^{r/2}+1, N)`}</Katex>
+        </>}
+      >
         <p>
-          Given period r with a<sup>r</sup> ≡ 1 (mod N), we have a<sup>r</sup> − 1 ≡ 0 (mod N), so N divides
-          (a<sup>r/2</sup> − 1)(a<sup>r/2</sup> + 1). If a<sup>r/2</sup> ≢ −1 (mod N), then neither factor
-          is a multiple of N, and gcd extracts non-trivial factors.
-        </p>
-
-        <Katex display>{`p = \\gcd(a^{r/2}-1, N), \\quad q = \\gcd(a^{r/2}+1, N)`}</Katex>
-
-        <WorkedExample
-          title="Conditions for successful factoring"
-          steps={[
-            { label: 'r must be even so that r/2 is an integer.', latex: 'r = 2k \\text{ for some integer } k' },
-            { label: 'a^{r/2} ≢ −1 (mod N). Otherwise both gcds equal 1 or N — trivial.', latex: 'a^{r/2} \\not\\equiv -1 \\pmod{N}' },
-            { label: 'If both conditions hold, gcd(a^{r/2} − 1, N) and gcd(a^{r/2} + 1, N) are non-trivial factors with probability ≥ 1/2 over random a.', latex: 'p \\cdot q = N' },
-            { label: 'If any condition fails, pick a new a and repeat. Expected O(1) trials.', latex: '\\text{Repeat until success}' },
-          ]}
-        />
-
-
-        <Checkpoint
-          question="What gcd computation extracts a factor from period r?"
-          answer="gcd(a^{r/2} ± 1, N)"
-          hint="±1 from the a^r − 1 factorization."
-        />
+                  Given period r with a<sup>r</sup> ≡ 1 (mod N), we have a<sup>r</sup> − 1 ≡ 0 (mod N), so N divides
+                  (a<sup>r/2</sup> − 1)(a<sup>r/2</sup> + 1). If a<sup>r/2</sup> ≢ −1 (mod N), then neither factor
+                  is a multiple of N, and gcd extracts non-trivial factors.
+                </p>
       </LearnSection>
 
-      <LearnSection chapter="shor" sectionId="11.3">
+      <LearnSection chapter="shor" sectionId="11.3"
+        widgets={<>
+          <ShorFactor15Stepper />
+          <LabLink id="shor" title="Shor's Algorithm Demo" />
+        </>}
+      >
         <p>
-          The canonical demo factors N = 15 with a = 2. The period of 2<sup>x</sup> mod 15 is r = 4,
-          yielding factors 3 and 5.
-        </p>
-
-        <ShorFactor15Stepper />
-
-        <WorkedExample
-          title="a = 2, N = 15 (summary)"
-          steps={[
-            { label: 'Sequence 2^x mod 15: 1, 2, 4, 8, 1, … → period r = 4.', latex: '2^4 \\equiv 1 \\pmod{15}' },
-            { label: 'r is even. a^{r/2} = 2² = 4 ≢ 14 ≡ −1 (mod 15). ✓', latex: '4 \\not\\equiv -1 \\pmod{15}' },
-            { label: 'gcd(4 − 1, 15) = gcd(3, 15) = 3.', latex: '\\gcd(3, 15) = 3' },
-            { label: 'gcd(4 + 1, 15) = gcd(5, 15) = 5. Therefore 15 = 3 × 5.', latex: '15 = 3 \\times 5' },
-          ]}
-        />
-
-        <LabLink id="shor" title="Shor's Algorithm Demo" />
+                  The canonical demo factors N = 15 with a = 2. The period of 2<sup>x</sup> mod 15 is r = 4,
+                  yielding factors 3 and 5.
+                </p>
       </LearnSection>
 
-      <LearnSection chapter="shor" sectionId="11.4">
+      <LearnSection chapter="shor" sectionId="11.4"
+        widgets={<>
+          <Katex display>{`T_{\\text{Shor}}(N) = \\text{poly}(\\log N)`}</Katex>
+          <table className="data-table" style={{ maxWidth: '560px' }}>
+                    <thead>
+                      <tr><th>Component</th><th>Classical / Quantum</th><th>Cost</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>Choose a, gcd check</td><td>Classical</td><td>O(log² N)</td></tr>
+                      <tr><td>Modular exponentiation circuit</td><td>Quantum</td><td>O(n³) gates</td></tr>
+                      <tr><td>QPE + QFT</td><td>Quantum</td><td>O(n² log N) gates</td></tr>
+                      <tr><td>Continued fractions</td><td>Classical</td><td>O(n²)</td></tr>
+                      <tr><td>{'gcd(a^{r/2} ± 1, N)'}</td><td>Classical</td><td>O(log² N)</td></tr>
+                    </tbody>
+                  </table>
+        </>}
+      >
         <p>
-          On a fault-tolerant quantum computer with O(n) qubits and poly(n) gates:
-        </p>
-        <Katex display>{`T_{\\text{Shor}}(N) = \\text{poly}(\\log N)`}</Katex>
+                  On a fault-tolerant quantum computer with O(n) qubits and poly(n) gates:
+                </p>
         <p>
-          The best known classical factoring (General Number Field Sieve) is sub-exponential:
-          exp(O((log N)<sup>1/3</sup>)). Shor provides a super-polynomial speedup — the reason
-          post-quantum cryptography migration is underway.
-        </p>
-
-        <table className="data-table" style={{ maxWidth: '560px' }}>
-          <thead>
-            <tr><th>Component</th><th>Classical / Quantum</th><th>Cost</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Choose a, gcd check</td><td>Classical</td><td>O(log² N)</td></tr>
-            <tr><td>Modular exponentiation circuit</td><td>Quantum</td><td>O(n³) gates</td></tr>
-            <tr><td>QPE + QFT</td><td>Quantum</td><td>O(n² log N) gates</td></tr>
-            <tr><td>Continued fractions</td><td>Classical</td><td>O(n²)</td></tr>
-            <tr><td>{'gcd(a^{r/2} ± 1, N)'}</td><td>Classical</td><td>O(log² N)</td></tr>
-          </tbody>
-        </table>
-
-        <Checkpoint
-          question="Shor runs in what time on a fault-tolerant machine (in n = log N)?"
-          answer="polynomial"
-          hint="Poly(n) = poly(log N)."
-        />
+                  The best known classical factoring (General Number Field Sieve) is sub-exponential:
+                  exp(O((log N)<sup>1/3</sup>)). Shor provides a super-polynomial speedup — the reason
+                  post-quantum cryptography migration is underway.
+                </p>
       </LearnSection>
 
-      <LearnSection chapter="shor" sectionId="11.5" next={{ title: 'Modern Topics', path: '/learn/modern' }}>
+      <LearnSection chapter="shor" sectionId="11.5" next={{ title: 'Modern Topics', path: '/learn/modern' }}
+        widgets={<>
+          <h3>Related labs</h3>
+          <ul>
+                    <li><Link to="/playground/shor">Shor&apos;s Algorithm Demo (N=15)</Link></li>
+                    <li><Link to="/playground/period-finding">Period Explorer</Link></li>
+                    <li><Link to="/playground/phase-estimation">Phase Estimation</Link></li>
+                    <li><Link to="/playground/qft">QFT Visualizer</Link></li>
+                  </ul>
+        </>}
+      >
         <p>
-          RSA, Diffie–Hellman, and elliptic-curve cryptography (via Shor&apos;s discrete-log variant)
-          rely on the hardness of factoring or discrete logarithms. A large-scale fault-tolerant quantum
-          computer running Shor would break these systems.
-        </p>
-
-
-
-        <h3>Related labs</h3>
-        <ul>
-          <li><Link to="/playground/shor">Shor&apos;s Algorithm Demo (N=15)</Link></li>
-          <li><Link to="/playground/period-finding">Period Explorer</Link></li>
-          <li><Link to="/playground/phase-estimation">Phase Estimation</Link></li>
-          <li><Link to="/playground/qft">QFT Visualizer</Link></li>
-        </ul>
+                  RSA, Diffie–Hellman, and elliptic-curve cryptography (via Shor&apos;s discrete-log variant)
+                  rely on the hardness of factoring or discrete logarithms. A large-scale fault-tolerant quantum
+                  computer running Shor would break these systems.
+                </p>
       </LearnSection>
     </article>
   );

@@ -99,50 +99,69 @@ export default function QFT() {
       <h1>{title}</h1>
       <p>{intro}</p>
 
-      <LearnSection chapter="qft" sectionId="9.1" prev={{ title: 'Quantum Algorithms', path: '/learn/algorithms' }}>
-        <Katex display>{`\\omega_N = e^{2\\pi i / N}`}</Katex>
-        <Katex display>{`\\text{QFT}|x\\rangle = \\frac{1}{\\sqrt{N}}\\sum_{k=0}^{N-1} \\omega_N^{xk}|k\\rangle`}</Katex>
+      <LearnSection chapter="qft" sectionId="9.1" prev={{ title: 'Quantum Algorithms', path: '/learn/algorithms' }}
+        widgets={<>
+          <Katex display>{`\\omega_N = e^{2\\pi i / N}`}</Katex>
+          <Katex display>{`\\text{QFT}|x\\rangle = \\frac{1}{\\sqrt{N}}\\sum_{k=0}^{N-1} \\omega_N^{xk}|k\\rangle`}</Katex>
+        </>}
+      >
         <p>
-          {t('learn.qft.sections.9.1.paragraphs.p3', {
-            N: omegaExample.N,
-            k: omegaExample.k,
-            angle: omegaExample.angleDeg,
-          })}
-        </p>
+                  {t('learn.qft.sections.9.1.paragraphs.p3', {
+                    N: omegaExample.N,
+                    k: omegaExample.k,
+                    angle: omegaExample.angleDeg,
+                  })}
+                </p>
       </LearnSection>
 
-      <LearnSection chapter="qft" sectionId="9.2">
-        <div className="card" style={{ borderLeft: '4px solid var(--warning, #c90)' }}>
-          <p><strong>{warningTitle}</strong> {warningP1}</p>
-          <p>{warningP2}</p>
-        </div>
-        <QFTAmplitudeDemo />
+      <LearnSection chapter="qft" sectionId="9.2"
+        widgets={<>
+          <div className="card" style={{ borderLeft: '4px solid var(--warning, #c90)' }}>
+                    <p><strong>{warningTitle}</strong> {warningP1}</p>
+                    <p>{warningP2}</p>
+                  </div>
+          <QFTAmplitudeDemo />
+        </>}
+      >
+
       </LearnSection>
 
-      <LearnSection chapter="qft" sectionId="9.3">
-        <Katex display>{`\\text{QFT}|x_{n-1}\\cdots x_0\\rangle = \\bigotimes_{j=0}^{n-1} \\frac{|0\\rangle + e^{2\\pi i \\cdot 0.x_{n-1}\\cdots x_j}|1\\rangle}{\\sqrt{2}}`}</Katex>
+      <LearnSection chapter="qft" sectionId="9.3"
+        widgets={<>
+          <Katex display>{`\\text{QFT}|x_{n-1}\\cdots x_0\\rangle = \\bigotimes_{j=0}^{n-1} \\frac{|0\\rangle + e^{2\\pi i \\cdot 0.x_{n-1}\\cdots x_j}|1\\rangle}{\\sqrt{2}}`}</Katex>
+        </>}
+      >
+
       </LearnSection>
 
-      <LearnSection chapter="qft" sectionId="9.4">
-        <Katex display>{`\\text{QFT}^{-1}|k\\rangle = \\frac{1}{\\sqrt{N}}\\sum_{x=0}^{N-1} \\omega_N^{-kx}|x\\rangle`}</Katex>
-        <IQFTDemo />
+      <LearnSection chapter="qft" sectionId="9.4"
+        widgets={<>
+          <Katex display>{`\\text{QFT}^{-1}|k\\rangle = \\frac{1}{\\sqrt{N}}\\sum_{x=0}^{N-1} \\omega_N^{-kx}|x\\rangle`}</Katex>
+          <IQFTDemo />
+        </>}
+      >
+
       </LearnSection>
 
       <LearnSection
         chapter="qft"
         sectionId="9.5"
         next={{ title: 'Phase Estimation', path: '/learn/phase-estimation' }}
+      
+        widgets={<>
+          <p>
+                    <Link to={`/playground/qft`} className="btn btn-primary" style={{ textDecoration: 'none' }}>
+                      {t('learn.qft.labLink', { title: t('navigation.labs.qft') })}
+                    </Link>
+                  </p>
+          <p>
+                    <Link to="/playground/period-finding">{t('learn.qft.sections.9.5.links.periodFinding')}</Link>
+                    {' · '}
+                    <Link to="/learn/shor">{t('learn.qft.sections.9.5.links.shor')}</Link>
+                  </p>
+        </>}
       >
-        <p>
-          <Link to={`/playground/qft`} className="btn btn-primary" style={{ textDecoration: 'none' }}>
-            {t('learn.qft.labLink', { title: t('navigation.labs.qft') })}
-          </Link>
-        </p>
-        <p>
-          <Link to="/playground/period-finding">{t('learn.qft.sections.9.5.links.periodFinding')}</Link>
-          {' · '}
-          <Link to="/learn/shor">{t('learn.qft.sections.9.5.links.shor')}</Link>
-        </p>
+
       </LearnSection>
     </article>
   );

@@ -3,8 +3,6 @@ import { useT } from '@/context/LocaleContext';
 import { useState, useMemo, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
-import Checkpoint from '@/components/Checkpoint';
-import WorkedExample from '@/components/WorkedExample';
 import {
   C,
   Gates,
@@ -315,254 +313,163 @@ export default function QuantumCircuits() {
       <LearnSection chapter="quantumCircuits" sectionId="6.1"
         prev={{ title: 'Multiple Qubits', path: '/learn/multiple-qubits' }}
         next={{ title: '6.2 Bell walkthrough', path: `${BASE}#6.2` }}
+      
+        widgets={<>
+          <Katex display>
+                    {`|\\psi_{\\text{out}}\\rangle = U_k \\cdots U_2 U_1 |\\psi_{\\text{in}}\\rangle`}
+                  </Katex>
+          <LabLink path="/playground/circuit-builder" title="Open Circuit Builder" />
+          <PracticeProblem prompt="You have CNOT with control qubit 1 and target qubit 0, starting from |10⟩. What is the output?">
+                    <p>
+                      Control is |1⟩, so target flips: |10⟩ → |11⟩.
+                    </p>
+                  </PracticeProblem>
+        </>}
       >
         <p>
-          Each horizontal line is one qubit&apos;s world-line through time. A box on a line is a
-          single-qubit gate; a vertical line connecting two wires is a two-qubit gate (control shown
-          as a filled dot, target as ⊕ for CNOT). Gates apply in sequence: the rightmost gate in a
-          left-to-right diagram acts last on the state vector.
-        </p>
-
-        <Katex display>
-          {`|\\psi_{\\text{out}}\\rangle = U_k \\cdots U_2 U_1 |\\psi_{\\text{in}}\\rangle`}
-        </Katex>
-
+                  Each horizontal line is one qubit&apos;s world-line through time. A box on a line is a
+                  single-qubit gate; a vertical line connecting two wires is a two-qubit gate (control shown
+                  as a filled dot, target as ⊕ for CNOT). Gates apply in sequence: the rightmost gate in a
+                  left-to-right diagram acts last on the state vector.
+                </p>
         <p>
-          <strong>Controls</strong> condition an operation on another qubit being |1⟩ (for positive
-          control). Multi-controlled gates generalize this. <strong>Measurement</strong> is drawn as
-          a meter symbol; it projects onto computational basis outcomes and outputs classical bits.
-          Mid-circuit measurement with classical feed-forward lets later gates depend on earlier
-          outcomes — essential for teleportation and error correction.
-        </p>
-
+                  <strong>Controls</strong> condition an operation on another qubit being |1⟩ (for positive
+                  control). Multi-controlled gates generalize this. <strong>Measurement</strong> is drawn as
+                  a meter symbol; it projects onto computational basis outcomes and outputs classical bits.
+                  Mid-circuit measurement with classical feed-forward lets later gates depend on earlier
+                  outcomes — essential for teleportation and error correction.
+                </p>
         <p>
-          Classical wires (double lines) carry measurement results. In simulators like this textbook,
-          we track the full state vector until measurement; hardware executes pulses implementing
-          each gate subject to calibration and connectivity limits.
-        </p>
-
-        <WorkedExample
-          title="Reading gate order"
-          steps={[
-            { label: 'Circuit: X then H on one qubit, starting from |0⟩.', latex: 'H \\cdot X |0\\rangle' },
-            { label: 'X first: |0⟩ → |1⟩.', latex: 'X|0\\rangle = |1\\rangle' },
-            { label: 'Then H: |1⟩ → |−⟩.', latex: 'H|1\\rangle = |-\\rangle' },
-            { label: 'Reversing order gives H|0⟩ = |+⟩ then X|+⟩ = |−⟩ — same here, but generally [H,X] ≠ 0.', latex: '[H,X] \\neq 0' },
-          ]}
-        />
-
-
-        <Checkpoint
-          question="In a left-to-right diagram, which gate applies first to |ψ_in⟩?"
-          answer="leftmost"
-          hint="Time flows left to right; the first gate is on the left."
-        />
-
-        <LabLink path="/playground/circuit-builder" title="Open Circuit Builder" />
-
-        <PracticeProblem prompt="You have CNOT with control qubit 1 and target qubit 0, starting from |10⟩. What is the output?">
-          <p>
-            Control is |1⟩, so target flips: |10⟩ → |11⟩.
-          </p>
-        </PracticeProblem>
+                  Classical wires (double lines) carry measurement results. In simulators like this textbook,
+                  we track the full state vector until measurement; hardware executes pulses implementing
+                  each gate subject to calibration and connectivity limits.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="quantumCircuits" sectionId="6.2"
         prev={{ title: '6.1 Conventions', path: `${BASE}#6.1` }}
         next={{ title: '6.3 Gate set', path: `${BASE}#6.3` }}
+      
+        widgets={<>
+          <Katex display>
+                    {`|\\Phi^+\\rangle = \\text{CNOT}_{0\\to 1}\\, H_0 |00\\rangle = \\tfrac{|00\\rangle + |11\\rangle}{\\sqrt{2}}`}
+                  </Katex>
+          <BellStepWalkthrough />
+          <LabLink path="/playground/bell-states" title="Bell State Generator lab" />
+          <PracticeProblem prompt="Write the unitary matrix for the Bell preparation circuit in the {|00⟩,|01⟩,|10⟩,|11⟩} basis (conceptually) and list which amplitudes are non-zero.">
+                    <p>
+                      U = CNOT · (H ⊗ I). Starting from |00⟩, only |00⟩ and |11⟩ have amplitude 1/√2; |01⟩ and
+                      |10⟩ are zero — maximally entangled support on the even parity subspace.
+                    </p>
+                  </PracticeProblem>
+        </>}
       >
         <p>
-          The Bell state |Φ⁺⟩ = (|00⟩ + |11⟩)/√2 is the canonical entangled pair. It is prepared
-          from |00⟩ with one Hadamard and one CNOT — the minimal entangling circuit. Understanding
-          each step builds intuition for how superposition on the control qubit spreads correlation
-          to the target.
-        </p>
-
-        <Katex display>
-          {`|\\Phi^+\\rangle = \\text{CNOT}_{0\\to 1}\\, H_0 |00\\rangle = \\tfrac{|00\\rangle + |11\\rangle}{\\sqrt{2}}`}
-        </Katex>
-
+                  The Bell state |Φ⁺⟩ = (|00⟩ + |11⟩)/√2 is the canonical entangled pair. It is prepared
+                  from |00⟩ with one Hadamard and one CNOT — the minimal entangling circuit. Understanding
+                  each step builds intuition for how superposition on the control qubit spreads correlation
+                  to the target.
+                </p>
         <p>
-          After H₀, qubit 0 is in |+⟩ while qubit 1 remains |0⟩ — a product state (|+⟩⊗|0⟩).
-          CNOT entangles: the + branch stays |00⟩, the − branch would flip target, but H only
-          created + amplitude on |0⟩ for qubit 0 in the superposition that matters; the result is
-          equal weight on |00⟩ and |11⟩ with zero on |01⟩ and |10⟩.
-        </p>
-
-        <BellStepWalkthrough />
-
-        <WorkedExample
-          title="Amplitudes at each step"
-          steps={[
-            { label: '|00⟩ has amplitude 1 on index 00.', latex: 'c_{00} = 1' },
-            { label: 'H₀: (|00⟩ + |10⟩)/√2 — index 00 and 10 each 1/√2.', latex: 'c_{00} = c_{10} = 1/\\sqrt{2}' },
-            { label: 'CNOT₀₁ maps |10⟩ → |11⟩.', latex: 'c_{00} = c_{11} = 1/\\sqrt{2}' },
-            { label: 'Final state is |Φ⁺⟩.', latex: '|\\Phi^+\\rangle' },
-          ]}
-        />
-
-        <Checkpoint
-          question="After H on qubit 0 only, is the 2-qubit state entangled?"
-          answer="no"
-          hint="Still a product |+⟩ ⊗ |0⟩."
-        />
-
-        <LabLink path="/playground/bell-states" title="Bell State Generator lab" />
-
-        <PracticeProblem prompt="Write the unitary matrix for the Bell preparation circuit in the {|00⟩,|01⟩,|10⟩,|11⟩} basis (conceptually) and list which amplitudes are non-zero.">
-          <p>
-            U = CNOT · (H ⊗ I). Starting from |00⟩, only |00⟩ and |11⟩ have amplitude 1/√2; |01⟩ and
-            |10⟩ are zero — maximally entangled support on the even parity subspace.
-          </p>
-        </PracticeProblem>
+                  After H₀, qubit 0 is in |+⟩ while qubit 1 remains |0⟩ — a product state (|+⟩⊗|0⟩).
+                  CNOT entangles: the + branch stays |00⟩, the − branch would flip target, but H only
+                  created + amplitude on |0⟩ for qubit 0 in the superposition that matters; the result is
+                  equal weight on |00⟩ and |11⟩ with zero on |01⟩ and |10⟩.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="quantumCircuits" sectionId="6.3"
         prev={{ title: '6.2 Bell walkthrough', path: `${BASE}#6.2` }}
         next={{ title: '6.4 State readout', path: `${BASE}#6.4` }}
+      
+        widgets={<>
+          <Katex display>
+                    {`H = \\tfrac{1}{\\sqrt{2}}\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix},\\quad
+                    T = \\begin{pmatrix}1&0\\\\0&e^{i\\pi/4}\\end{pmatrix}`}
+                  </Katex>
+          <GateSetExplorer />
+          <LabLink path="/playground/gate-explorer" title="Quantum Gate Explorer" />
+          <PracticeProblem prompt="Apply S twice to |1⟩. What gate is equivalent to SS?">
+                    <p>
+                      S|1⟩ = i|1⟩; S²|1⟩ = −|1⟩ = Z|1⟩. So SS = Z (up to global phase on other basis states, S² = Z exactly).
+                    </p>
+                  </PracticeProblem>
+        </>}
       >
         <p>
-          <strong>Pauli gates</strong> I, X, Y, Z are involutions (X bit-flip, Z phase-flip, Y = iXZ).
-          <strong> Hadamard</strong> H creates superposition and swaps Z/X bases.{' '}
-          <strong>Phase gates</strong> S (√Z, π/2 phase on |1⟩) and T (⁴√Z, π/4) are common in
-          fault-tolerant constructions because T is non-Clifford — needed for universality with H and
-          CNOT.
-        </p>
-
-        <Katex display>
-          {`H = \\tfrac{1}{\\sqrt{2}}\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix},\\quad
-          T = \\begin{pmatrix}1&0\\\\0&e^{i\\pi/4}\\end{pmatrix}`}
-        </Katex>
-
+                  <strong>Pauli gates</strong> I, X, Y, Z are involutions (X bit-flip, Z phase-flip, Y = iXZ).
+                  <strong> Hadamard</strong> H creates superposition and swaps Z/X bases.{' '}
+                  <strong>Phase gates</strong> S (√Z, π/2 phase on |1⟩) and T (⁴√Z, π/4) are common in
+                  fault-tolerant constructions because T is non-Clifford — needed for universality with H and
+                  CNOT.
+                </p>
         <p>
-          <strong>Rotation gates</strong> Rx(θ), Ry(θ), Rz(θ) implement exp(−iθσ/2) about the
-          corresponding axis — any single-qubit unitary is a rotation up to global phase.{' '}
-          <strong>CNOT</strong> flips target when control is |1⟩; <strong>CZ</strong> applies −1 phase
-          on |11⟩ only. <strong>SWAP</strong> exchanges two qubits (real hardware may implement SWAP
-          via three CNOTs). <strong>Toffoli</strong> (CCNOT) flips target when both controls are |1⟩ —
-          universal for classical reversible logic embedded in quantum circuits.
-        </p>
-
-        <GateSetExplorer />
-
-
-        <WorkedExample
-          title="Decompose SWAP from CNOTs"
-          steps={[
-            { label: 'SWAP = CNOT₀₁ · CNOT₁₀ · CNOT₀₁.', latex: '\\text{SWAP}_{0,1} = \\text{CNOT}_{0,1}\\,\\text{CNOT}_{1,0}\\,\\text{CNOT}_{0,1}' },
-            { label: 'Three CNOTs exchange qubits 0 and 1 on connected linear topology.' },
-            { label: 'Depth 3 if each CNOT is one layer on those wires.' },
-          ]}
-        />
-
-        <Checkpoint
-          question="Which gate is non-Clifford and needed for universality with H and CNOT?"
-          answer="T"
-          hint="It adds π/4 phase on |1⟩."
-        />
-
-        <LabLink path="/playground/gate-explorer" title="Quantum Gate Explorer" />
-
-        <PracticeProblem prompt="Apply S twice to |1⟩. What gate is equivalent to SS?">
-          <p>
-            S|1⟩ = i|1⟩; S²|1⟩ = −|1⟩ = Z|1⟩. So SS = Z (up to global phase on other basis states, S² = Z exactly).
-          </p>
-        </PracticeProblem>
+                  <strong>Rotation gates</strong> Rx(θ), Ry(θ), Rz(θ) implement exp(−iθσ/2) about the
+                  corresponding axis — any single-qubit unitary is a rotation up to global phase.{' '}
+                  <strong>CNOT</strong> flips target when control is |1⟩; <strong>CZ</strong> applies −1 phase
+                  on |11⟩ only. <strong>SWAP</strong> exchanges two qubits (real hardware may implement SWAP
+                  via three CNOTs). <strong>Toffoli</strong> (CCNOT) flips target when both controls are |1⟩ —
+                  universal for classical reversible logic embedded in quantum circuits.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="quantumCircuits" sectionId="6.4"
         prev={{ title: '6.3 Gate set', path: `${BASE}#6.3` }}
         next={{ title: '6.5 Depth & OpenQASM', path: `${BASE}#6.5` }}
+      
+        widgets={<>
+          <Katex display>
+                    {`P(x) = |\\langle x | \\psi \\rangle|^2, \\quad \\sum_x P(x) = 1`}
+                  </Katex>
+          <StateReadoutPanel />
+          <PracticeProblem prompt="A 2-qubit state has amplitude 1/2 on |00⟩, 1/2 on |01⟩, and 0 on |10⟩, |11⟩. What is P(00) and is qubit 1 independent of qubit 0?">
+                    <p>
+                      P(00) = (1/2)² = 1/4. Given q₀=0, only |00⟩ and |01⟩ remain — equal weight — so q₁ is not
+                      independent (knowing q₀=0 gives P(q₁=0)=P(q₁=1)=1/2 but the joint is not product).
+                    </p>
+                  </PracticeProblem>
+        </>}
       >
         <p>
-          An ideal simulator stores the <strong>state vector</strong> — 2ⁿ complex amplitudes for n
-          qubits. After each gate, amplitudes update by matrix multiplication. Measurement does not
-          change the vector until you sample or collapse: the Born rule gives outcome probabilities
-          P(x) = |α_x|² for label x.
-        </p>
-
-        <Katex display>
-          {`P(x) = |\\langle x | \\psi \\rangle|^2, \\quad \\sum_x P(x) = 1`}
-        </Katex>
-
+                  An ideal simulator stores the <strong>state vector</strong> — 2ⁿ complex amplitudes for n
+                  qubits. After each gate, amplitudes update by matrix multiplication. Measurement does not
+                  change the vector until you sample or collapse: the Born rule gives outcome probabilities
+                  P(x) = |α_x|² for label x.
+                </p>
         <p>
-          For entangled states, marginal probabilities on one qubit may be 50/50 even when joint
-          outcomes are perfectly correlated. Always distinguish full state vector readout (simulator)
-          from histograms of many shots (hardware).
-        </p>
-
-        <StateReadoutPanel />
-
-        <WorkedExample
-          title="Readout for |Φ⁺⟩"
-          steps={[
-            { label: 'Non-zero amplitudes: 00 and 11 each 1/√2.', latex: 'c_{00} = c_{11} = 1/\\sqrt{2}' },
-            { label: 'P(00) = P(11) = 1/2.', latex: 'P(00) = P(11) = 0.5' },
-            { label: 'Single-qubit marginals: P(q₀=0)=P(q₀=1)=1/2 — uncorrelated individually.', latex: 'P(q_0=0)=\\tfrac{1}{2}' },
-            { label: 'Joint: never see 01 or 10 — that is the entanglement signature.', latex: 'P(01)=P(10)=0' },
-          ]}
-        />
-
-        <Checkpoint
-          question="Ideal simulators track what primary object?"
-          answer="statevector"
-          hint="A list of 2^n amplitudes."
-        />
-
-
-        <PracticeProblem prompt="A 2-qubit state has amplitude 1/2 on |00⟩, 1/2 on |01⟩, and 0 on |10⟩, |11⟩. What is P(00) and is qubit 1 independent of qubit 0?">
-          <p>
-            P(00) = (1/2)² = 1/4. Given q₀=0, only |00⟩ and |01⟩ remain — equal weight — so q₁ is not
-            independent (knowing q₀=0 gives P(q₁=0)=P(q₁=1)=1/2 but the joint is not product).
-          </p>
-        </PracticeProblem>
+                  For entangled states, marginal probabilities on one qubit may be 50/50 even when joint
+                  outcomes are perfectly correlated. Always distinguish full state vector readout (simulator)
+                  from histograms of many shots (hardware).
+                </p>
       </LearnSection>
 
       <LearnSection chapter="quantumCircuits" sectionId="6.5"
         prev={{ title: '6.4 State readout', path: `${BASE}#6.4` }}
         next={{ title: 'Error Correction', path: '/learn/error-correction' }}
+      
+        widgets={<>
+          <CircuitMetricsDemo />
+          <LabLink path="/playground/circuit-builder" title="Open Circuit Builder" />
+          <PracticeProblem prompt="Bell preparation uses 2 gates and depth 2. If you must insert a SWAP between qubits 0 and 1 using 3 CNOTs after the Bell circuit, what happens to depth if SWAP is implemented as 3 sequential layers?">
+                    <p>
+                      Original depth 2. Three sequential CNOT layers add 3, giving total depth 5 (assuming SWAP
+                      gates run after Bell and each CNOT layer cannot overlap prior qubit operations on involved
+                      wires).
+                    </p>
+                  </PracticeProblem>
+        </>}
       >
         <p>
-          <strong>Circuit depth</strong> counts sequential layers of gates that cannot run in parallel
-          on the same qubits. <strong>Gate count</strong> is the total number of operations — related
-          to runtime and error accumulation. <strong>Width</strong> is the qubit count. NISQ devices
-          favor shallow, wide circuits with native gate sets and limited connectivity.
-        </p>
-
-        <CircuitMetricsDemo />
-
+                  <strong>Circuit depth</strong> counts sequential layers of gates that cannot run in parallel
+                  on the same qubits. <strong>Gate count</strong> is the total number of operations — related
+                  to runtime and error accumulation. <strong>Width</strong> is the qubit count. NISQ devices
+                  favor shallow, wide circuits with native gate sets and limited connectivity.
+                </p>
         <p>
-          What grows exponentially with n is the <em>state vector dimension</em> 2ⁿ — simulating 50+
-          qubits exactly is infeasible on classical computers for generic states. Structured circuits
-          (Clifford, low entanglement) may be tractable longer.
-        </p>
-
-        <Checkpoint
-          question="What grows exponentially with qubit count n in exact simulation?"
-          answer="state vector dimension"
-          hint="Hilbert space size 2^n."
-        />
-
-
-
-        <WorkedExample
-          title="Parallel vs serial H gates"
-          steps={[
-            { label: 'H on qubits 0 and 1 in parallel: depth 1, 2 gates.', latex: 'D = 1' },
-            { label: 'H on qubit 0 then H on qubit 0 again: depth 2, 2 gates on same wire.', latex: 'D = 2' },
-            { label: 'Bell circuit H₀ + CNOT: depth 2 (CNOT waits for H to finish on control).', latex: 'D = 2' },
-          ]}
-        />
-
-        <LabLink path="/playground/circuit-builder" title="Open Circuit Builder" />
-
-        <PracticeProblem prompt="Bell preparation uses 2 gates and depth 2. If you must insert a SWAP between qubits 0 and 1 using 3 CNOTs after the Bell circuit, what happens to depth if SWAP is implemented as 3 sequential layers?">
-          <p>
-            Original depth 2. Three sequential CNOT layers add 3, giving total depth 5 (assuming SWAP
-            gates run after Bell and each CNOT layer cannot overlap prior qubit operations on involved
-            wires).
-          </p>
-        </PracticeProblem>
+                  What grows exponentially with n is the <em>state vector dimension</em> 2ⁿ — simulating 50+
+                  qubits exactly is infeasible on classical computers for generic states. Structured circuits
+                  (Clifford, low entanglement) may be tractable longer.
+                </p>
       </LearnSection>
 
       <div className="section-nav">

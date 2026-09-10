@@ -3,8 +3,6 @@ import { useT } from '@/context/LocaleContext';
 import { useState, useMemo, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
-import Checkpoint from '@/components/Checkpoint';
-import WorkedExample from '@/components/WorkedExample';
 import {
   C,
   BellStates,
@@ -219,223 +217,135 @@ export default function Entanglement() {
       <LearnSection chapter="entanglement" sectionId="7.1"
         prev={{ title: 'Error Correction', path: '/learn/error-correction' }}
         next={{ title: '7.2 Bell states', path: `${BASE}#7.2` }}
+      
+        widgets={<>
+          <Katex display>
+                    {`|\\Psi^-\\rangle = \\tfrac{|01\\rangle - |10\\rangle}{\\sqrt{2}} \\quad \\text{(singlet)}`}
+                  </Katex>
+          <LabLink id="chsh" title="Bell/CHSH Experiment lab" />
+          <PracticeProblem prompt="In one sentence, what question do local hidden variables try to answer about Bell correlations?">
+                    <p>
+                      Whether pre-shared classical random variables at the source can reproduce all quantum
+                      correlation statistics without nonlocal influence.
+                    </p>
+                  </PracticeProblem>
+        </>}
       >
         <p>
-          In 1935, Einstein, Podolsky, and Rosen argued that if quantum mechanics is complete, measuring
-          one particle of an entangled pair seems to instantaneously fix the other&apos;s properties —
-          uncomfortable with relativity. Their thought experiment used entangled position/momentum; modern
-          presentations use spin or polarization qubits.
-        </p>
-
+                  In 1935, Einstein, Podolsky, and Rosen argued that if quantum mechanics is complete, measuring
+                  one particle of an entangled pair seems to instantaneously fix the other&apos;s properties —
+                  uncomfortable with relativity. Their thought experiment used entangled position/momentum; modern
+                  presentations use spin or polarization qubits.
+                </p>
         <p>
-          A <strong>local hidden variable</strong> (LHV) model assumes each particle carries pre-set
-          values determined at creation, and measurements merely reveal them without faster-than-light
-          influence. Bell and others showed that certain correlation <em>inequalities</em> (CHSH) cap
-          what any LHV model can produce — quantum mechanics exceeds that cap.
-        </p>
-
-        <Katex display>
-          {`|\\Psi^-\\rangle = \\tfrac{|01\\rangle - |10\\rangle}{\\sqrt{2}} \\quad \\text{(singlet)}`}
-        </Katex>
-
+                  A <strong>local hidden variable</strong> (LHV) model assumes each particle carries pre-set
+                  values determined at creation, and measurements merely reveal them without faster-than-light
+                  influence. Bell and others showed that certain correlation <em>inequalities</em> (CHSH) cap
+                  what any LHV model can produce — quantum mechanics exceeds that cap.
+                </p>
         <p>
-          We do not need metaphysics to use entanglement: it is a resource for protocols (teleportation,
-          superdense coding, error correction). The EPR debate sharpened the question — are correlations
-          classical-like with hidden instructions, or genuinely quantum? Experiments favor quantum
-          mechanics, while no-signaling ensures relativity is respected.
-        </p>
-
-        <WorkedExample
-          title="EPR-style correlation sketch"
-          steps={[
-            {
-              label: 'Alice and Bob share |Ψ⁻⟩.',
-              latex: '|\\Psi^-\\rangle',
-            },
-            {
-              label: 'Both measure Z: always opposite bits (01 or 10).',
-              latex: 'P(01) + P(10) = 1',
-            },
-            {
-              label: 'LHV story: each particle had a hidden z ∈ {+1,−1} fixed at source.',
-            },
-            {
-              label: 'Bell/CHSH: some angle choices force LHV correlations ≤ 2; quantum hits 2√2.',
-              latex: 'S_{\\text{QM}} \\leq 2\\sqrt{2}',
-            },
-          ]}
-        />
-
-
-        <Checkpoint
-          question="Can entanglement alone send a message faster than light?"
-          answer="no"
-          hint="Marginal outcomes at Bob do not depend on Alice's setting."
-        />
-
-        <LabLink id="chsh" title="Bell/CHSH Experiment lab" />
-
-        <PracticeProblem prompt="In one sentence, what question do local hidden variables try to answer about Bell correlations?">
-          <p>
-            Whether pre-shared classical random variables at the source can reproduce all quantum
-            correlation statistics without nonlocal influence.
-          </p>
-        </PracticeProblem>
+                  We do not need metaphysics to use entanglement: it is a resource for protocols (teleportation,
+                  superdense coding, error correction). The EPR debate sharpened the question — are correlations
+                  classical-like with hidden instructions, or genuinely quantum? Experiments favor quantum
+                  mechanics, while no-signaling ensures relativity is respected.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="entanglement" sectionId="7.2"
         prev={{ title: '7.1 EPR & LHV', path: `${BASE}#7.1` }}
         next={{ title: '7.3 Correlation vs causation', path: `${BASE}#7.3` }}
+      
+        widgets={<>
+          <Katex display>
+                    {`|\\Phi^\\pm\\rangle = \\tfrac{|00\\rangle \\pm |11\\rangle}{\\sqrt{2}}, \\quad
+                    |\\Psi^\\pm\\rangle = \\tfrac{|01\\rangle \\pm |10\\rangle}{\\sqrt{2}}`}
+                  </Katex>
+          <BellStatesExplorer />
+          <LabLink id="bell-states" title="Bell State Generator" />
+          <PracticeProblem prompt="How many Bell states span the subspace of states with equal amplitude on |00⟩ and |11⟩ only?">
+                    <p>
+                      Two: |Φ⁺⟩ and |Φ⁻⟩ differ by relative sign between |00⟩ and |11⟩. The |Ψ±⟩ pair spans
+                      the odd-parity subspace (|01⟩ and |10⟩) instead.
+                    </p>
+                  </PracticeProblem>
+        </>}
       >
         <p>
-          The Bell basis is a complete orthonormal set of maximally entangled two-qubit states. Any
-          two-qubit pure state can be expressed in this basis, but the four Bell states are the
-          building blocks for entanglement swapping, superdense coding, and many algorithms.
-        </p>
-
-        <Katex display>
-          {`|\\Phi^\\pm\\rangle = \\tfrac{|00\\rangle \\pm |11\\rangle}{\\sqrt{2}}, \\quad
-          |\\Psi^\\pm\\rangle = \\tfrac{|01\\rangle \\pm |10\\rangle}{\\sqrt{2}}`}
-        </Katex>
-
+                  The Bell basis is a complete orthonormal set of maximally entangled two-qubit states. Any
+                  two-qubit pure state can be expressed in this basis, but the four Bell states are the
+                  building blocks for entanglement swapping, superdense coding, and many algorithms.
+                </p>
         <p>
-          |Φ⁺⟩ is prepared by H then CNOT on |00⟩. Applying Z on one qubit turns |Φ⁺⟩ into |Φ⁻⟩;
-          X on one qubit gives |Ψ⁺⟩; both gives |Ψ⁻⟩. They are mutually orthogonal — numerically
-          {' |⟨Φ⁺|Ψ⁻⟩|² = '}{phiPsiOverlap.toFixed(4)} (zero overlap confirms orthogonality).
-        </p>
-
-        <BellStatesExplorer />
-
-        <WorkedExample
-          title="Create |Φ⁺⟩ and relate to |Φ⁻⟩"
-          steps={[
-            { label: 'H₀ on |00⟩.', latex: '\\tfrac{|00\\rangle+|10\\rangle}{\\sqrt{2}}' },
-            { label: 'CNOT₀₁ → |Φ⁺⟩.', latex: '|\\Phi^+\\rangle' },
-            { label: 'Apply Z on qubit 1.', latex: 'Z_1|\\Phi^+\\rangle = |\\Phi^-\\rangle' },
-            { label: 'Apply X on qubit 1 instead.', latex: 'X_1|\\Phi^+\\rangle = |\\Psi^+\\rangle' },
-          ]}
-        />
-
-        <Checkpoint
-          question="Is |Φ⁺⟩ a product state?"
-          answer="no"
-          hint="Try writing α|0⟩+β|1⟩ on each qubit separately."
-        />
-
-        <LabLink id="bell-states" title="Bell State Generator" />
-
-        <PracticeProblem prompt="How many Bell states span the subspace of states with equal amplitude on |00⟩ and |11⟩ only?">
-          <p>
-            Two: |Φ⁺⟩ and |Φ⁻⟩ differ by relative sign between |00⟩ and |11⟩. The |Ψ±⟩ pair spans
-            the odd-parity subspace (|01⟩ and |10⟩) instead.
-          </p>
-        </PracticeProblem>
+                  |Φ⁺⟩ is prepared by H then CNOT on |00⟩. Applying Z on one qubit turns |Φ⁺⟩ into |Φ⁻⟩;
+                  X on one qubit gives |Ψ⁺⟩; both gives |Ψ⁻⟩. They are mutually orthogonal — numerically
+                  {' |⟨Φ⁺|Ψ⁻⟩|² = '}{phiPsiOverlap.toFixed(4)} (zero overlap confirms orthogonality).
+                </p>
       </LearnSection>
 
       <LearnSection chapter="entanglement" sectionId="7.3"
         prev={{ title: '7.2 Bell states', path: `${BASE}#7.2` }}
         next={{ title: '7.4 Partial trace', path: `${BASE}#7.4` }}
+      
+        widgets={<>
+          <Katex display>
+                    {`P(b \\mid a, \\text{settings}) \\neq P(b \\mid \\text{settings}) \\text{ in general (correlation)}`}
+                  </Katex>
+          <Katex display>
+                    {`\\rho_B = \\text{Tr}_A(\\rho_{AB}) \\text{ independent of Alice's later measurement choice}`}
+                  </Katex>
+          <CorrelationDemo />
+          <PracticeProblem prompt="Alice and Bob share |Φ⁺⟩. Alice measures Z and gets 0. What is Bob's state before he measures, and does Alice's choice of X vs Z basis change Bob's marginal if Bob always measures Z?">
+                    <p>
+                      Conditional on Alice's 0, Bob is in |0⟩ (collapses joint state). If Alice measures in X
+                      instead, Bob's Z marginal remains 50/50 — Alice's basis choice changes correlations, not
+                      Bob's Z-only marginal statistics before he measures.
+                    </p>
+                  </PracticeProblem>
+        </>}
       >
         <p>
-          Strong correlations between distant measurements do not mean one event <em>caused</em> the
-          other in the classical sense. With entanglement, neither outcome exists as a definite classical
-          value before measurement in the standard quantum formalism — yet joint statistics are rigidly
-          correlated when bases match.
-        </p>
-
+                  Strong correlations between distant measurements do not mean one event <em>caused</em> the
+                  other in the classical sense. With entanglement, neither outcome exists as a definite classical
+                  value before measurement in the standard quantum formalism — yet joint statistics are rigidly
+                  correlated when bases match.
+                </p>
         <p>
-          If Alice measures before Bob or Bob before Alice, the predicted <em>joint</em> distribution
-          is the same (for the same observables). Relativistic quantum field theory formalizes this
-          with no-signaling: Alice cannot encode a message in her choice of measurement basis because
-          Bob&apos;s marginal statistics are unchanged.
-        </p>
-
-        <Katex display>
-          {`P(b \\mid a, \\text{settings}) \\neq P(b \\mid \\text{settings}) \\text{ in general (correlation)}`}
-        </Katex>
-
-        <Katex display>
-          {`\\rho_B = \\text{Tr}_A(\\rho_{AB}) \\text{ independent of Alice's later measurement choice}`}
-        </Katex>
-
-        <CorrelationDemo />
-
-        <WorkedExample
-          title="|Φ⁺⟩ in Z basis"
-          steps={[
-            { label: 'Joint state has only |00⟩ and |11⟩.', latex: 'c_{01}=c_{10}=0' },
-            { label: 'Alice measures Z → 0 or 1 with 50% each.', latex: 'P(A=0)=P(A=1)=\\tfrac{1}{2}' },
-            { label: 'Given A=0, Bob’s qubit is |0⟩; given A=1, Bob’s is |1⟩.', latex: '\\text{perfect correlation}' },
-            { label: 'Bob’s marginal alone is still 50/50 — correlation without controllable signal.', latex: 'P(B=0)=\\tfrac{1}{2}' },
-          ]}
-        />
-
-
-        <Checkpoint
-          question="Can Alice send a message by choosing her measurement angle alone?"
-          answer="no"
-        />
-
-        <PracticeProblem prompt="Alice and Bob share |Φ⁺⟩. Alice measures Z and gets 0. What is Bob's state before he measures, and does Alice's choice of X vs Z basis change Bob's marginal if Bob always measures Z?">
-          <p>
-            Conditional on Alice's 0, Bob is in |0⟩ (collapses joint state). If Alice measures in X
-            instead, Bob's Z marginal remains 50/50 — Alice's basis choice changes correlations, not
-            Bob's Z-only marginal statistics before he measures.
-          </p>
-        </PracticeProblem>
+                  If Alice measures before Bob or Bob before Alice, the predicted <em>joint</em> distribution
+                  is the same (for the same observables). Relativistic quantum field theory formalizes this
+                  with no-signaling: Alice cannot encode a message in her choice of measurement basis because
+                  Bob&apos;s marginal statistics are unchanged.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="entanglement" sectionId="7.4"
         prev={{ title: '7.3 Correlation vs causation', path: `${BASE}#7.3` }}
         next={{ title: 'Quantum Protocols', path: '/learn/protocols' }}
+      
+        widgets={<>
+          <Katex display>
+                    {`\\rho_A = \\sum_b \\langle b| \\psi\\rangle\\langle\\psi| b\\rangle \\quad \\text{(partial trace over B)}`}
+                  </Katex>
+          <PartialTraceDemo />
+          <LabLink id="entanglement" title="Entanglement Measurement lab" />
+          <PracticeProblem prompt="Compute ρ_A for |00⟩ and compare purity to |Φ⁺⟩.">
+                    <p>
+                      |00⟩ is product: ρ_A = |0⟩⟨0|, purity 1. |Φ⁺⟩ gives ρ_A = I/2, purity 1/2. Entanglement
+                      shows up as mixed marginals despite a pure joint state.
+                    </p>
+                  </PracticeProblem>
+        </>}
       >
         <p>
-          Describing one subsystem of an entangled pair requires tracing out the other. For pure joint
-          state |ψ⟩<sub>AB</sub>, the reduced density matrix on A is ρ_A = Tr_B(|ψ⟩⟨ψ|). If ρ_A is not a
-          pure state projector, subsystem A is entangled with B — even though A alone may look
-          completely random when measured.
-        </p>
-
-        <Katex display>
-          {`\\rho_A = \\sum_b \\langle b| \\psi\\rangle\\langle\\psi| b\\rangle \\quad \\text{(partial trace over B)}`}
-        </Katex>
-
+                  Describing one subsystem of an entangled pair requires tracing out the other. For pure joint
+                  state |ψ⟩<sub>AB</sub>, the reduced density matrix on A is ρ_A = Tr_B(|ψ⟩⟨ψ|). If ρ_A is not a
+                  pure state projector, subsystem A is entangled with B — even though A alone may look
+                  completely random when measured.
+                </p>
         <p>
-          For |Φ⁺⟩, ρ_A = I/2 — maximally mixed. Alice’s Z outcomes are 50/50, yet the joint state is
-          pure. This is the hallmark of entanglement: ignorance locally, information globally. For a
-          product state |00⟩, ρ_A = |0⟩⟨0| — pure and uncorrelated.
-        </p>
-
-        <PartialTraceDemo />
-
-        <WorkedExample
-          title="Partial trace of |Φ⁺⟩"
-          steps={[
-            { label: 'Amplitudes c₀₀ = c₁₁ = 1/√2.', latex: '|\\Phi^+\\rangle' },
-            {
-              label: 'ρ_A = Tr_B: sum over B index of |ψ⟩⟨ψ| blocks.',
-              latex: '\\rho_A = \\tfrac{1}{2}(|0\\rangle\\langle 0| + |1\\rangle\\langle 1|)',
-            },
-            { label: 'Purity Tr(ρ_A²) = 1/2 < 1 → mixed reduced state.', latex: '\\text{Tr}(\\rho_A^2) = \\tfrac{1}{2}' },
-            { label: 'Entanglement entropy S(ρ_A) = ln 2 for this maximally entangled pair.', latex: 'S = 1\\text{ bit}' },
-          ]}
-        />
-
-
-        <Checkpoint
-          question="For |Φ⁺⟩, is the reduced state on one qubit pure or mixed?"
-          answer="mixed"
-          hint="Tr(ρ_A²) = 1/2."
-        />
-
-        <LabLink id="entanglement" title="Entanglement Measurement lab" />
-
-        <PracticeProblem prompt="Compute ρ_A for |00⟩ and compare purity to |Φ⁺⟩.">
-          <p>
-            |00⟩ is product: ρ_A = |0⟩⟨0|, purity 1. |Φ⁺⟩ gives ρ_A = I/2, purity 1/2. Entanglement
-            shows up as mixed marginals despite a pure joint state.
-          </p>
-        </PracticeProblem>
+                  For |Φ⁺⟩, ρ_A = I/2 — maximally mixed. Alice’s Z outcomes are 50/50, yet the joint state is
+                  pure. This is the hallmark of entanglement: ignorance locally, information globally. For a
+                  product state |00⟩, ρ_A = |0⟩⟨0| — pure and uncorrelated.
+                </p>
       </LearnSection>
 
       <div className="section-nav">

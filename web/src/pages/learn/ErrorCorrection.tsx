@@ -3,8 +3,6 @@ import { useT } from '@/context/LocaleContext';
 import { useState, useMemo, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
-import Checkpoint from '@/components/Checkpoint';
-import WorkedExample from '@/components/WorkedExample';
 import {
   C,
   zeroState,
@@ -362,261 +360,155 @@ export default function ErrorCorrection() {
       <LearnSection chapter="errorCorrection" sectionId="5.1"
         prev={{ title: 'Quantum Circuits', path: '/learn/circuits' }}
         next={{ title: '5.2 Bit-flip code', path: `${BASE}#5.2` }}
+      
+        widgets={<>
+          <Katex display>
+                    {`E(\\rho) = (1-p)\\,\\rho + p_x X\\rho X + p_y Y\\rho Y + p_z Z\\rho Z + \\cdots`}
+                  </Katex>
+          <NoiseExplorer />
+          <PhysicalVsLogical />
+          <PracticeProblem prompt="A physical qubit has error rate p = 0.1 per time step. Why is naive repetition (copying the same classical bit three times) impossible quantum mechanically, and what replaces it?">
+                    <p>
+                      Unknown qubits cannot be copied. We replace cloning with an entangling encode: |0⟩_L = |000⟩,
+                      |1⟩_L = |111⟩ via CNOTs from a single data qubit. Parity checks Z₀Z₁ and Z₁Z₂ detect
+                      which bit flipped without measuring the logical value.
+                    </p>
+                  </PracticeProblem>
+        </>}
       >
         <p>
-          Classical repetition codes copy a bit three times and take a majority vote. Quantum
-          mechanics forbids cloning, so we cannot simply duplicate an unknown qubit state. Instead,
-          QEC spreads one logical qubit across several physical qubits using entanglement, then
-          measures <em>syndrome</em> operators that reveal error types without collapsing the
-          encoded information.
-        </p>
-
+                  Classical repetition codes copy a bit three times and take a majority vote. Quantum
+                  mechanics forbids cloning, so we cannot simply duplicate an unknown qubit state. Instead,
+                  QEC spreads one logical qubit across several physical qubits using entanglement, then
+                  measures <em>syndrome</em> operators that reveal error types without collapsing the
+                  encoded information.
+                </p>
         <p>
-          Noise on a qubit is often modeled as a short list of discrete Pauli errors plus continuous
-          decoherence. A <strong>bit-flip</strong> applies X, swapping |0⟩ and |1⟩. A{' '}
-          <strong>phase-flip</strong> applies Z, flipping the sign of |1⟩ while leaving
-          probabilities unchanged. <strong>Decoherence</strong> (T₂ processes) destroys off-diagonal
-          coherences in the density matrix, turning superpositions into classical mixtures.
-          <strong> Gate errors</strong> mean the implemented unitary differs from the intended one —
-          over-rotation, miscalibrated pulses, or crosstalk.
-        </p>
-
-        <Katex display>
-          {`E(\\rho) = (1-p)\\,\\rho + p_x X\\rho X + p_y Y\\rho Y + p_z Z\\rho Z + \\cdots`}
-        </Katex>
-
+                  Noise on a qubit is often modeled as a short list of discrete Pauli errors plus continuous
+                  decoherence. A <strong>bit-flip</strong> applies X, swapping |0⟩ and |1⟩. A{' '}
+                  <strong>phase-flip</strong> applies Z, flipping the sign of |1⟩ while leaving
+                  probabilities unchanged. <strong>Decoherence</strong> (T₂ processes) destroys off-diagonal
+                  coherences in the density matrix, turning superpositions into classical mixtures.
+                  <strong> Gate errors</strong> mean the implemented unitary differs from the intended one —
+                  over-rotation, miscalibrated pulses, or crosstalk.
+                </p>
         <p>
-          A <strong>physical qubit</strong> is the two-level system you manipulate on chip — subject
-          to all the noise above. A <strong>logical qubit</strong> is an encoded degree of freedom
-          protected by a code; many physical qubits (and ancillas) may represent one logical qubit.
-          The goal is to make logical error rates far smaller than physical rates, enabling long
-          algorithms once physical noise falls below a <em>threshold</em>.
-        </p>
-
-        <NoiseExplorer />
-        <PhysicalVsLogical />
-
-        <WorkedExample
-          title="Bit flip on |+⟩"
-          steps={[
-            {
-              label: 'Start from |+⟩ = H|0⟩.',
-              latex: '|+\\rangle = \\tfrac{1}{\\sqrt{2}}(|0\\rangle + |1\\rangle)',
-            },
-            {
-              label: 'Apply X (bit flip).',
-              latex: 'X|+\\rangle = \\tfrac{1}{\\sqrt{2}}(|1\\rangle + |0\\rangle) = |-\\rangle',
-            },
-            {
-              label: 'Z-basis measurement probabilities swap: P(0) and P(1) exchange roles.',
-              latex: 'P(0):\\; \\tfrac{1}{2} \\to \\tfrac{1}{2}\\;\\text{(same)}\\;\\text{but amplitudes change sign pattern vs }|-\\rangle',
-            },
-          ]}
-        />
-
-        <Checkpoint
-          question="Name one discrete single-qubit Pauli error."
-          answer="bit flip"
-          hint="X, Y, or Z — pick the one that swaps |0⟩ and |1⟩."
-        />
-
-
-        <PracticeProblem prompt="A physical qubit has error rate p = 0.1 per time step. Why is naive repetition (copying the same classical bit three times) impossible quantum mechanically, and what replaces it?">
-          <p>
-            Unknown qubits cannot be copied. We replace cloning with an entangling encode: |0⟩_L = |000⟩,
-            |1⟩_L = |111⟩ via CNOTs from a single data qubit. Parity checks Z₀Z₁ and Z₁Z₂ detect
-            which bit flipped without measuring the logical value.
-          </p>
-        </PracticeProblem>
+                  A <strong>physical qubit</strong> is the two-level system you manipulate on chip — subject
+                  to all the noise above. A <strong>logical qubit</strong> is an encoded degree of freedom
+                  protected by a code; many physical qubits (and ancillas) may represent one logical qubit.
+                  The goal is to make logical error rates far smaller than physical rates, enabling long
+                  algorithms once physical noise falls below a <em>threshold</em>.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="errorCorrection" sectionId="5.2"
         prev={{ title: '5.1 Why QEC?', path: `${BASE}#5.1` }}
         next={{ title: '5.3 Phase-flip & Shor code', path: `${BASE}#5.3` }}
+      
+        widgets={<>
+          <Katex display>
+                    {`|0\\rangle_L = |000\\rangle, \\quad |1\\rangle_L = |111\\rangle`}
+                  </Katex>
+          <SyndromeTableInteractive />
+          <LabLink id="error-correction" title="Error Correction Simulator" />
+          <PracticeProblem prompt="You measure syndrome (1, 0) on the bit-flip code. Which correction do you apply, and why does this not reveal whether the logical qubit was |0⟩_L or |1⟩_L?">
+                    <p>
+                      Syndrome (1, 0) indicates X on qubit 1 — apply X₁. Both |000⟩ and |111⟩ produce the same
+                      syndrome under X₁ (|100⟩ and |011⟩ respectively), so the syndrome only identifies the
+                      error, not the logical bit value.
+                    </p>
+                  </PracticeProblem>
+        </>}
       >
         <p>
-          The simplest quantum code protects against a single bit-flip (X) on any of three qubits.
-          Logical zero and one span a two-dimensional subspace of the eight-dimensional Hilbert space
-          of three qubits:
-        </p>
-
-        <Katex display>
-          {`|0\\rangle_L = |000\\rangle, \\quad |1\\rangle_L = |111\\rangle`}
-        </Katex>
-
+                  The simplest quantum code protects against a single bit-flip (X) on any of three qubits.
+                  Logical zero and one span a two-dimensional subspace of the eight-dimensional Hilbert space
+                  of three qubits:
+                </p>
         <p>
-          Encoding applies CNOT from qubit 0 to qubits 1 and 2. Any single X error takes the codeword
-          to another state that differs in Z-parity between neighbors. Measuring the stabilizers
-          Z₀Z₁ and Z₁Z₂ (products of Pauli Z on adjacent pairs) yields a two-bit syndrome. The
-          syndrome identifies which qubit flipped; applying X on that qubit restores the codeword.
-        </p>
-
+                  Encoding applies CNOT from qubit 0 to qubits 1 and 2. Any single X error takes the codeword
+                  to another state that differs in Z-parity between neighbors. Measuring the stabilizers
+                  Z₀Z₁ and Z₁Z₂ (products of Pauli Z on adjacent pairs) yields a two-bit syndrome. The
+                  syndrome identifies which qubit flipped; applying X on that qubit restores the codeword.
+                </p>
         <p>
-          Crucially, these are <em>commuting</em> measurements on the code space: they do not
-          distinguish |0⟩_L from |1⟩_L, only which error occurred. The interactive table below
-          lets you inject an error and watch the syndrome point to the correction.
-        </p>
-
-        <SyndromeTableInteractive />
-
-        <WorkedExample
-          title="Detect and correct X on qubit 1"
-          steps={[
-            { label: 'Encode |1⟩_L → |111⟩ using X on qubit 0 then CNOTs.', latex: '|111\\rangle' },
-            { label: 'Bit-flip on qubit 1 → |101⟩.', latex: '|101\\rangle' },
-            {
-              label: 'Z₀Z₁ eigenvalue: Z on qubits 0,1 gives (−1)(+1)(−1) = +1 → syndrome bit 1.',
-              latex: 's_0 = 1',
-            },
-            {
-              label: 'Z₁Z₂ eigenvalue: (+1)(−1)(+1) = −1 → syndrome bit 0.',
-              latex: 's_1 = 0 \\Rightarrow \\text{error on qubit 1}',
-            },
-            { label: 'Apply X₁ to recover |111⟩.', latex: 'X_1|101\\rangle = |111\\rangle' },
-          ]}
-        />
-
-        <Checkpoint
-          question="How many bit-flip errors can the 3-qubit bit-flip code correct?"
-          answer="1"
-          hint="Distinct syndromes for each single-qubit X."
-        />
-
-
-        <LabLink id="error-correction" title="Error Correction Simulator" />
-
-        <PracticeProblem prompt="You measure syndrome (1, 0) on the bit-flip code. Which correction do you apply, and why does this not reveal whether the logical qubit was |0⟩_L or |1⟩_L?">
-          <p>
-            Syndrome (1, 0) indicates X on qubit 1 — apply X₁. Both |000⟩ and |111⟩ produce the same
-            syndrome under X₁ (|100⟩ and |011⟩ respectively), so the syndrome only identifies the
-            error, not the logical bit value.
-          </p>
-        </PracticeProblem>
+                  Crucially, these are <em>commuting</em> measurements on the code space: they do not
+                  distinguish |0⟩_L from |1⟩_L, only which error occurred. The interactive table below
+                  lets you inject an error and watch the syndrome point to the correction.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="errorCorrection" sectionId="5.3"
         prev={{ title: '5.2 Bit-flip code', path: `${BASE}#5.2` }}
         next={{ title: '5.4 Mitigation vs correction', path: `${BASE}#5.4` }}
+      
+        widgets={<>
+          <Katex display>
+                    {`H^{\\otimes 3}\\,\\bigl(\\text{bit-flip code}\\bigr)\\,H^{\\otimes 3} = \\text{phase-flip code}`}
+                  </Katex>
+          <PhaseFlipViaH />
+          <LabLink id="error-correction" title="Error Correction Simulator (Shor-style demos)" />
+          <PracticeProblem prompt="Write two stabilizers for the 3-qubit bit-flip code and explain why Z₀Z₁ anticommutes with a logical X̄ = X₀X₁X₂ applied to |1⟩_L but commutes with the code space.">
+                    <p>
+                      Stabilizers: S₁ = Z₀Z₁, S₂ = Z₁Z₂. For |111⟩, each Z pair gives +1. A logical X̄ flips all
+                      bits; S₁ and S₂ still yield +1 on valid codewords. An error X_j anticommutes with one
+                      stabilizer, flipping its measurement outcome — that is the syndrome bit.
+                    </p>
+                  </PracticeProblem>
+        </>}
       >
         <p>
-          The bit-flip code protects against X but not Z: a phase error Z|111⟩ = −|111⟩ leaves
-          bit parities unchanged yet flips the logical sign. The <strong>phase-flip code</strong>{' '}
-          swaps roles: logical states are uniform superpositions |0⟩_L = |+++⟩, |1⟩_L = |−−−⟩ with
-          X-parity checks. Equivalently, conjugate the bit-flip code by H⊗³: Z errors become X
-          errors in the rotated frame.
-        </p>
-
-        <Katex display>
-          {`H^{\\otimes 3}\\,\\bigl(\\text{bit-flip code}\\bigr)\\,H^{\\otimes 3} = \\text{phase-flip code}`}
-        </Katex>
-
-        <PhaseFlipViaH />
-
+                  The bit-flip code protects against X but not Z: a phase error Z|111⟩ = −|111⟩ leaves
+                  bit parities unchanged yet flips the logical sign. The <strong>phase-flip code</strong>{' '}
+                  swaps roles: logical states are uniform superpositions |0⟩_L = |+++⟩, |1⟩_L = |−−−⟩ with
+                  X-parity checks. Equivalently, conjugate the bit-flip code by H⊗³: Z errors become X
+                  errors in the rotated frame.
+                </p>
         <p>
-          Neither code alone handles arbitrary single-qubit Pauli errors (X, Y, or Z). Peter Shor
-          combined both ideas into a <strong>9-qubit code</strong>: three blocks of three qubits, each
-          block a bit-flip code, with an outer layer of phase-flip protection across blocks. One
-          logical qubit uses nine physical qubits plus syndrome ancillas in full implementations.
-        </p>
-
-        <WorkedExample
-          title="Shor code layout (conceptual)"
-          steps={[
-            {
-              label: 'Block 1, 2, 3 each encode a bit via |0⟩→|000⟩, |1⟩→|111⟩ within the block.',
-              latex: '|\\psi\\rangle_L \\in \\mathcal{C}_1 \\otimes \\mathcal{C}_2 \\otimes \\mathcal{C}_3',
-            },
-            {
-              label: 'Phase errors between blocks detected by X-type parity on corresponding qubits across blocks.',
-            },
-            {
-              label: 'Any single-qubit X, Y, or Z error maps to a unique syndrome under nine stabilizer generators.',
-            },
-            {
-              label: 'Correction applies the inverse Pauli on the affected physical qubit.',
-            },
-          ]}
-        />
-
-
-        <Checkpoint
-          question="What gate conjugation turns the bit-flip code into the phase-flip code?"
-          answer="hadamard"
-          hint="Apply the same gate on every qubit before and after."
-        />
-
-        <LabLink id="error-correction" title="Error Correction Simulator (Shor-style demos)" />
-
-        <PracticeProblem prompt="Write two stabilizers for the 3-qubit bit-flip code and explain why Z₀Z₁ anticommutes with a logical X̄ = X₀X₁X₂ applied to |1⟩_L but commutes with the code space.">
-          <p>
-            Stabilizers: S₁ = Z₀Z₁, S₂ = Z₁Z₂. For |111⟩, each Z pair gives +1. A logical X̄ flips all
-            bits; S₁ and S₂ still yield +1 on valid codewords. An error X_j anticommutes with one
-            stabilizer, flipping its measurement outcome — that is the syndrome bit.
-          </p>
-        </PracticeProblem>
+                  Neither code alone handles arbitrary single-qubit Pauli errors (X, Y, or Z). Peter Shor
+                  combined both ideas into a <strong>9-qubit code</strong>: three blocks of three qubits, each
+                  block a bit-flip code, with an outer layer of phase-flip protection across blocks. One
+                  logical qubit uses nine physical qubits plus syndrome ancillas in full implementations.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="errorCorrection" sectionId="5.4"
         prev={{ title: '5.3 Phase-flip & Shor', path: `${BASE}#5.3` }}
         next={{ title: 'Entanglement', path: '/learn/entanglement' }}
+      
+        widgets={<>
+          <Katex display>
+                    {`\\text{QEC:}\\; |\\psi\\rangle_L \\xrightarrow{\\text{noise}} |\\psi'\\rangle \\xrightarrow{\\text{correct}} |\\psi\\rangle_L \\qquad
+                    \\text{Mitigation:}\\; \\langle O \\rangle \\approx f(\\text{noisy samples})`}
+                  </Katex>
+          <PracticeProblem prompt="Your device has p = 10⁻² gate errors and no full QEC. Should you use mitigation or wait for a fault-tolerant machine to run Shor's algorithm on RSA-2048?">
+                    <p>
+                      Shor requires millions of high-fidelity gates — far beyond NISQ mitigation. Mitigation
+                      might help small variational demos; factoring RSA-2048 needs fault-tolerant QEC below
+                      threshold, not post-processing alone.
+                    </p>
+                  </PracticeProblem>
+        </>}
       >
         <p>
-          <strong>Error correction</strong> actively removes the effect of errors by extracting
-          syndrome information and applying a recovery operation, preserving the logical quantum
-          state (in principle arbitrarily well below threshold). It requires extra qubits, real-time
-          classical processing, and often fast feedback — the full fault-tolerance stack.
-        </p>
-
+                  <strong>Error correction</strong> actively removes the effect of errors by extracting
+                  syndrome information and applying a recovery operation, preserving the logical quantum
+                  state (in principle arbitrarily well below threshold). It requires extra qubits, real-time
+                  classical processing, and often fast feedback — the full fault-tolerance stack.
+                </p>
         <p>
-          <strong>Error mitigation</strong> does not recover the exact pre-error state. Instead it
-          estimates expectation values or outputs by combining many noisy runs: zero-noise
-          extrapolation, probabilistic error cancellation, readout correction, or Clifford data
-          regression. Mitigation is cheaper and works on today&apos;s NISQ devices but does not
-          provide an exponential suppression of logical error with code distance.
-        </p>
-
-        <Katex display>
-          {`\\text{QEC:}\\; |\\psi\\rangle_L \\xrightarrow{\\text{noise}} |\\psi'\\rangle \\xrightarrow{\\text{correct}} |\\psi\\rangle_L \\qquad
-          \\text{Mitigation:}\\; \\langle O \\rangle \\approx f(\\text{noisy samples})`}
-        </Katex>
-
+                  <strong>Error mitigation</strong> does not recover the exact pre-error state. Instead it
+                  estimates expectation values or outputs by combining many noisy runs: zero-noise
+                  extrapolation, probabilistic error cancellation, readout correction, or Clifford data
+                  regression. Mitigation is cheaper and works on today&apos;s NISQ devices but does not
+                  provide an exponential suppression of logical error with code distance.
+                </p>
         <p>
-          Below a <strong>threshold</strong> physical error rate, concatenated or surface codes make
-          logical errors vanish with increasing code size — enabling arbitrarily long computations in
-          principle. Above threshold, correction fails. Mitigation remains useful either way for
-          near-term variational algorithms where full QEC is too costly.
-        </p>
-
-        <WorkedExample
-          title="Zero-noise extrapolation (sketch)"
-          steps={[
-            { label: 'Run the same circuit at noise strengths λ, 2λ, 3λ (stretched gates).' },
-            { label: 'Measure observable ⟨O⟩ at each noise level.' },
-            { label: 'Fit a curve and extrapolate to λ → 0 for an improved estimate.' },
-            { label: 'This mitigates bias in ⟨O⟩ but does not fix a corrupted logical qubit mid-circuit.' },
-          ]}
-        />
-
-
-        <Checkpoint
-          question="Does QEC require measuring the logical qubit value directly?"
-          answer="no"
-          hint="Only syndromes — parities — are measured."
-        />
-
-        <Checkpoint
-          question="Can error mitigation guarantee an arbitrarily long coherent quantum computation?"
-          answer="no"
-          hint="Mitigation improves estimates; it does not scale like fault-tolerant QEC."
-        />
-
-        <PracticeProblem prompt="Your device has p = 10⁻² gate errors and no full QEC. Should you use mitigation or wait for a fault-tolerant machine to run Shor's algorithm on RSA-2048?">
-          <p>
-            Shor requires millions of high-fidelity gates — far beyond NISQ mitigation. Mitigation
-            might help small variational demos; factoring RSA-2048 needs fault-tolerant QEC below
-            threshold, not post-processing alone.
-          </p>
-        </PracticeProblem>
+                  Below a <strong>threshold</strong> physical error rate, concatenated or surface codes make
+                  logical errors vanish with increasing code size — enabling arbitrarily long computations in
+                  principle. Above threshold, correction fails. Mitigation remains useful either way for
+                  near-term variational algorithms where full QEC is too costly.
+                </p>
       </LearnSection>
 
       <div className="section-nav">

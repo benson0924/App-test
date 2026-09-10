@@ -3,8 +3,6 @@ import { useT } from '@/context/LocaleContext';
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
-import Checkpoint from '@/components/Checkpoint';
-import WorkedExample from '@/components/WorkedExample';
 import {
   C,
   Gates,
@@ -291,271 +289,185 @@ export default function LinearAlgebra() {
       <LearnSection chapter="linearAlgebra" sectionId="3.1"
         prev={{ title: 'Chapter 2: One Qubit', path: '/learn/one-qubit' }}
         next={{ title: '3.2 Bras', path: `${BASE}#3.2` }}
+      
+        widgets={<>
+          <Katex display>{`|\\psi\\rangle = \\begin{pmatrix} \\alpha \\\\ \\beta \\end{pmatrix}, \\quad \\alpha, \\beta \\in \\mathbb{C}`}</Katex>
+        </>}
       >
         <p>
-          A quantum <strong>pure state</strong> is represented by a column vector in a complex
-          Hilbert space. Dirac's <strong>ket</strong> notation writes this vector as{' '}
-          <Katex>{`|\\psi\\rangle`}</Katex>, read "psi ket." For one qubit the space is{' '}
-          <Katex>{`\\mathbb{C}^2`}</Katex>, spanned by the computational basis kets{' '}
-          <Katex>{`|0\\rangle`}</Katex> and <Katex>{`|1\\rangle`}</Katex>.
-        </p>
+                  A quantum <strong>pure state</strong> is represented by a column vector in a complex
+                  Hilbert space. Dirac's <strong>ket</strong> notation writes this vector as{' '}
+                  <Katex>{`|\\psi\\rangle`}</Katex>, read "psi ket." For one qubit the space is{' '}
+                  <Katex>{`\\mathbb{C}^2`}</Katex>, spanned by the computational basis kets{' '}
+                  <Katex>{`|0\\rangle`}</Katex> and <Katex>{`|1\\rangle`}</Katex>.
+                </p>
         <p>
-          In column-vector form, <Katex>{`|0\\rangle = \\begin{pmatrix}1\\\\0\\end{pmatrix}`}</Katex>{' '}
-          and <Katex>{`|1\\rangle = \\begin{pmatrix}0\\\\1\\end{pmatrix}`}</Katex>. Any single-qubit
-          state is a linear combination{' '}
-          <Katex>{`|\\psi\\rangle = \\alpha|0\\rangle + \\beta|1\\rangle`}</Katex> with complex
-          coefficients stored as a two-component column:
-        </p>
-        <Katex display>{`|\\psi\\rangle = \\begin{pmatrix} \\alpha \\\\ \\beta \\end{pmatrix}, \\quad \\alpha, \\beta \\in \\mathbb{C}`}</Katex>
+                  In column-vector form, <Katex>{`|0\\rangle = \\begin{pmatrix}1\\\\0\\end{pmatrix}`}</Katex>{' '}
+                  and <Katex>{`|1\\rangle = \\begin{pmatrix}0\\\\1\\end{pmatrix}`}</Katex>. Any single-qubit
+                  state is a linear combination{' '}
+                  <Katex>{`|\\psi\\rangle = \\alpha|0\\rangle + \\beta|1\\rangle`}</Katex> with complex
+                  coefficients stored as a two-component column:
+                </p>
         <p>
-          The ket is not merely a notational convenience — it signals that we are treating the object
-          as a vector that will be acted on by matrices (operators) from the left. When we extend to
-          multiple qubits, kets live in larger tensor-product spaces, but the column-vector picture
-          remains the same.
-        </p>
+                  The ket is not merely a notational convenience — it signals that we are treating the object
+                  as a vector that will be acted on by matrices (operators) from the left. When we extend to
+                  multiple qubits, kets live in larger tensor-product spaces, but the column-vector picture
+                  remains the same.
+                </p>
         <p>
-          We often label basis kets by bit strings: <Katex>{`|0\\rangle`}</Katex> and{' '}
-          <Katex>{`|1\\rangle`}</Katex> for one qubit, later <Katex>{`|00\\rangle, |01\\rangle, \\ldots`}</Katex>{' '}
-          for two. The symbol inside the ket is a shorthand for which standard basis direction the
-          vector points — not a classical value stored inside the quantum system.
-        </p>
-
-        <WorkedExample
-          title="Express |+⟩ in column form"
-          steps={[
-            { label: 'The |+⟩ state is an equal superposition of |0⟩ and |1⟩.', latex: '|+\\rangle = \\tfrac{1}{\\sqrt{2}}|0\\rangle + \\tfrac{1}{\\sqrt{2}}|1\\rangle' },
-            { label: 'Substitute the basis column vectors and add component-wise.', latex: '|+\\rangle = \\tfrac{1}{\\sqrt{2}}\\begin{pmatrix}1\\\\0\\end{pmatrix} + \\tfrac{1}{\\sqrt{2}}\\begin{pmatrix}0\\\\1\\end{pmatrix}' },
-            { label: 'Result: a normalized column vector with equal real entries.', latex: '|+\\rangle = \\begin{pmatrix} 1/\\sqrt{2} \\\\ 1/\\sqrt{2} \\end{pmatrix}' },
-          ]}
-        />
-
-        <Checkpoint
-          question="How many complex amplitudes specify a single-qubit pure state?"
-          answer="2"
-          hint="Count the basis states |0⟩ and |1⟩."
-        />
-
+                  We often label basis kets by bit strings: <Katex>{`|0\\rangle`}</Katex> and{' '}
+                  <Katex>{`|1\\rangle`}</Katex> for one qubit, later <Katex>{`|00\\rangle, |01\\rangle, \\ldots`}</Katex>{' '}
+                  for two. The symbol inside the ket is a shorthand for which standard basis direction the
+                  vector points — not a classical value stored inside the quantum system.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="linearAlgebra" sectionId="3.2"
         prev={{ title: '3.1 Kets', path: `${BASE}#3.1` }}
         next={{ title: '3.3 Inner Products', path: `${BASE}#3.3` }}
+      
+        widgets={<>
+          <Katex display>{`|\\psi\\rangle = \\begin{pmatrix} \\alpha \\\\ \\beta \\end{pmatrix} \\quad \\Longleftrightarrow \\quad \\langle\\psi| = \\begin{pmatrix} \\alpha^* & \\beta^* \\end{pmatrix}`}</Katex>
+        </>}
       >
         <p>
-          Every ket <Katex>{`|\\psi\\rangle`}</Katex> has a dual <strong>bra</strong>{' '}
-          <Katex>{`\\langle\\psi|`}</Katex>, obtained by taking the conjugate transpose (Hermitian
-          adjoint) of the column vector. If{' '}
-          <Katex>{`|\\psi\\rangle = (\\alpha, \\beta)^\\mathsf{T}`}</Katex>, then{' '}
-          <Katex>{`\\langle\\psi| = (\\alpha^*, \\beta^*)`}</Katex> — a row vector with complex
-          conjugated entries.
-        </p>
-        <Katex display>{`|\\psi\\rangle = \\begin{pmatrix} \\alpha \\\\ \\beta \\end{pmatrix} \\quad \\Longleftrightarrow \\quad \\langle\\psi| = \\begin{pmatrix} \\alpha^* & \\beta^* \\end{pmatrix}`}</Katex>
+                  Every ket <Katex>{`|\\psi\\rangle`}</Katex> has a dual <strong>bra</strong>{' '}
+                  <Katex>{`\\langle\\psi|`}</Katex>, obtained by taking the conjugate transpose (Hermitian
+                  adjoint) of the column vector. If{' '}
+                  <Katex>{`|\\psi\\rangle = (\\alpha, \\beta)^\\mathsf{T}`}</Katex>, then{' '}
+                  <Katex>{`\\langle\\psi| = (\\alpha^*, \\beta^*)`}</Katex> — a row vector with complex
+                  conjugated entries.
+                </p>
         <p>
-          The dagger notation <Katex>{`(\\cdot)^\\dagger`}</Katex> denotes conjugate transpose for
-          vectors and matrices. For kets, <Katex>{`\\langle\\psi| = |\\psi\\rangle^\\dagger`}</Katex>.
-          This pairing is what makes Dirac's <strong>braket</strong>{' '}
-          <Katex>{`\\langle\\phi|\\psi\\rangle`}</Katex> a natural inner product: a row times a column
-          yielding a complex scalar.
-        </p>
-
-        <WorkedExample
-          title="Find ⟨ψ| for |ψ⟩ = (1, i)ᵀ"
-          steps={[
-            { label: 'Write the ket as a column.', latex: '|\\psi\\rangle = \\begin{pmatrix} 1 \\\\ i \\end{pmatrix}' },
-            { label: 'Take complex conjugate of each entry.', latex: '1^* = 1, \\quad i^* = -i' },
-            { label: 'Form the row vector (conjugate transpose).', latex: '\\langle\\psi| = \\begin{pmatrix} 1 & -i \\end{pmatrix}' },
-          ]}
-        />
-
-        <Checkpoint
-          question="What is the bra ⟨0| in row-vector form?"
-          answer="(1, 0)"
-          hint="Take the conjugate transpose of |0⟩ = (1, 0)ᵀ."
-        />
-
-
+                  The dagger notation <Katex>{`(\\cdot)^\\dagger`}</Katex> denotes conjugate transpose for
+                  vectors and matrices. For kets, <Katex>{`\\langle\\psi| = |\\psi\\rangle^\\dagger`}</Katex>.
+                  This pairing is what makes Dirac's <strong>braket</strong>{' '}
+                  <Katex>{`\\langle\\phi|\\psi\\rangle`}</Katex> a natural inner product: a row times a column
+                  yielding a complex scalar.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="linearAlgebra" sectionId="3.3"
         prev={{ title: '3.2 Bras', path: `${BASE}#3.2` }}
         next={{ title: '3.4 Projection & Measurement', path: `${BASE}#3.4` }}
+      
+        widgets={<>
+          <Katex display>{`\\langle\\phi|\\psi\\rangle = \\sum_i \\phi_i^* \\psi_i = \\phi^\\dagger \\psi`}</Katex>
+          <Katex display>{`\\langle i|j\\rangle = \\delta_{ij} = \\begin{cases} 1 & i = j \\\\ 0 & i \\neq j \\end{cases}`}</Katex>
+          <InnerProductCalculator />
+        </>}
       >
         <p>
-          The <strong>inner product</strong> (or <strong>scalar product</strong>) of two kets{' '}
-          <Katex>{`|\\phi\\rangle`}</Katex> and <Katex>{`|\\psi\\rangle`}</Katex> is the complex
-          number <Katex>{`\\langle\\phi|\\psi\\rangle`}</Katex>, computed by summing products of
-          conjugated components:
-        </p>
-        <Katex display>{`\\langle\\phi|\\psi\\rangle = \\sum_i \\phi_i^* \\psi_i = \\phi^\\dagger \\psi`}</Katex>
+                  The <strong>inner product</strong> (or <strong>scalar product</strong>) of two kets{' '}
+                  <Katex>{`|\\phi\\rangle`}</Katex> and <Katex>{`|\\psi\\rangle`}</Katex> is the complex
+                  number <Katex>{`\\langle\\phi|\\psi\\rangle`}</Katex>, computed by summing products of
+                  conjugated components:
+                </p>
         <p>
-          The <strong>norm</strong> of a state is{' '}
-          <Katex>{`\\|\\psi\\| = \\sqrt{\\langle\\psi|\\psi\\rangle}`}</Katex>. A valid quantum
-          state must be <strong>normalized</strong>: <Katex>{`\\langle\\psi|\\psi\\rangle = 1`}</Katex>.
-          Two states are <strong>orthogonal</strong> when{' '}
-          <Katex>{`\\langle\\phi|\\psi\\rangle = 0`}</Katex> — they share no overlap and are
-          perfectly distinguishable in a single-shot measurement in a basis containing both.
-        </p>
+                  The <strong>norm</strong> of a state is{' '}
+                  <Katex>{`\\|\\psi\\| = \\sqrt{\\langle\\psi|\\psi\\rangle}`}</Katex>. A valid quantum
+                  state must be <strong>normalized</strong>: <Katex>{`\\langle\\psi|\\psi\\rangle = 1`}</Katex>.
+                  Two states are <strong>orthogonal</strong> when{' '}
+                  <Katex>{`\\langle\\phi|\\psi\\rangle = 0`}</Katex> — they share no overlap and are
+                  perfectly distinguishable in a single-shot measurement in a basis containing both.
+                </p>
         <p>
-          The computational basis <Katex>{`\\{|0\\rangle, |1\\rangle\\}`}</Katex> is{' '}
-          <strong>orthonormal</strong>: each vector has unit norm and any two distinct basis kets
-          are orthogonal. This is the default measurement basis for qubits throughout the textbook.
-        </p>
-        <Katex display>{`\\langle i|j\\rangle = \\delta_{ij} = \\begin{cases} 1 & i = j \\\\ 0 & i \\neq j \\end{cases}`}</Katex>
-
-        <InnerProductCalculator />
-
-        <WorkedExample
-          title="Inner product of |0⟩ and |+⟩"
-          steps={[
-            { label: 'Write both kets in column form.', latex: '|0\\rangle = \\begin{pmatrix}1\\\\0\\end{pmatrix},\\; |+\\rangle = \\tfrac{1}{\\sqrt{2}}\\begin{pmatrix}1\\\\1\\end{pmatrix}' },
-            { label: 'Form ⟨0|+⟩ = 1*·(1/√2) + 0*·(1/√2).', latex: '\\langle 0|+\\rangle = \\tfrac{1}{\\sqrt{2}}' },
-            { label: 'The overlap is non-zero — |0⟩ and |+⟩ are not orthogonal.', latex: '|\\langle 0|+\\rangle|^2 = \\tfrac{1}{2}' },
-          ]}
-        />
-
-        <Checkpoint
-          question="Are |+⟩ and |−⟩ orthogonal?"
-          answer="yes"
-          hint="Compute ⟨+|−⟩; |−⟩ = (|0⟩ − |1⟩)/√2."
-        />
-
+                  The computational basis <Katex>{`\\{|0\\rangle, |1\\rangle\\}`}</Katex> is{' '}
+                  <strong>orthonormal</strong>: each vector has unit norm and any two distinct basis kets
+                  are orthogonal. This is the default measurement basis for qubits throughout the textbook.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="linearAlgebra" sectionId="3.4"
         prev={{ title: '3.3 Inner Products', path: `${BASE}#3.3` }}
         next={{ title: '3.5 Outer Products', path: `${BASE}#3.5` }}
+      
+        widgets={<>
+          <Katex display>{`P(m) = |\\langle m|\\psi\\rangle|^2`}</Katex>
+          <Katex display>{`P_0 = |0\\rangle\\langle 0| = \\begin{pmatrix} 1 & 0 \\\\ 0 & 0 \\end{pmatrix}, \\quad P_1 = |1\\rangle\\langle 1| = \\begin{pmatrix} 0 & 0 \\\\ 0 & 1 \\end{pmatrix}`}</Katex>
+          <ProjectionDemo />
+          <LabLink id="measurement" title="Measurement Lab" />
+        </>}
       >
         <p>
-          When we measure a qubit in the computational basis, outcome <Katex>{`m \\in \\{0,1\\}`}</Katex>{' '}
-          occurs with probability given by the <strong>Born rule</strong>:
-        </p>
-        <Katex display>{`P(m) = |\\langle m|\\psi\\rangle|^2`}</Katex>
+                  When we measure a qubit in the computational basis, outcome <Katex>{`m \\in \\{0,1\\}`}</Katex>{' '}
+                  occurs with probability given by the <strong>Born rule</strong>:
+                </p>
         <p>
-          The amplitude <Katex>{`\\langle m|\\psi\\rangle`}</Katex> is the overlap between the
-          state and the measurement outcome ket. Squaring its magnitude gives a real probability
-          between 0 and 1. After obtaining outcome <Katex>{`m`}</Katex>, the state{' '}
-          <strong>collapses</strong> to <Katex>{`|m\\rangle`}</Katex> (up to normalization, which
-          is already 1 for basis states).
-        </p>
+                  The amplitude <Katex>{`\\langle m|\\psi\\rangle`}</Katex> is the overlap between the
+                  state and the measurement outcome ket. Squaring its magnitude gives a real probability
+                  between 0 and 1. After obtaining outcome <Katex>{`m`}</Katex>, the state{' '}
+                  <strong>collapses</strong> to <Katex>{`|m\\rangle`}</Katex> (up to normalization, which
+                  is already 1 for basis states).
+                </p>
         <p>
-          The <strong>projector</strong> onto outcome <Katex>{`m`}</Katex> is the outer product{' '}
-          <Katex>{`P_m = |m\\rangle\\langle m|`}</Katex>, a 2×2 matrix that picks out the component
-          of <Katex>{`|\\psi\\rangle`}</Katex> along <Katex>{`|m\\rangle`}</Katex>. The probability
-          can also be written <Katex>{`P(m) = \\langle\\psi|P_m|\\psi\\rangle`}</Katex>.
-        </p>
-        <Katex display>{`P_0 = |0\\rangle\\langle 0| = \\begin{pmatrix} 1 & 0 \\\\ 0 & 0 \\end{pmatrix}, \\quad P_1 = |1\\rangle\\langle 1| = \\begin{pmatrix} 0 & 0 \\\\ 0 & 1 \\end{pmatrix}`}</Katex>
+                  The <strong>projector</strong> onto outcome <Katex>{`m`}</Katex> is the outer product{' '}
+                  <Katex>{`P_m = |m\\rangle\\langle m|`}</Katex>, a 2×2 matrix that picks out the component
+                  of <Katex>{`|\\psi\\rangle`}</Katex> along <Katex>{`|m\\rangle`}</Katex>. The probability
+                  can also be written <Katex>{`P(m) = \\langle\\psi|P_m|\\psi\\rangle`}</Katex>.
+                </p>
         <p>
-          Projectors are Hermitian (<Katex>{`P_m = P_m^\\dagger`}</Katex>) and idempotent (
-          <Katex>{`P_m^2 = P_m`}</Katex>). Applying a projector once has the same effect as applying
-          it twice — once we know the outcome, repeating the measurement yields the same result with
-          certainty.
-        </p>
-
-        <ProjectionDemo />
-
-        <WorkedExample
-          title="Measure |ψ⟩ = (3/5)|0⟩ + (4/5)|1⟩ in the Z basis"
-          steps={[
-            { label: 'Compute ⟨0|ψ⟩ = 3/5.', latex: '\\langle 0|\\psi\\rangle = \\tfrac{3}{5}' },
-            { label: 'Probability of outcome 0.', latex: 'P(0) = |\\tfrac{3}{5}|^2 = \\tfrac{9}{25} = 0.36' },
-            { label: 'By normalization, P(1) = 1 − P(0) = 16/25 = 0.64.', latex: 'P(1) = |\\tfrac{4}{5}|^2 = \\tfrac{16}{25}' },
-          ]}
-        />
-
-        <Checkpoint
-          question="For |ψ⟩ = |+⟩, what is P(0) when measuring in the computational basis?"
-          answer="1/2"
-          hint="⟨0|+⟩ = 1/√2; square the magnitude."
-        />
-
-        <LabLink id="measurement" title="Measurement Lab" />
-
+                  Projectors are Hermitian (<Katex>{`P_m = P_m^\\dagger`}</Katex>) and idempotent (
+                  <Katex>{`P_m^2 = P_m`}</Katex>). Applying a projector once has the same effect as applying
+                  it twice — once we know the outcome, repeating the measurement yields the same result with
+                  certainty.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="linearAlgebra" sectionId="3.5"
         prev={{ title: '3.4 Projection & Measurement', path: `${BASE}#3.4` }}
         next={{ title: '3.6 Unitary Matrices', path: `${BASE}#3.6` }}
+      
+        widgets={<>
+          <Katex display>{`|\\psi\\rangle\\langle\\phi| = \\begin{pmatrix} \\alpha \\\\ \\beta \\end{pmatrix} \\begin{pmatrix} \\gamma^* & \\delta^* \\end{pmatrix} = \\begin{pmatrix} \\alpha\\gamma^* & \\alpha\\delta^* \\\\ \\beta\\gamma^* & \\beta\\delta^* \\end{pmatrix}`}</Katex>
+          <Katex display>{`\\sum_{j \\in \\{0,1\\}} |j\\rangle\\langle j| = |0\\rangle\\langle 0| + |1\\rangle\\langle 1| = I`}</Katex>
+          <LabLink id="tensor-product" title="Tensor Product Lab" />
+        </>}
       >
         <p>
-          The <strong>outer product</strong> of a ket <Katex>{`|\\psi\\rangle`}</Katex> and a bra{' '}
-          <Katex>{`\\langle\\phi|`}</Katex> forms a matrix:{' '}
-          <Katex>{`|\\psi\\rangle\\langle\\phi|`}</Katex>. For single-qubit kets this is a 2×2
-          complex matrix. When <Katex>{`\\phi = \\psi`}</Katex>, the outer product is a rank-one
-          projector onto the subspace spanned by <Katex>{`|\\psi\\rangle`}</Katex>.
-        </p>
-        <Katex display>{`|\\psi\\rangle\\langle\\phi| = \\begin{pmatrix} \\alpha \\\\ \\beta \\end{pmatrix} \\begin{pmatrix} \\gamma^* & \\delta^* \\end{pmatrix} = \\begin{pmatrix} \\alpha\\gamma^* & \\alpha\\delta^* \\\\ \\beta\\gamma^* & \\beta\\delta^* \\end{pmatrix}`}</Katex>
+                  The <strong>outer product</strong> of a ket <Katex>{`|\\psi\\rangle`}</Katex> and a bra{' '}
+                  <Katex>{`\\langle\\phi|`}</Katex> forms a matrix:{' '}
+                  <Katex>{`|\\psi\\rangle\\langle\\phi|`}</Katex>. For single-qubit kets this is a 2×2
+                  complex matrix. When <Katex>{`\\phi = \\psi`}</Katex>, the outer product is a rank-one
+                  projector onto the subspace spanned by <Katex>{`|\\psi\\rangle`}</Katex>.
+                </p>
         <p>
-          A crucial identity: summing outer products over an orthonormal basis reconstructs the
-          identity operator. For the computational basis,
-        </p>
-        <Katex display>{`\\sum_{j \\in \\{0,1\\}} |j\\rangle\\langle j| = |0\\rangle\\langle 0| + |1\\rangle\\langle 1| = I`}</Katex>
+                  A crucial identity: summing outer products over an orthonormal basis reconstructs the
+                  identity operator. For the computational basis,
+                </p>
         <p>
-          This <strong>completeness relation</strong> (also called <strong>resolution of the
-          identity</strong>) underlies the Born rule: inserting <Katex>{`I = \\sum_j |j\\rangle\\langle j|`}</Katex>{' '}
-          into <Katex>{`\\langle\\psi|\\psi\\rangle`}</Katex> decomposes unity into a sum of
-          probabilities <Katex>{`|\\langle j|\\psi\\rangle|^2`}</Katex>.
-        </p>
-
-        <WorkedExample
-          title="Verify completeness for one qubit"
-          steps={[
-            { label: 'Write each projector explicitly.', latex: '|0\\rangle\\langle 0| = \\begin{pmatrix}1&0\\\\0&0\\end{pmatrix},\\; |1\\rangle\\langle 1| = \\begin{pmatrix}0&0\\\\0&1\\end{pmatrix}' },
-            { label: 'Add the matrices entry-wise.', latex: '|0\\rangle\\langle 0| + |1\\rangle\\langle 1| = \\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}' },
-            { label: 'The sum is the 2×2 identity I.', latex: '\\sum_j |j\\rangle\\langle j| = I' },
-          ]}
-        />
-
-        <Checkpoint
-          question="What is the rank of the projector |0⟩⟨0|?"
-          answer="1"
-          hint="It projects onto a one-dimensional subspace."
-        />
-
-        <LabLink id="tensor-product" title="Tensor Product Lab" />
-
+                  This <strong>completeness relation</strong> (also called <strong>resolution of the
+                  identity</strong>) underlies the Born rule: inserting <Katex>{`I = \\sum_j |j\\rangle\\langle j|`}</Katex>{' '}
+                  into <Katex>{`\\langle\\psi|\\psi\\rangle`}</Katex> decomposes unity into a sum of
+                  probabilities <Katex>{`|\\langle j|\\psi\\rangle|^2`}</Katex>.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="linearAlgebra" sectionId="3.6"
         prev={{ title: '3.5 Outer Products', path: `${BASE}#3.5` }}
         next={{ title: 'Chapter 4: Multiple Qubits', path: '/learn/multiple-qubits' }}
+      
+        widgets={<>
+          <Katex display>{`U^\\dagger U = U U^\\dagger = I`}</Katex>
+          <Katex display>{`\\langle\\psi'|\\psi'\\rangle = \\langle\\psi|U^\\dagger U|\\psi\\rangle = \\langle\\psi|I|\\psi\\rangle = \\langle\\psi|\\psi\\rangle = 1`}</Katex>
+          <UnitaryDemo />
+          <LabLink id="unitary-checker" title="Unitary Checker" />
+        </>}
       >
         <p>
-          Quantum gates are represented by <strong>unitary matrices</strong>. A matrix{' '}
-          <Katex>{`U`}</Katex> is unitary if its conjugate transpose equals its inverse:
-        </p>
-        <Katex display>{`U^\\dagger U = U U^\\dagger = I`}</Katex>
+                  Quantum gates are represented by <strong>unitary matrices</strong>. A matrix{' '}
+                  <Katex>{`U`}</Katex> is unitary if its conjugate transpose equals its inverse:
+                </p>
         <p>
-          Unitary evolution is reversible: given <Katex>{`|\\psi'\\rangle = U|\\psi\\rangle`}</Katex>,
-          we can recover <Katex>{`|\\psi\\rangle = U^\\dagger|\\psi'\\rangle`}</Katex>. This
-          reversibility is essential — unlike classical AND gates, quantum gates do not discard
-          information (until measurement).
-        </p>
+                  Unitary evolution is reversible: given <Katex>{`|\\psi'\\rangle = U|\\psi\\rangle`}</Katex>,
+                  we can recover <Katex>{`|\\psi\\rangle = U^\\dagger|\\psi'\\rangle`}</Katex>. This
+                  reversibility is essential — unlike classical AND gates, quantum gates do not discard
+                  information (until measurement).
+                </p>
         <p>
-          <strong>Normalization is preserved:</strong> for any unitary{' '}
-          <Katex>{`U`}</Katex> and state <Katex>{`|\\psi\\rangle`}</Katex>,
-        </p>
-        <Katex display>{`\\langle\\psi'|\\psi'\\rangle = \\langle\\psi|U^\\dagger U|\\psi\\rangle = \\langle\\psi|I|\\psi\\rangle = \\langle\\psi|\\psi\\rangle = 1`}</Katex>
-
-        <UnitaryDemo />
-
-        <WorkedExample
-          title="Prove H is unitary"
-          steps={[
-            { label: 'Write the Hadamard matrix.', latex: 'H = \\tfrac{1}{\\sqrt{2}}\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}' },
-            { label: 'Compute H† (conjugate transpose).', latex: 'H^\\dagger = \\tfrac{1}{\\sqrt{2}}\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix} = H' },
-            { label: 'Multiply H†H — the (1,1) entry is ½(1+1) = 1; off-diagonals cancel.', latex: 'H^\\dagger H = I' },
-            { label: 'H is unitary, so it maps valid states to valid states.', latex: '\\|H|\\psi\\rangle\\| = \\||\\psi\\rangle\\|' },
-          ]}
-        />
-
-        <Checkpoint
-          question="If U is unitary, what is det(U) in general?"
-          answer="e^(iθ)"
-          hint="Determinant of a unitary lies on the unit circle in the complex plane."
-        />
-
-        <LabLink id="unitary-checker" title="Unitary Checker" />
-
+                  <strong>Normalization is preserved:</strong> for any unitary{' '}
+                  <Katex>{`U`}</Katex> and state <Katex>{`|\\psi\\rangle`}</Katex>,
+                </p>
       </LearnSection>
 
       <div className="section-nav">

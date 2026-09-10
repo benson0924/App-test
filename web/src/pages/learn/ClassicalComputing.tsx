@@ -3,8 +3,6 @@ import { useT } from '@/context/LocaleContext';
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
-import Checkpoint from '@/components/Checkpoint';
-import WorkedExample from '@/components/WorkedExample';
 import {
   allBitStrings,
   binaryToDecimal,
@@ -372,349 +370,223 @@ export default function ClassicalComputing() {
 
       <LearnSection chapter="classical" sectionId="states-and-information"
         next={{ title: '1.2 Binary Numbers', path: `${BASE}#binary-numbers` }}
+      
+        widgets={<>
+          <Katex display>{`|\\text{register}\\rangle \\in \\{0,1\\}^n, \\quad |\\{0,1\\}^n| = 2^n`}</Katex>
+          <BitExplorer />
+          <p>
+                    Try the interactive explorer above, or open the{' '}
+                    <Link to="/playground/binary-states">Binary State Explorer</Link> lab.
+                  </p>
+        </>}
       >
         <p>
-          Classical information lives in discrete, distinguishable configurations. The simplest unit is
-          the <strong>bit</strong>, which takes one of two values: 0 or 1. Physical implementations vary
-          (voltage levels, magnetic orientation, punch-card holes), but logically every classical register
-          is a string of bits.
-        </p>
+                  Classical information lives in discrete, distinguishable configurations. The simplest unit is
+                  the <strong>bit</strong>, which takes one of two values: 0 or 1. Physical implementations vary
+                  (voltage levels, magnetic orientation, punch-card holes), but logically every classical register
+                  is a string of bits.
+                </p>
         <p>
-          An <Katex>{`n`}</Katex>-bit register can be in exactly one of <Katex>{`2^n`}</Katex> states at any
-          moment. There is no fractional bit and no simultaneous 0-and-1 — the register's content is
-          fully specified by which bit string it holds.
-        </p>
-        <Katex display>{`|\\text{register}\\rangle \\in \\{0,1\\}^n, \\quad |\\{0,1\\}^n| = 2^n`}</Katex>
-
-        <BitExplorer />
-
-        <WorkedExample
-          title="Counting 4-bit addresses"
-          steps={[
-            { label: 'Each bit doubles the number of distinct states. Starting from 1 bit → 2 states.', latex: '2^1 = 2' },
-            { label: 'For n = 4, multiply four factors of 2.', latex: '2^4 = 2 \\times 2 \\times 2 \\times 2 = 16' },
-            { label: 'The register can represent unsigned integers 0 through 15, or any 16 distinct symbols.', latex: '0000_2 \\ldots 1111_2 \\;\\Leftrightarrow\\; 0_{10} \\ldots 15_{10}' },
-          ]}
-        />
-
-        <Checkpoint
-          question="How many distinct states can a 7-bit classical register represent?"
-          answer="128"
-          hint="Use 2^n with n = 7."
-        />
-
-        <p>
-          Try the interactive explorer above, or open the{' '}
-          <Link to="/playground/binary-states">Binary State Explorer</Link> lab.
-        </p>
+                  An <Katex>{`n`}</Katex>-bit register can be in exactly one of <Katex>{`2^n`}</Katex> states at any
+                  moment. There is no fractional bit and no simultaneous 0-and-1 — the register's content is
+                  fully specified by which bit string it holds.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="classical" sectionId="binary-numbers"
         prev={{ title: '1.1 States and Information', path: `${BASE}#states-and-information` }}
         next={{ title: '1.3 Logic Gates', path: `${BASE}#logic-gates` }}
+      
+        widgets={<>
+          <Katex display>{`N = \\sum_{i=0}^{n-1} b_i \\, 2^i, \\quad b_i \\in \\{0,1\\}`}</Katex>
+          <BinaryConverter />
+          <p>
+                    Practice conversions in the{' '}
+                    <Link to="/playground/binary-states">Binary State Explorer</Link> lab.
+                  </p>
+        </>}
       >
         <p>
-          Binary strings are not just abstract states — they encode numbers. Each position carries a
-          weight that is a power of two, read from right (least significant) to left (most significant).
-        </p>
-        <Katex display>{`N = \\sum_{i=0}^{n-1} b_i \\, 2^i, \\quad b_i \\in \\{0,1\\}`}</Katex>
+                  Binary strings are not just abstract states — they encode numbers. Each position carries a
+                  weight that is a power of two, read from right (least significant) to left (most significant).
+                </p>
         <p>
-          Conversion between binary and decimal is a routine skill. Fixed-width representations pad
-          with leading zeros so that, for example, 5 becomes <code>0101</code> in 4 bits.
-        </p>
-
-        <BinaryConverter />
-
-        <WorkedExample
-          title="Convert 1101₂ to decimal"
-          steps={[
-            { label: 'Identify bit positions and weights (rightmost index i = 0).', latex: '1101_2 = 1\\cdot2^3 + 1\\cdot2^2 + 0\\cdot2^1 + 1\\cdot2^0' },
-            { label: 'Evaluate each term.', latex: '8 + 4 + 0 + 1 = 13' },
-            { label: 'Therefore 1101₂ = 13₁₀.', latex: '1101_2 = 13_{10}' },
-          ]}
-        />
-
-        <Checkpoint
-          question="What is 10110 in binary as a decimal number?"
-          answer="22"
-          hint="Sum powers of two where the bit is 1: 16 + 4 + 2."
-        />
-
-        <p>
-          Practice conversions in the{' '}
-          <Link to="/playground/binary-states">Binary State Explorer</Link> lab.
-        </p>
+                  Conversion between binary and decimal is a routine skill. Fixed-width representations pad
+                  with leading zeros so that, for example, 5 becomes <code>0101</code> in 4 bits.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="classical" sectionId="logic-gates"
         prev={{ title: '1.2 Binary Numbers', path: `${BASE}#binary-numbers` }}
         next={{ title: '1.4 Boolean Algebra', path: `${BASE}#boolean-algebra` }}
+      
+        widgets={<>
+          <Katex display>{`\\text{AND}(a,b) = ab, \\quad \\text{OR}(a,b) = a + b - ab, \\quad \\text{XOR}(a,b) = a \\oplus b`}</Katex>
+          <TruthTableSimulator />
+          <p>
+                    Explore gate combinations in the{' '}
+                    <Link to="/playground/logic-gates">Logic Gate Simulator</Link> lab.
+                  </p>
+        </>}
       >
         <p>
-          Computation is transformation. A <strong>logic gate</strong> takes one or more bits and
-          produces an output bit according to a fixed truth table. Gates are the building blocks of
-          circuits: combinational networks (no memory) and sequential machines (with feedback or clocks).
-        </p>
+                  Computation is transformation. A <strong>logic gate</strong> takes one or more bits and
+                  produces an output bit according to a fixed truth table. Gates are the building blocks of
+                  circuits: combinational networks (no memory) and sequential machines (with feedback or clocks).
+                </p>
         <p>Common gates include NOT (inverter), AND, OR, XOR, and their negated variants NAND and NOR.</p>
-        <Katex display>{`\\text{AND}(a,b) = ab, \\quad \\text{OR}(a,b) = a + b - ab, \\quad \\text{XOR}(a,b) = a \\oplus b`}</Katex>
-
-        <TruthTableSimulator />
-
-        <WorkedExample
-          title="Build XOR from AND, OR, and NOT"
-          steps={[
-            { label: 'XOR is true when inputs differ — one is 0 and the other is 1.', latex: 'a \\oplus b = (a \\land \\bar{b}) \\lor (\\bar{a} \\land b)' },
-            { label: 'Equivalently, XOR is OR minus the overlap (both-1 case).', latex: 'a \\oplus b = (a \\lor b) \\land \\neg(a \\land b)' },
-            { label: 'A two-level circuit: compute AND and NOT terms, then OR them together.', latex: '\\text{XOR} = \\text{OR}\\big(\\text{AND}(a,\\bar{b}), \\text{AND}(\\bar{a},b)\\big)' },
-          ]}
-        />
-
-        <Checkpoint
-          question="What is the output of AND(1, 0)?"
-          answer="0"
-        />
-
-        <p>
-          Explore gate combinations in the{' '}
-          <Link to="/playground/logic-gates">Logic Gate Simulator</Link> lab.
-        </p>
       </LearnSection>
 
       <LearnSection chapter="classical" sectionId="boolean-algebra"
         prev={{ title: '1.3 Logic Gates', path: `${BASE}#logic-gates` }}
         next={{ title: '1.5 Adders', path: `${BASE}#adders` }}
+      
+        widgets={<>
+          <Katex display>{`\\overline{A \\land B} = \\bar{A} \\lor \\bar{B}, \\quad \\overline{A \\lor B} = \\bar{A} \\land \\bar{B} \\quad \\text{(De Morgan)}`}</Katex>
+          <DeMorganDemo />
+        </>}
       >
         <p>
-          Boolean algebra abstracts gates into symbols with algebraic laws: commutativity, associativity,
-          distributivity, identity elements, and complement. These laws let us simplify circuits and prove
-          gate networks equivalent without enumerating every input.
-        </p>
-        <Katex display>{`\\overline{A \\land B} = \\bar{A} \\lor \\bar{B}, \\quad \\overline{A \\lor B} = \\bar{A} \\land \\bar{B} \\quad \\text{(De Morgan)}`}</Katex>
+                  Boolean algebra abstracts gates into symbols with algebraic laws: commutativity, associativity,
+                  distributivity, identity elements, and complement. These laws let us simplify circuits and prove
+                  gate networks equivalent without enumerating every input.
+                </p>
         <p>
-          De Morgan's laws swap AND/OR under negation and are indispensable when translating between
-          positive and negative logic, or when optimizing chip area.
-        </p>
-
-        <DeMorganDemo />
-
-        <WorkedExample
-          title="Simplify ¬(A ∧ B) ∨ A"
-          steps={[
-            { label: 'Apply De Morgan to the negated AND term.', latex: '\\overline{A \\land B} = \\bar{A} \\lor \\bar{B}' },
-            { label: 'Substitute into the expression.', latex: '(\\bar{A} \\lor \\bar{B}) \\lor A' },
-            { label: 'Use OR associativity and the identity A ∨ ¬A = 1.', latex: 'A \\lor \\bar{A} \\lor \\bar{B} = 1 \\lor \\bar{B} = 1' },
-            { label: 'The expression is a tautology — always 1 regardless of inputs.', latex: '\\overline{A \\land B} \\lor A \\equiv 1' },
-          ]}
-        />
-
-        <Checkpoint
-          question="By De Morgan's law, what is NOT(A OR B) equivalent to?"
-          answer="NOT(A) AND NOT(B)"
-          hint="Negation distributes by flipping AND to OR."
-        />
-
+                  De Morgan's laws swap AND/OR under negation and are indispensable when translating between
+                  positive and negative logic, or when optimizing chip area.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="classical" sectionId="adders"
         prev={{ title: '1.4 Boolean Algebra', path: `${BASE}#boolean-algebra` }}
         next={{ title: '1.6 Reversible Computation', path: `${BASE}#reversible-computation` }}
+      
+        widgets={<>
+          <Katex display>{`\\text{sum} = a \\oplus b \\oplus c_{\\text{in}}, \\quad c_{\\text{out}} = (a \\land b) \\lor (c_{\\text{in}} \\land (a \\oplus b))`}</Katex>
+          <RippleCarryDemo />
+          <p>
+                    Step through addition interactively in the{' '}
+                    <Link to="/playground/binary-adder">Binary Adder</Link> lab.
+                  </p>
+        </>}
       >
         <p>
-          Arithmetic reduces to repeated bit operations. A <strong>half adder</strong> adds two bits
-          producing sum and carry; a <strong>full adder</strong> also accepts an incoming carry from
-          the previous (less significant) column. Chaining full adders yields a ripple-carry adder.
-        </p>
-        <Katex display>{`\\text{sum} = a \\oplus b \\oplus c_{\\text{in}}, \\quad c_{\\text{out}} = (a \\land b) \\lor (c_{\\text{in}} \\land (a \\oplus b))`}</Katex>
-
-        <RippleCarryDemo />
-
-        <WorkedExample
-          title="Add 0110₂ + 0011₂"
-          steps={[
-            { label: 'Start from the rightmost column (LSB): 0 + 1 = 1, carry 0.', latex: '0 \\oplus 1 = 1' },
-            { label: 'Next column: 1 + 1 = 0, carry 1.', latex: '1 + 1 = 10_2' },
-            { label: 'Third column with carry: 1 + 0 + 1 = 0, carry 1.', latex: '1 \\oplus 0 \\oplus 1 = 0' },
-            { label: 'MSB column: 0 + 0 + 1 = 1. Result 1001₂ = 9₁₀.', latex: '0110_2 + 0011_2 = 1001_2 = 9_{10}' },
-          ]}
-        />
-
-        <Checkpoint
-          question="What is the sum bit of a half adder when both inputs are 1?"
-          answer="0"
-          hint="Sum is XOR; 1 XOR 1 = 0. (Carry is 1.)"
-        />
-
-        <p>
-          Step through addition interactively in the{' '}
-          <Link to="/playground/binary-adder">Binary Adder</Link> lab.
-        </p>
+                  Arithmetic reduces to repeated bit operations. A <strong>half adder</strong> adds two bits
+                  producing sum and carry; a <strong>full adder</strong> also accepts an incoming carry from
+                  the previous (less significant) column. Chaining full adders yields a ripple-carry adder.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="classical" sectionId="reversible-computation"
         prev={{ title: '1.5 Adders', path: `${BASE}#adders` }}
         next={{ title: '1.7 Classical Error Correction', path: `${BASE}#classical-error-correction` }}
+      
+        widgets={<>
+          <Katex display>{`\\text{CCNOT}(a,b,c) = (a,\\; b,\\; c \\oplus (a \\land b))`}</Katex>
+          <ToffoliDemo />
+        </>}
       >
         <p>
-          Standard AND and OR gates are <strong>irreversible</strong>: the output does not uniquely
-          determine the inputs (AND(0,0) and AND(0,1) both yield 0). Landauer showed that erasing
-          information has a thermodynamic cost — motivating <strong>reversible</strong> circuits where
-          every output bit can be traced back to inputs.
-        </p>
+                  Standard AND and OR gates are <strong>irreversible</strong>: the output does not uniquely
+                  determine the inputs (AND(0,0) and AND(0,1) both yield 0). Landauer showed that erasing
+                  information has a thermodynamic cost — motivating <strong>reversible</strong> circuits where
+                  every output bit can be traced back to inputs.
+                </p>
         <p>
-          Reversible classical gates are permutations on bit strings. The <strong>Toffoli (CCNOT)</strong>{' '}
-          gate flips a target bit iff both control bits are 1, and is universal for classical reversible
-          computation when combined with NOT. Quantum computing adopts Toffoli (and its 2-qubit cousin CNOT)
-          as native operations.
-        </p>
-        <Katex display>{`\\text{CCNOT}(a,b,c) = (a,\\; b,\\; c \\oplus (a \\land b))`}</Katex>
-
-        <ToffoliDemo />
-
-        <WorkedExample
-          title="Why AND alone is not reversible"
-          steps={[
-            { label: 'Suppose an AND gate output is 0.', latex: '\\text{AND}(a,b) = 0' },
-            { label: 'Both (0,0) and (0,1) and (1,0) are valid pre-images — inputs are lost.', latex: '(0,0), (0,1), (1,0) \\mapsto 0' },
-            { label: 'A reversible alternative keeps inputs: map (a,b) → (a, b, a∧b) using ancilla bits.', latex: '(a,b,0) \\xrightarrow{\\text{Toffoli-like}} (a,b,a\\land b)' },
-          ]}
-        />
-
-        <Checkpoint
-          question="When A=1, B=1, C=0, what is the target output of a Toffoli gate?"
-          answer="1"
-          hint="Target flips when both controls are 1."
-        />
+                  Reversible classical gates are permutations on bit strings. The <strong>Toffoli (CCNOT)</strong>{' '}
+                  gate flips a target bit iff both control bits are 1, and is universal for classical reversible
+                  computation when combined with NOT. Quantum computing adopts Toffoli (and its 2-qubit cousin CNOT)
+                  as native operations.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="classical" sectionId="classical-error-correction"
         prev={{ title: '1.6 Reversible Computation', path: `${BASE}#reversible-computation` }}
         next={{ title: '1.8 Complexity', path: `${BASE}#complexity` }}
+      
+        widgets={<>
+          <Katex display>{`\\text{decode}(b_1, b_2, b_3) = \\mathbb{1}\\big[\\sum_i b_i \\geq 2\\big]`}</Katex>
+          <ErrorCorrectionDemo />
+          <p>
+                    Compare classical and quantum approaches in the{' '}
+                    <Link to="/playground/error-correction">Error Correction Simulator</Link> lab (later chapter).
+                  </p>
+        </>}
       >
         <p>
-          Physical wires and memory cells suffer bit flips from noise. <strong>Error-correcting codes</strong>{' '}
-          add redundancy so the receiver can detect or correct errors. The simplest idea is repetition:
-          send each bit three times and take a majority vote at decode time.
-        </p>
-        <Katex display>{`\\text{decode}(b_1, b_2, b_3) = \\mathbb{1}\\big[\\sum_i b_i \\geq 2\\big]`}</Katex>
+                  Physical wires and memory cells suffer bit flips from noise. <strong>Error-correcting codes</strong>{' '}
+                  add redundancy so the receiver can detect or correct errors. The simplest idea is repetition:
+                  send each bit three times and take a majority vote at decode time.
+                </p>
         <p>
-          More efficient codes (Hamming, Reed–Solomon) achieve better rate–distance tradeoffs. Quantum
-          error correction generalizes these ideas to protect qubits — but the no-cloning theorem forbids
-          naive repetition, requiring entanglement-based stabilizer codes instead.
-        </p>
-
-        <ErrorCorrectionDemo />
-
-        <WorkedExample
-          title="Majority vote with one error"
-          steps={[
-            { label: 'Encode bit 1 as three copies: (1, 1, 1).', latex: '1 \\mapsto (1,1,1)' },
-            { label: 'Suppose wire 2 flips: received (1, 0, 1).', latex: '(1,0,1)' },
-            { label: 'Count ones: two out of three. Majority = 1 — error corrected.', latex: '\\text{maj}(1,0,1) = 1' },
-          ]}
-        />
-
-        <Checkpoint
-          question="With a 3-bit repetition code, how many bit flips can be corrected?"
-          answer="1"
-          hint="Two matching bits outvote the third."
-        />
-
-        <p>
-          Compare classical and quantum approaches in the{' '}
-          <Link to="/playground/error-correction">Error Correction Simulator</Link> lab (later chapter).
-        </p>
+                  More efficient codes (Hamming, Reed–Solomon) achieve better rate–distance tradeoffs. Quantum
+                  error correction generalizes these ideas to protect qubits — but the no-cloning theorem forbids
+                  naive repetition, requiring entanglement-based stabilizer codes instead.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="classical" sectionId="complexity"
         prev={{ title: '1.7 Classical Error Correction', path: `${BASE}#classical-error-correction` }}
         next={{ title: '1.9 Turing Machines', path: `${BASE}#turing-machines` }}
+      
+        widgets={<>
+          <Katex display>{`O(1) \\subset O(\\log n) \\subset O(n) \\subset O(n \\log n) \\subset O(n^2) \\subset O(2^n)`}</Katex>
+          <ComplexityGraph />
+        </>}
       >
         <p>
-          As problems scale, resource usage matters. <strong>Computational complexity</strong> classifies
-          problems by how time or space grows with input size <Katex>{`n`}</Katex>. Polynomial growth is
-          generally feasible; exponential growth becomes intractable quickly.
-        </p>
-        <Katex display>{`O(1) \\subset O(\\log n) \\subset O(n) \\subset O(n \\log n) \\subset O(n^2) \\subset O(2^n)`}</Katex>
+                  As problems scale, resource usage matters. <strong>Computational complexity</strong> classifies
+                  problems by how time or space grows with input size <Katex>{`n`}</Katex>. Polynomial growth is
+                  generally feasible; exponential growth becomes intractable quickly.
+                </p>
         <p>
-          The class P contains problems solvable in polynomial time on a deterministic Turing machine.
-          NP contains problems whose solutions are verifiable in polynomial time. Whether P = NP remains
-          open. Quantum complexity introduces BQP — problems efficiently solvable by quantum computers
-          with bounded error.
-        </p>
-
-        <ComplexityGraph />
-
-        <WorkedExample
-          title="Compare O(n) vs O(2ⁿ) at n = 20"
-          steps={[
-            { label: 'Linear growth: 20 operations (up to constant factors).', latex: 'O(n):\\; n = 20' },
-            { label: 'Exponential: 2²⁰ ≈ 1,048,576 operations.', latex: 'O(2^n):\\; 2^{20} = 1{,}048{,}576' },
-            { label: 'The exponential algorithm is ~50,000× slower at this modest input size.', latex: '\\frac{2^{20}}{20} \\approx 52{,}000' },
-          ]}
-        />
-
-        <Checkpoint
-          question="Which grows faster for large n: O(n²) or O(2ⁿ)?"
-          answer="O(2ⁿ)"
-          hint="Exponential eventually dominates any polynomial."
-        />
-
+                  The class P contains problems solvable in polynomial time on a deterministic Turing machine.
+                  NP contains problems whose solutions are verifiable in polynomial time. Whether P = NP remains
+                  open. Quantum complexity introduces BQP — problems efficiently solvable by quantum computers
+                  with bounded error.
+                </p>
         <p>
-          See the full complexity reference at{' '}
-          <Link to="/reference/complexity">Complexity Classes</Link>.
-        </p>
+                  See the full complexity reference at{' '}
+                  <Link to="/reference/complexity">Complexity Classes</Link>.
+                </p>
       </LearnSection>
 
       <LearnSection chapter="classical" sectionId="turing-machines"
         prev={{ title: '1.8 Complexity', path: `${BASE}#complexity` }}
         next={{ title: 'Chapter 2: One Qubit', path: '/learn/one-qubit' }}
+      
+        widgets={<>
+          <Katex display>{`M = (Q, \\Sigma, \\Gamma, \\delta, q_0, q_{\\text{accept}}, q_{\\text{reject}})`}</Katex>
+          <div className="lab-panel">
+                    <h3 style={{ marginTop: 0 }}>Conceptual simulation: binary increment</h3>
+                    <p style={{ fontSize: '0.9rem' }}>
+                      Imagine a Turing machine that reads a binary number on its tape (least significant bit at the
+                      head), adds 1, and halts. The algorithm mirrors ripple carry: flip bits from right until a 0
+                      becomes 1 or a new leading 1 is needed.
+                    </p>
+                    <ol style={{ fontSize: '0.9rem', paddingLeft: '1.25rem' }}>
+                      <li>Start in "carry = 1" state at the LSB.</li>
+                      <li>If current cell is 0 and carry = 1: write 1, carry = 0, halt (or move left if more digits).</li>
+                      <li>If current cell is 1 and carry = 1: write 0, carry = 1, move left.</li>
+                      <li>If tape ends with carry = 1: extend with a new leading 1.</li>
+                    </ol>
+                    <p style={{ fontFamily: 'var(--font-mono)', marginBottom: 0 }}>
+                      Example: 1011₂ + 1 → 1100₂ (flip trailing 1s until the 0, then carry propagates).
+                    </p>
+                  </div>
+        </>}
       >
         <p>
-          A <strong>Turing machine</strong> is an abstract model of computation: a finite control, an
-          infinite tape divided into cells, and a read/write head that moves left or right. Despite its
-          simplicity, the model captures everything a modern computer can compute — the <strong>Church–Turing thesis</strong>{' '}
-          equates intuitive "algorithm" with Turing-machine computability.
-        </p>
-        <Katex display>{`M = (Q, \\Sigma, \\Gamma, \\delta, q_0, q_{\\text{accept}}, q_{\\text{reject}})`}</Katex>
+                  A <strong>Turing machine</strong> is an abstract model of computation: a finite control, an
+                  infinite tape divided into cells, and a read/write head that moves left or right. Despite its
+                  simplicity, the model captures everything a modern computer can compute — the <strong>Church–Turing thesis</strong>{' '}
+                  equates intuitive "algorithm" with Turing-machine computability.
+                </p>
         <p>
-          The transition function <Katex>{`\\delta`}</Katex> specifies, for each state and tape symbol,
-          what to write, which direction to move, and the next state. A machine <strong>decides</strong>{' '}
-          a language if it halts on every input, accepting members and rejecting non-members.
-        </p>
-
-        <div className="lab-panel">
-          <h3 style={{ marginTop: 0 }}>Conceptual simulation: binary increment</h3>
-          <p style={{ fontSize: '0.9rem' }}>
-            Imagine a Turing machine that reads a binary number on its tape (least significant bit at the
-            head), adds 1, and halts. The algorithm mirrors ripple carry: flip bits from right until a 0
-            becomes 1 or a new leading 1 is needed.
-          </p>
-          <ol style={{ fontSize: '0.9rem', paddingLeft: '1.25rem' }}>
-            <li>Start in "carry = 1" state at the LSB.</li>
-            <li>If current cell is 0 and carry = 1: write 1, carry = 0, halt (or move left if more digits).</li>
-            <li>If current cell is 1 and carry = 1: write 0, carry = 1, move left.</li>
-            <li>If tape ends with carry = 1: extend with a new leading 1.</li>
-          </ol>
-          <p style={{ fontFamily: 'var(--font-mono)', marginBottom: 0 }}>
-            Example: 1011₂ + 1 → 1100₂ (flip trailing 1s until the 0, then carry propagates).
-          </p>
-        </div>
-
-        <WorkedExample
-          title="TM decides strings ending in '01'"
-          steps={[
-            { label: 'Scan right until blank — remember the last two symbols seen.', latex: 'q_{\\text{scan}}' },
-            { label: 'If the last two symbols are 0 then 1, accept.', latex: 'q_{\\text{accept}}' },
-            { label: 'Otherwise reject. The machine uses finite memory (last two chars) despite unbounded tape.', latex: '|Q| = O(1) \\text{ states}' },
-          ]}
-        />
-
-        <Checkpoint
-          question="Can a Turing machine have infinitely many states?"
-          answer="no"
-          hint="The control is finite; only the tape is unbounded."
-        />
-
+                  The transition function <Katex>{`\\delta`}</Katex> specifies, for each state and tape symbol,
+                  what to write, which direction to move, and the next state. A machine <strong>decides</strong>{' '}
+                  a language if it halts on every input, accepting members and rejecting non-members.
+                </p>
       </LearnSection>
 
       <div className="section-nav">

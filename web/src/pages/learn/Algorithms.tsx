@@ -3,8 +3,6 @@ import { useT } from '@/context/LocaleContext';
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
-import Checkpoint from '@/components/Checkpoint';
-import WorkedExample from '@/components/WorkedExample';
 import {
   runDeutsch,
   runDeutschJozsa,
@@ -293,201 +291,145 @@ export default function Algorithms() {
         phase estimation in later chapters.
       </p>
 
-      <LearnSection chapter="algorithms" sectionId="8.1" prev={{ title: 'Quantum Protocols', path: '/learn/protocols' }}>
+      <LearnSection chapter="algorithms" sectionId="8.1" prev={{ title: 'Quantum Protocols', path: '/learn/protocols' }}
+        widgets={<>
+          <Katex display>{`U_f |x\\rangle|y\\rangle = |x\\rangle|y \\oplus f(x)\\rangle`}</Katex>
+          <PhaseKickbackDemo />
+        </>}
+      >
         <p>
-          An <strong>oracle</strong> is a reversible black-box unitary that encodes a classical function{' '}
-          <Katex>{`f : \\{0,1\\}^n \\to \\{0,1\\}`}</Katex>. The standard construction uses an ancilla qubit:
-        </p>
-        <Katex display>{`U_f |x\\rangle|y\\rangle = |x\\rangle|y \\oplus f(x)\\rangle`}</Katex>
+                  An <strong>oracle</strong> is a reversible black-box unitary that encodes a classical function{' '}
+                  <Katex>{`f : \\{0,1\\}^n \\to \\{0,1\\}`}</Katex>. The standard construction uses an ancilla qubit:
+                </p>
         <p>
-          Query complexity counts how many times an algorithm invokes U<sub>f</sub>. This model abstracts
-          away the internal structure of f — the algorithm must learn about f only through queries.
-        </p>
-
-        <WorkedExample
-          title="Phase kickback with |−⟩ ancilla"
-          steps={[
-            {
-              label: 'Prepare ancilla in |−⟩ = H|1⟩. A controlled-X (flip when f(x)=1) on |y⟩ becomes a controlled-Z on |x⟩.',
-              latex: '|x\\rangle|{-}\\rangle \\xrightarrow{U_f} (-1)^{f(x)}|x\\rangle|{-}\\rangle',
-            },
-            {
-              label: 'Apply H to input: |+⟩ picks up phase (−1)^{f(0)}; |−⟩ picks up (−1)^{f(1)}.',
-              latex: 'H|+\\rangle = \\tfrac{1}{\\sqrt{2}}\\big((-1)^{f(0)}|0\\rangle + (-1)^{f(1)}|1\\rangle\\big)',
-            },
-            {
-              label: 'For constant f (f(0)=f(1)): result is ±|+⟩ → measure |0⟩. For balanced f: result is ±|−⟩ → measure |1⟩.',
-              latex: '\\text{1 query distinguishes constant vs balanced (Deutsch)}',
-            },
-          ]}
-        />
-
-        <PhaseKickbackDemo />
-
-        <Checkpoint
-          question="What state must the ancilla be in for phase kickback to occur?"
-          answer="|−⟩"
-          hint="Hadamard of |1⟩."
-        />
+                  Query complexity counts how many times an algorithm invokes U<sub>f</sub>. This model abstracts
+                  away the internal structure of f — the algorithm must learn about f only through queries.
+                </p>
       </LearnSection>
 
-      <LearnSection chapter="algorithms" sectionId="8.2">
+      <LearnSection chapter="algorithms" sectionId="8.2"
+        widgets={<>
+          <table className="data-table" style={{ maxWidth: '480px' }}>
+                    <thead>
+                      <tr><th>Function</th><th>f(0)</th><th>f(1)</th><th>Type</th></tr>
+                    </thead>
+                    <tbody>
+                      {DEUTSCH_FUNCTIONS.map((f) => (
+                        <tr key={f.id}>
+                          <td>{f.name}</td>
+                          <td>{f.f(0)}</td>
+                          <td>{f.f(1)}</td>
+                          <td>{f.kind}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+          <Katex display>{`|0\\rangle|1\\rangle \\xrightarrow{X,H} |+\\rangle|{-}\\rangle \\xrightarrow{U_f} \\xrightarrow{H} |\\text{answer}\\rangle|{-}\\rangle`}</Katex>
+          <DeutschDemo />
+          <LabLink id="deutsch" title="Deutsch Algorithm" />
+        </>}
+      >
         <p>
-          Deutsch&apos;s problem (1985): given f: {'{0,1}'} → {'{0,1}'}, determine whether f is{' '}
-          <em>constant</em> (f(0)=f(1)) or <em>balanced</em> (f(0)≠f(1)). There are exactly four
-          such functions on one bit:
-        </p>
-
-        <table className="data-table" style={{ maxWidth: '480px' }}>
-          <thead>
-            <tr><th>Function</th><th>f(0)</th><th>f(1)</th><th>Type</th></tr>
-          </thead>
-          <tbody>
-            {DEUTSCH_FUNCTIONS.map((f) => (
-              <tr key={f.id}>
-                <td>{f.name}</td>
-                <td>{f.f(0)}</td>
-                <td>{f.f(1)}</td>
-                <td>{f.kind}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <Katex display>{`|0\\rangle|1\\rangle \\xrightarrow{X,H} |+\\rangle|{-}\\rangle \\xrightarrow{U_f} \\xrightarrow{H} |\\text{answer}\\rangle|{-}\\rangle`}</Katex>
-
-        <DeutschDemo />
-
-
-        <LabLink id="deutsch" title="Deutsch Algorithm" />
+                  Deutsch&apos;s problem (1985): given f: {'{0,1}'} → {'{0,1}'}, determine whether f is{' '}
+                  <em>constant</em> (f(0)=f(1)) or <em>balanced</em> (f(0)≠f(1)). There are exactly four
+                  such functions on one bit:
+                </p>
       </LearnSection>
 
-      <LearnSection chapter="algorithms" sectionId="8.3">
+      <LearnSection chapter="algorithms" sectionId="8.3"
+        widgets={<>
+          <Katex display>{`\\text{Classical worst case: } 2^{n-1}+1 \\text{ queries} \\quad\\text{vs}\\quad \\text{Quantum: } 1 \\text{ query}`}</Katex>
+          <DeutschJozsaDemo />
+          <LabLink id="deutsch-jozsa" title="Deutsch–Jozsa" />
+        </>}
+      >
         <p>
-          Generalizing to n input bits, the <strong>promise</strong> is that f is either constant
-          (same value for all 2<sup>n</sup> inputs) or balanced (exactly 2<sup>n−1</sup> zeros and
-          2<sup>n−1</sup> ones). Without this promise, the problem is hard even quantumly.
-        </p>
-
-        <Katex display>{`\\text{Classical worst case: } 2^{n-1}+1 \\text{ queries} \\quad\\text{vs}\\quad \\text{Quantum: } 1 \\text{ query}`}</Katex>
-
+                  Generalizing to n input bits, the <strong>promise</strong> is that f is either constant
+                  (same value for all 2<sup>n</sup> inputs) or balanced (exactly 2<sup>n−1</sup> zeros and
+                  2<sup>n−1</sup> ones). Without this promise, the problem is hard even quantumly.
+                </p>
         <p>
-          The circuit mirrors Deutsch: prepare |−⟩ ancilla, apply H<sup>⊗n</sup>, oracle, H<sup>⊗n</sup>.
-          Constant functions yield |0…0⟩ with certainty; balanced functions never yield all zeros.
-        </p>
-
-        <DeutschJozsaDemo />
-
-        <Checkpoint
-          question="What measurement outcome proves f is constant in Deutsch–Jozsa?"
-          answer="|0⟩⊗n"
-          hint="All-zero on the input register."
-        />
-
-        <LabLink id="deutsch-jozsa" title="Deutsch–Jozsa" />
+                  The circuit mirrors Deutsch: prepare |−⟩ ancilla, apply H<sup>⊗n</sup>, oracle, H<sup>⊗n</sup>.
+                  Constant functions yield |0…0⟩ with certainty; balanced functions never yield all zeros.
+                </p>
       </LearnSection>
 
-      <LearnSection chapter="algorithms" sectionId="8.4">
+      <LearnSection chapter="algorithms" sectionId="8.4"
+        widgets={<>
+          <Katex display>{`f(x) = s_0 x_0 \\oplus s_1 x_1 \\oplus \\cdots \\oplus s_{n-1} x_{n-1}`}</Katex>
+          <BernsteinVaziraniDemo />
+          <LabLink id="bernstein-vazirani" title="Bernstein–Vazirani" />
+        </>}
+      >
         <p>
-          Given oracle access to <Katex>{`f(x) = s \\cdot x \\pmod{2}`}</Katex> (inner product mod 2
-          of n-bit strings), recover the hidden string s ∈ {'{0,1}'}<sup>n</sup>.
-        </p>
-
-        <Katex display>{`f(x) = s_0 x_0 \\oplus s_1 x_1 \\oplus \\cdots \\oplus s_{n-1} x_{n-1}`}</Katex>
-
-        <WorkedExample
-          title="Recover s in one query"
-          steps={[
-            { label: 'Prepare |+⟩⊗n and |−⟩ ancilla (same as Deutsch–Jozsa setup).' },
-            { label: 'The phase oracle implements (−1)^{s·x} on each basis state |x⟩.' },
-            { label: 'After inverse Hadamards, the amplitude of |x⟩ is concentrated on x = s. Measure to read s.', latex: 'H^{\\otimes n} \\, (-1)^{s\\cdot x} |+\\rangle^{\\otimes n} \\propto |s\\rangle' },
-          ]}
-        />
-
-        <BernsteinVaziraniDemo />
-
+                  Given oracle access to <Katex>{`f(x) = s \\cdot x \\pmod{2}`}</Katex> (inner product mod 2
+                  of n-bit strings), recover the hidden string s ∈ {'{0,1}'}<sup>n</sup>.
+                </p>
         <p>
-          Classically, learning s requires querying f with each standard basis vector e<sub>i</sub> — n queries.
-          Bernstein–Vazirani needs only one.
-        </p>
-
-        <LabLink id="bernstein-vazirani" title="Bernstein–Vazirani" />
+                  Classically, learning s requires querying f with each standard basis vector e<sub>i</sub> — n queries.
+                  Bernstein–Vazirani needs only one.
+                </p>
       </LearnSection>
 
-      <LearnSection chapter="algorithms" sectionId="8.5">
+      <LearnSection chapter="algorithms" sectionId="8.5"
+        widgets={<>
+          <Katex display>{`f(x) = f(x \\oplus s) \\quad \\text{for all } x, \\quad s \\neq 0`}</Katex>
+          <LabLink id="simon" title="Simon's Algorithm" />
+        </>}
+      >
         <p>
-          Simon&apos;s problem (1994): f: {'{0,1}'}<sup>n</sup> → {'{0,1}'}<sup>n</sup> is promised to be
-          2-to-1 with a hidden period s ∈ {'{0,1}'}<sup>n</sup>, s ≠ 0, such that f(x) = f(x ⊕ s) for all x.
-        </p>
-
-        <Katex display>{`f(x) = f(x \\oplus s) \\quad \\text{for all } x, \\quad s \\neq 0`}</Katex>
-
+                  Simon&apos;s problem (1994): f: {'{0,1}'}<sup>n</sup> → {'{0,1}'}<sup>n</sup> is promised to be
+                  2-to-1 with a hidden period s ∈ {'{0,1}'}<sup>n</sup>, s ≠ 0, such that f(x) = f(x ⊕ s) for all x.
+                </p>
         <p>
-          Classically, finding s requires ~2<sup>n/2</sup> queries (birthday paradox). Simon&apos;s quantum
-          algorithm finds s with O(n) oracle queries plus O(n) classical post-processing.
-        </p>
-
-
-        <Checkpoint
-          question="What field is Simon's post-processing linear algebra performed over?"
-          answer="GF(2)"
-          hint="Bits with XOR as addition."
-        />
-
-        <LabLink id="simon" title="Simon's Algorithm" />
+                  Classically, finding s requires ~2<sup>n/2</sup> queries (birthday paradox). Simon&apos;s quantum
+                  algorithm finds s with O(n) oracle queries plus O(n) classical post-processing.
+                </p>
       </LearnSection>
 
-      <LearnSection chapter="algorithms" sectionId="8.6" next={{ title: 'Quantum Fourier Transform', path: '/learn/qft' }}>
+      <LearnSection chapter="algorithms" sectionId="8.6" next={{ title: 'Quantum Fourier Transform', path: '/learn/qft' }}
+        widgets={<>
+          <h3>Uniform superposition</h3>
+          <Katex display>{`|s\\rangle = \\frac{1}{\\sqrt{N}}\\sum_{x=0}^{N-1}|x\\rangle = H^{\\otimes n}|0\\rangle^{\\otimes n}`}</Katex>
+          <h3>Oracle O<sub>w</sub></h3>
+          <Katex display>{`O_w |x\\rangle = \\begin{cases}-|x\\rangle & x = w \\\\ |x\\rangle & x \\neq w\\end{cases}`}</Katex>
+          <h3>Diffusion operator D</h3>
+          <Katex display>{`D = 2|s\\rangle\\langle s| - I \\quad \\text{(reflection about the mean)}`}</Katex>
+          <Katex display>{`k \\approx \\frac{\\pi}{4}\\sqrt{N}`}</Katex>
+          <GroverDemo />
+          <LabLink id="grover" title="Grover Search" />
+        </>}
+      >
         <p>
-          Grover (1996) searches an unstructured database of N = 2<sup>n</sup> items for a marked
-          entry w, using O(√N) oracle queries — a quadratic speedup over classical O(N).
-        </p>
-
-        <h3>Uniform superposition</h3>
-        <Katex display>{`|s\\rangle = \\frac{1}{\\sqrt{N}}\\sum_{x=0}^{N-1}|x\\rangle = H^{\\otimes n}|0\\rangle^{\\otimes n}`}</Katex>
-
-        <h3>Oracle O<sub>w</sub></h3>
-        <Katex display>{`O_w |x\\rangle = \\begin{cases}-|x\\rangle & x = w \\\\ |x\\rangle & x \\neq w\\end{cases}`}</Katex>
-
-        <h3>Diffusion operator D</h3>
-        <Katex display>{`D = 2|s\\rangle\\langle s| - I \\quad \\text{(reflection about the mean)}`}</Katex>
-
+                  Grover (1996) searches an unstructured database of N = 2<sup>n</sup> items for a marked
+                  entry w, using O(√N) oracle queries — a quadratic speedup over classical O(N).
+                </p>
         <p>
-          Each Grover iteration G = D · O<sub>w</sub> rotates the state vector toward |w⟩ by angle
-          ≈ 2 arcsin(1/√N). The optimal iteration count is:
-        </p>
-        <Katex display>{`k \\approx \\frac{\\pi}{4}\\sqrt{N}`}</Katex>
-
-        <GroverDemo />
-
-
-        <Checkpoint
-          question="How many queries does Grover need for N items (order of growth)?"
-          answer="O(√N)"
-          hint="Quadratic speedup over classical O(N)."
-        />
-
-        <LabLink id="grover" title="Grover Search" />
+                  Each Grover iteration G = D · O<sub>w</sub> rotates the state vector toward |w⟩ by angle
+                  ≈ 2 arcsin(1/√N). The optimal iteration count is:
+                </p>
       </LearnSection>
 
-      <LearnSection chapter="algorithms" sectionId="8.7">
+      <LearnSection chapter="algorithms" sectionId="8.7"
+        widgets={<>
+          <ComplexityTable />
+          <h3>Algorithm labs</h3>
+          <ul>
+                    <li><Link to="/playground/deutsch">Deutsch Algorithm</Link></li>
+                    <li><Link to="/playground/deutsch-jozsa">Deutsch–Jozsa</Link></li>
+                    <li><Link to="/playground/bernstein-vazirani">Bernstein–Vazirani</Link></li>
+                    <li><Link to="/playground/simon">Simon&apos;s Algorithm</Link></li>
+                    <li><Link to="/playground/grover">Grover Search</Link></li>
+                    <li><Link to="/playground/qft">QFT Visualizer</Link></li>
+                    <li><Link to="/playground/phase-estimation">Phase Estimation</Link></li>
+                  </ul>
+        </>}
+      >
         <p>
-          The algorithms in this chapter illustrate different speedup types: constant-factor (Deutsch),
-          polynomial (Bernstein–Vazirani), exponential in query complexity (Deutsch–Jozsa, Simon),
-          quadratic (Grover), and super-polynomial (Shor, covered in Chapter 11).
-        </p>
-        <ComplexityTable />
-
-        <h3>Algorithm labs</h3>
-        <ul>
-          <li><Link to="/playground/deutsch">Deutsch Algorithm</Link></li>
-          <li><Link to="/playground/deutsch-jozsa">Deutsch–Jozsa</Link></li>
-          <li><Link to="/playground/bernstein-vazirani">Bernstein–Vazirani</Link></li>
-          <li><Link to="/playground/simon">Simon&apos;s Algorithm</Link></li>
-          <li><Link to="/playground/grover">Grover Search</Link></li>
-          <li><Link to="/playground/qft">QFT Visualizer</Link></li>
-          <li><Link to="/playground/phase-estimation">Phase Estimation</Link></li>
-        </ul>
+                  The algorithms in this chapter illustrate different speedup types: constant-factor (Deutsch),
+                  polynomial (Bernstein–Vazirani), exponential in query complexity (Deutsch–Jozsa, Simon),
+                  quadratic (Grover), and super-polynomial (Shor, covered in Chapter 11).
+                </p>
       </LearnSection>
     </article>
   );

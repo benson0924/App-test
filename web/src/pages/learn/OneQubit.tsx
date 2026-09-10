@@ -3,8 +3,6 @@ import { useT } from '@/context/LocaleContext';
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Katex from '@/components/Math';
-import Checkpoint from '@/components/Checkpoint';
-import WorkedExample from '@/components/WorkedExample';
 import { LabLink, MisconceptionAlert, PracticeBlock } from '@/components/ChapterHelpers';
 import ComplexPlaneLab from '@/components/labs/ComplexPlaneLab';
 import QubitStateLab from '@/components/labs/QubitStateLab';
@@ -147,168 +145,119 @@ export default function OneQubit() {
         correction="A qubit is a normalized vector in ℂ². Measurement returns one classical outcome with probabilities |α|² and |β|². The amplitudes encode phase information that affects interference and non-Z measurements."
       />
 
-      <LearnSection chapter="oneQubit" sectionId="what-is-a-qubit">
+      <LearnSection chapter="oneQubit" sectionId="what-is-a-qubit"
+        widgets={<>
+          <Katex display>{`|\\psi\\rangle = \\alpha|0\\rangle + \\beta|1\\rangle, \\quad \\alpha,\\beta \\in \\mathbb{C}`}</Katex>
+          <Katex display>{`|\\alpha|^2 + |\\beta|^2 = 1`}</Katex>
+          <LabLink id="qubit-state" title="Single-Qubit State Explorer" />
+        </>}
+      >
         <p>
-          A classical bit lives in the set {'{0, 1}'}. A <strong>qubit</strong> lives in a two-dimensional
-          complex vector space with orthonormal basis |0⟩ and |1⟩. The general pure state is a
-          superposition:
-        </p>
-
-        <Katex display>{`|\\psi\\rangle = \\alpha|0\\rangle + \\beta|1\\rangle, \\quad \\alpha,\\beta \\in \\mathbb{C}`}</Katex>
-        <Katex display>{`|\\alpha|^2 + |\\beta|^2 = 1`}</Katex>
-
+                  A classical bit lives in the set {'{0, 1}'}. A <strong>qubit</strong> lives in a two-dimensional
+                  complex vector space with orthonormal basis |0⟩ and |1⟩. The general pure state is a
+                  superposition:
+                </p>
         <p>
-          Normalization ensures total measurement probability equals 1. The global phase e<sup>iγ</sup>|ψ⟩
-          is unobservable, but the relative phase between α and β is physically meaningful in non-Z bases.
-        </p>
-
-        <WorkedExample
-          title="Equal superposition |+⟩"
-          steps={[
-            { label: 'Choose α = β = 1/√2.', latex: '|\\psi\\rangle = \\tfrac{1}{\\sqrt{2}}|0\\rangle + \\tfrac{1}{\\sqrt{2}}|1\\rangle' },
-            { label: 'Check normalization: 1/2 + 1/2 = 1.', latex: '|\\alpha|^2 + |\\beta|^2 = 1' },
-            { label: 'This state is H|0⟩ = |+⟩.', latex: '|+\\rangle = H|0\\rangle' },
-            { label: 'Z measurement: P(0) = P(1) = 1/2.', latex: 'P(0) = P(1) = \\tfrac{1}{2}' },
-          ]}
-        />
-
-
-        <Checkpoint question="How many real parameters describe a pure qubit, ignoring global phase?" answer="2" hint="Think Bloch sphere angles θ and φ." />
-        <LabLink id="qubit-state" title="Single-Qubit State Explorer" />
+                  Normalization ensures total measurement probability equals 1. The global phase e<sup>iγ</sup>|ψ⟩
+                  is unobservable, but the relative phase between α and β is physically meaningful in non-Z bases.
+                </p>
       </LearnSection>
 
-      <LearnSection chapter="oneQubit" sectionId="complex-amplitudes">
+      <LearnSection chapter="oneQubit" sectionId="complex-amplitudes"
+        widgets={<>
+          <Katex display>{`|z|^2 = z^* z = a^2 + b^2`}</Katex>
+          <Katex display>{`z = r e^{i\\phi}`}</Katex>
+          <ComplexPlaneLab />
+          <LabLink id="complex-plane" title="Complex Number Explorer" />
+        </>}
+      >
         <p>
-          Write z = a + bi with conjugate z* = a − bi, magnitude |z| = √(a² + b²), and polar form
-          z = re<sup>iφ</sup>. Euler's identity e<sup>iφ</sup> = cos φ + i sin φ connects rotation to phase.
-        </p>
-
-        <Katex display>{`|z|^2 = z^* z = a^2 + b^2`}</Katex>
-        <Katex display>{`z = r e^{i\\phi}`}</Katex>
-
-        <WorkedExample
-          title="Amplitude (2 + i)/√13"
-          steps={[
-            { label: 'Identify a = 2/√13, b = 1/√13.', latex: 'z = \\tfrac{2}{\\sqrt{13}} + \\tfrac{i}{\\sqrt{13}}' },
-            { label: 'Magnitude squared: |z|² = 4/13 + 1/13 = 5/13... wait, check: (4+1)/13 = 5/13 for single amplitude.' },
-            { label: 'For a full state, both |α|² and |β|² must sum to 1.', latex: '|\\alpha|^2 + |\\beta|^2 = 1' },
-          ]}
-        />
-
-        <ComplexPlaneLab />
-        <LabLink id="complex-plane" title="Complex Number Explorer" />
+                  Write z = a + bi with conjugate z* = a − bi, magnitude |z| = √(a² + b²), and polar form
+                  z = re<sup>iφ</sup>. Euler's identity e<sup>iφ</sup> = cos φ + i sin φ connects rotation to phase.
+                </p>
       </LearnSection>
 
-      <LearnSection chapter="oneQubit" sectionId="measurement">
+      <LearnSection chapter="oneQubit" sectionId="measurement"
+        widgets={<>
+          <Katex display>{`P(0) = |\\langle 0|\\psi\\rangle|^2 = |\\alpha|^2, \\quad P(1) = |\\beta|^2`}</Katex>
+          <MeasurementLab />
+          <LabLink id="measurement" title="Measurement Simulator" />
+        </>}
+      >
         <p>
-          Measuring in the Z basis yields outcome 0 with probability P(0) = |α|² and outcome 1 with
-          P(1) = |β|². After observing 0, the state collapses to |0⟩; after 1, to |1⟩. This is the
-          Born rule for projective measurement.
-        </p>
-
-        <Katex display>{`P(0) = |\\langle 0|\\psi\\rangle|^2 = |\\alpha|^2, \\quad P(1) = |\\beta|^2`}</Katex>
-
-        <WorkedExample
-          title="State ( √3/2 |0⟩ + 1/2 |1⟩ )"
-          steps={[
-            { label: 'Identify α = √3/2, β = 1/2.', latex: '|\\psi\\rangle = \\tfrac{\\sqrt{3}}{2}|0\\rangle + \\tfrac{1}{2}|1\\rangle' },
-            { label: 'P(0) = (√3/2)² = 3/4.', latex: 'P(0) = \\tfrac{3}{4}' },
-            { label: 'P(1) = (1/2)² = 1/4.', latex: 'P(1) = \\tfrac{1}{4}' },
-            { label: 'Check: 3/4 + 1/4 = 1.', latex: 'P(0)+P(1)=1' },
-          ]}
-        />
-
-
-        <Checkpoint question="After measuring |ψ⟩ and obtaining 1, what is the post-measurement state?" answer="|1⟩" />
-        <MeasurementLab />
-        <LabLink id="measurement" title="Measurement Simulator" />
+                  Measuring in the Z basis yields outcome 0 with probability P(0) = |α|² and outcome 1 with
+                  P(1) = |β|². After observing 0, the state collapses to |0⟩; after 1, to |1⟩. This is the
+                  Born rule for projective measurement.
+                </p>
       </LearnSection>
 
-      <LearnSection chapter="oneQubit" sectionId="other-bases">
+      <LearnSection chapter="oneQubit" sectionId="other-bases"
+        widgets={<>
+          <Katex display>{`|0\\rangle = \\tfrac{|+\\rangle + |-\\rangle}{\\sqrt{2}}, \\quad |1\\rangle = \\tfrac{|+\\rangle - |-\\rangle}{\\sqrt{2}}`}</Katex>
+          <Katex display>{`P(+) = \\left|\\tfrac{\\alpha + \\beta}{\\sqrt{2}}\\right|^2, \\quad P(-) = \\left|\\tfrac{\\alpha - \\beta}{\\sqrt{2}}\\right|^2`}</Katex>
+          <BasisProbabilityPanel />
+          <LabLink id="measurement" title="Measurement Simulator (basis selector)" />
+        </>}
+      >
         <p>
-          The X basis uses |+⟩ = (|0⟩ + |1⟩)/√2 and |−⟩ = (|0⟩ − |1⟩)/√2. The Y basis uses
-          |i⟩ = (|0⟩ + i|1⟩)/√2 and |−i⟩ = (|0⟩ − i|1⟩)/√2. Rewrite any state in the chosen basis
-          and square coefficient magnitudes for probabilities.
-        </p>
-
-        <Katex display>{`|0\\rangle = \\tfrac{|+\\rangle + |-\\rangle}{\\sqrt{2}}, \\quad |1\\rangle = \\tfrac{|+\\rangle - |-\\rangle}{\\sqrt{2}}`}</Katex>
-        <Katex display>{`P(+) = \\left|\\tfrac{\\alpha + \\beta}{\\sqrt{2}}\\right|^2, \\quad P(-) = \\left|\\tfrac{\\alpha - \\beta}{\\sqrt{2}}\\right|^2`}</Katex>
-
-        <WorkedExample
-          title="Measuring |−⟩ in the X basis"
-          steps={[
-            { label: '|−⟩ is already an X-basis eigenstate.', latex: '|\\psi\\rangle = |-\\rangle' },
-            { label: 'Therefore P(−) = 1 with certainty.', latex: 'P(-) = 1' },
-            { label: 'In Z basis, P(0) = P(1) = 1/2 — same as |+⟩.', latex: 'P(0) = P(1) = \\tfrac{1}{2}' },
-          ]}
-        />
-
-        <BasisProbabilityPanel />
-        <LabLink id="measurement" title="Measurement Simulator (basis selector)" />
+                  The X basis uses |+⟩ = (|0⟩ + |1⟩)/√2 and |−⟩ = (|0⟩ − |1⟩)/√2. The Y basis uses
+                  |i⟩ = (|0⟩ + i|1⟩)/√2 and |−i⟩ = (|0⟩ − i|1⟩)/√2. Rewrite any state in the chosen basis
+                  and square coefficient magnitudes for probabilities.
+                </p>
       </LearnSection>
 
-      <LearnSection chapter="oneQubit" sectionId="global-relative-phase">
+      <LearnSection chapter="oneQubit" sectionId="global-relative-phase"
+        widgets={<>
+          <Katex display>{`|\\psi\\rangle \\sim e^{i\\gamma}|\\psi\\rangle`}</Katex>
+          <RelativePhaseDemo />
+          <QubitStateLab />
+          <LabLink id="qubit-state" title="Single-Qubit State Explorer" />
+        </>}
+      >
         <p>
-          Multiplying |ψ⟩ by e<sup>iγ</sup> does not change any measurement probability in any basis.
-          Relative phase between |0⟩ and |1⟩ components <em>does</em> matter: |+⟩ and (|0⟩ + i|1⟩)/√2
-          share Z statistics but differ in X and Y statistics and on the Bloch sphere.
-        </p>
-
-        <Katex display>{`|\\psi\\rangle \\sim e^{i\\gamma}|\\psi\\rangle`}</Katex>
-
-        <RelativePhaseDemo />
-
-        <Checkpoint question="Do |+⟩ and |−⟩ have the same Z-basis probabilities?" answer="yes" hint="Both are uniform superpositions with equal magnitude." />
-        <QubitStateLab />
-        <LabLink id="qubit-state" title="Single-Qubit State Explorer" />
+                  Multiplying |ψ⟩ by e<sup>iγ</sup> does not change any measurement probability in any basis.
+                  Relative phase between |0⟩ and |1⟩ components <em>does</em> matter: |+⟩ and (|0⟩ + i|1⟩)/√2
+                  share Z statistics but differ in X and Y statistics and on the Bloch sphere.
+                </p>
       </LearnSection>
 
-      <LearnSection chapter="oneQubit" sectionId="bloch-sphere">
+      <LearnSection chapter="oneQubit" sectionId="bloch-sphere"
+        widgets={<>
+          <Katex display>{`|\\psi\\rangle = \\cos\\tfrac{\\theta}{2}|0\\rangle + e^{i\\phi}\\sin\\tfrac{\\theta}{2}|1\\rangle`}</Katex>
+          <Katex display>{`x = \\sin\\theta\\cos\\phi, \\quad y = \\sin\\theta\\sin\\phi, \\quad z = \\cos\\theta`}</Katex>
+          <table className="data-table">
+                    <thead><tr><th>State</th><th>Bloch (x, y, z)</th></tr></thead>
+                    <tbody>
+                      <tr><td>|0⟩</td><td>(0, 0, 1)</td></tr>
+                      <tr><td>|1⟩</td><td>(0, 0, −1)</td></tr>
+                      <tr><td>|+⟩</td><td>(1, 0, 0)</td></tr>
+                      <tr><td>|−⟩</td><td>(−1, 0, 0)</td></tr>
+                      <tr><td>|i⟩</td><td>(0, 1, 0)</td></tr>
+                      <tr><td>|−i⟩</td><td>(0, −1, 0)</td></tr>
+                    </tbody>
+                  </table>
+          <BlochSphereLab />
+          <LabLink id="bloch-sphere" title="3D Bloch Sphere" />
+        </>}
+      >
         <p>
-          Every pure qubit (up to global phase) maps to a point on the unit sphere with
-          θ ∈ [0, π] and φ ∈ [0, 2π):
-        </p>
-
-        <Katex display>{`|\\psi\\rangle = \\cos\\tfrac{\\theta}{2}|0\\rangle + e^{i\\phi}\\sin\\tfrac{\\theta}{2}|1\\rangle`}</Katex>
-        <Katex display>{`x = \\sin\\theta\\cos\\phi, \\quad y = \\sin\\theta\\sin\\phi, \\quad z = \\cos\\theta`}</Katex>
-
-        <table className="data-table">
-          <thead><tr><th>State</th><th>Bloch (x, y, z)</th></tr></thead>
-          <tbody>
-            <tr><td>|0⟩</td><td>(0, 0, 1)</td></tr>
-            <tr><td>|1⟩</td><td>(0, 0, −1)</td></tr>
-            <tr><td>|+⟩</td><td>(1, 0, 0)</td></tr>
-            <tr><td>|−⟩</td><td>(−1, 0, 0)</td></tr>
-            <tr><td>|i⟩</td><td>(0, 1, 0)</td></tr>
-            <tr><td>|−i⟩</td><td>(0, −1, 0)</td></tr>
-          </tbody>
-        </table>
-
-        <WorkedExample
-          title="|0⟩ on the Bloch sphere"
-          steps={[
-            { label: 'θ = 0 ⇒ cos(θ/2) = 1, sin(θ/2) = 0.', latex: '|\\psi\\rangle = |0\\rangle' },
-            { label: 'Coordinates: x = y = 0, z = 1 (north pole).', latex: '(x,y,z)=(0,0,1)' },
-          ]}
-        />
-
-        <BlochSphereLab />
-        <LabLink id="bloch-sphere" title="3D Bloch Sphere" />
+                  Every pure qubit (up to global phase) maps to a point on the unit sphere with
+                  θ ∈ [0, π] and φ ∈ [0, 2π):
+                </p>
       </LearnSection>
 
-      <LearnSection chapter="oneQubit" sectionId="one-qubit-gates">
+      <LearnSection chapter="oneQubit" sectionId="one-qubit-gates"
+        widgets={<>
+          <Katex display>{`X|0\\rangle = |1\\rangle, \\quad H|0\\rangle = |+\\rangle, \\quad Z|1\\rangle = -|1\\rangle`}</Katex>
+          <Katex display>{`X = \\begin{pmatrix} 0 & 1 \\\\ 1 & 0 \\end{pmatrix}, \\quad H = \\tfrac{1}{\\sqrt{2}}\\begin{pmatrix} 1 & 1 \\\\ 1 & -1 \\end{pmatrix}`}</Katex>
+          <GateExplorerLab />
+          <LabLink id="gate-explorer" title="Quantum Gate Explorer" />
+        </>}
+      >
         <p>
-          Gates are 2×2 unitary matrices. Pauli X flips |0⟩ ↔ |1⟩; Z adds a phase to |1⟩; H creates
-          superposition. Important identities: X² = Y² = Z² = H² = I, S² = Z, T² = S.
-        </p>
-
-        <Katex display>{`X|0\\rangle = |1\\rangle, \\quad H|0\\rangle = |+\\rangle, \\quad Z|1\\rangle = -|1\\rangle`}</Katex>
-        <Katex display>{`X = \\begin{pmatrix} 0 & 1 \\\\ 1 & 0 \\end{pmatrix}, \\quad H = \\tfrac{1}{\\sqrt{2}}\\begin{pmatrix} 1 & 1 \\\\ 1 & -1 \\end{pmatrix}`}</Katex>
-
-
-        <Checkpoint question="What is H|+⟩?" answer="|0⟩" hint="H is its own inverse: H² = I." />
-        <GateExplorerLab />
-        <LabLink id="gate-explorer" title="Quantum Gate Explorer" />
+                  Gates are 2×2 unitary matrices. Pauli X flips |0⟩ ↔ |1⟩; Z adds a phase to |1⟩; H creates
+                  superposition. Important identities: X² = Y² = Z² = H² = I, S² = Z, T² = S.
+                </p>
       </LearnSection>
 
       <PracticeBlock problems={[
