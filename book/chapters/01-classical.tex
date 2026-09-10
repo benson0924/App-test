@@ -1,67 +1,237 @@
 \chapter{Classical Information and Computation}
+\label{ch:classical}
 
-Physical systems can encode information by occupying distinguishable states. A classical bit is the simplest unit: it takes one of two values, $0$ or $1$. For $n$ bits there are $2^n$ distinct register states.
+Before quantum mechanics enters the story, we need a precise language for \emph{classical} information: how bits encode data, how logic gates transform bits, how arithmetic is built from gates, and how classical computers are modeled mathematically. This chapter establishes the baseline against which quantum advantages are measured. Every concept here reappears---often in generalized form---when we study qubits, reversible circuits, and complexity classes such as \textbf{BQP}.
 
 \section{States and Information}
+\label{sec:states-info}
 
-If each bit is independent, an $n$-bit register has
+\subsection{Physical encoding}
+
+Physical systems can encode information by occupying distinguishable states. A switch may be open or closed; a magnetic domain may point up or down. The abstraction that captures this binary distinction is the \emph{classical bit}: a variable $b\in\{0,1\}$.
+
+For $n$ independent bits, a register holds one of $2^n$ distinct strings. If each bit is equally likely and independent, the number of configurations is
+\begin{equation}
+N = 2^n.
+\label{eq:2n-states}
+\end{equation}
+For $n=3$, the eight strings are $000,001,010,011,100,101,110,111$. Bits may represent integers (via binary encoding), characters (via ASCII or Unicode), machine instructions, or any digital datum once a convention is fixed.
+
+\subsection{Entropy and distinguishability}
+
+In Shannon's theory, a uniform random $n$-bit string carries $n$ bits of entropy. Distinguishability is absolute: observing a bit yields a definite $0$ or $1$ with no residual uncertainty unless the physical medium is noisy---a theme that returns in Chapter~\ref{ch:qec} when we protect quantum information.
+
+\begin{labbox}{1}{Binary State Explorer}
+Navigate to \texttt{/playground/binary-states} on the companion website. Select register sizes $n=1,2,\ldots,8$ and verify that the state count matches~\eqref{eq:2n-states}. Toggle individual bits and observe how each flip changes the decimal interpretation of the string.
+\end{labbox}
+
+\begin{example}
+How many distinct 10-bit registers exist? Using~\eqref{eq:2n-states} with $n=10$,
 \[
-N = 2^n
+N = 2^{10} = 1024.
 \]
-possible configurations. For $n=3$, the eight strings are $000,001,\ldots,111$. Bits may represent numbers, text, instructions, or any digital data once an encoding convention is fixed.
-
-\begin{center}
-\fbox{\parbox{0.9\textwidth}{\textbf{Interactive Lab 1:} Binary State Explorer --- select $n$ and inspect $2^n$ on the website.}}
-\end{center}
+This is exactly one kibibit ($1\,\mathrm{KiB}$) of addressable classical states when each address is one byte-aligned block of ten bits.
+\end{example}
 
 \section{Binary Numbers}
+\label{sec:binary}
 
-Positional notation interprets a bit string $b_{n-1}\cdots b_0$ as
+\subsection{Positional notation}
+
+Positional notation interprets a bit string $b_{n-1}b_{n-2}\cdots b_0$ with $b_j\in\{0,1\}$ as the integer
+\begin{equation}
+(b_{n-1}\cdots b_0)_2 = \sum_{j=0}^{n-1} b_j\, 2^j.
+\label{eq:binary-positional}
+\end{equation}
+The subscript~$2$ reminds us that digits are base-two. Leading zeros do not change value: $00101_2 = 101_2 = 5_{10}$.
+
+\subsection{Conversion and arithmetic preview}
+
+To convert from decimal to binary, repeated division by two extracts remainders as least-significant bits. Addition in binary uses the same positional rules as decimal, but carries propagate when a column sums to $2$ or more.
+
+\begin{example}
+Evaluate $1011_2$ in decimal:
 \[
-\sum_{j=0}^{n-1} b_j 2^j.
+1011_2 = 1\cdot 2^3 + 0\cdot 2^2 + 1\cdot 2^1 + 1\cdot 2^0 = 8 + 0 + 2 + 1 = 11_{10}.
 \]
-For example, $1011_2 = 1\cdot 8 + 0\cdot 4 + 1\cdot 2 + 1 = 11_{10}$.
+\end{example}
+
+\subsection{Fixed-width registers}
+
+Real hardware uses fixed-width registers. An $n$-bit unsigned integer wraps on overflow modulo $2^n$. Two's-complement encoding represents signed integers; the most significant bit indicates sign. Quantum algorithms often treat bit strings as labels for computational basis states $\ket{b_{n-1}\cdots b_0}$, making binary conventions essential.
 
 \section{Logic Gates}
+\label{sec:logic-gates}
 
-Boolean variables $A,B\in\{0,1\}$ combine through gates such as NOT ($\overline A$), AND ($A\land B$), OR ($A\lor B$), and XOR ($A\oplus B$). XOR satisfies $1\oplus 1 = 0$ and is its own inverse.
+\subsection{Boolean variables and truth tables}
+
+Boolean variables $A,B,C\in\{0,1\}$ combine through \emph{logic gates}. Table~\ref{tab:basic-gates} lists fundamental gates; each gate is a function $\{0,1\}^k\to\{0,1\}$ for some $k$.
+
+\begin{table}[H]
+\centering
+\caption{Elementary logic gates and their outputs.}
+\label{tab:basic-gates}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Gate & Symbol & Definition \\
+\midrule
+NOT & $\overline{A}$ & $\overline{0}=1$, $\overline{1}=0$ \\
+AND & $A\land B$ & $1$ only if both inputs are $1$ \\
+OR & $A\lor B$ & $1$ if at least one input is $1$ \\
+XOR & $A\oplus B$ & $1$ if inputs differ \\
+NAND & $\overline{A\land B}$ & negated AND \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+XOR is \emph{linear} over $\mathbb{F}_2$: $A\oplus B\oplus C$ is the parity of three bits. It is also its own inverse: $(A\oplus B)\oplus B = A$.
+
+\begin{labbox}{2}{Logic Gate Simulator}
+At \texttt{/playground/logic-gates}, build circuits from NOT, AND, OR, and XOR. Verify De Morgan identities interactively by comparing truth tables of equivalent networks.
+\end{labbox}
+
+\subsection{Universal classical sets}
+
+A gate set is \emph{universal} if any Boolean function can be built from it. $\{\mathrm{NAND}\}$ alone is universal: NOT is $\mathrm{NAND}(A,A)$, AND is $\overline{\mathrm{NAND}(A,B)}$, and OR follows from De Morgan. Reversible quantum gate sets play an analogous role in Chapter~\ref{ch:multi}.
 
 \section{Boolean Algebra}
+\label{sec:boolean}
 
-Identities include $A\land 1 = A$, $A\lor 0 = A$, and $A\land\overline A = 0$. De Morgan's laws state
-\[
-\overline{A\land B} = \overline A \lor \overline B,\qquad
-\overline{A\lor B} = \overline A \land \overline B.
-\]
+\subsection{Axioms and identities}
+
+Boolean algebra axiomatizes logic with operations $\land,\lor,\overline{\phantom{A}}$. Key identities include
+\begin{align}
+A \land 1 &= A, & A \lor 0 &= A, \\
+A \land 0 &= 0, & A \lor 1 &= 1, \\
+A \land \overline{A} &= 0, & A \lor \overline{A} &= 1.
+\end{align}
+Associativity, commutativity, and distributivity hold as in ordinary algebra, with the caveat that $A\land(B\lor C)=(A\land B)\lor(A\land C)$.
+
+\subsection{De Morgan's laws}
+
+De Morgan's laws relate negation and conjunction/disjunction:
+\begin{equation}
+\overline{A\land B} = \overline{A}\lor\overline{B},\qquad
+\overline{A\lor B} = \overline{A}\land\overline{B}.
+\label{eq:demorgan}
+\end{equation}
+These identities underpin NAND-based synthesis and appear in circuit optimization.
+
+\begin{example}
+Simplify $\overline{A\land(B\lor C)}$ using~\eqref{eq:demorgan}:
+\begin{align*}
+\overline{A\land(B\lor C)} &= \overline{A}\lor\overline{B\lor C} \\
+&= \overline{A}\lor(\overline{B}\land\overline{C}).
+\end{align*}
+\end{example}
+
+\subsection{Normal forms}
+
+Any Boolean function admits a \emph{sum-of-products} (disjunctive normal form) representation as an OR of AND clauses. Minimization---finding the fewest gates---is NP-hard in general, foreshadowing complexity themes in Section~\ref{sec:complexity}.
 
 \section{Adders}
+\label{sec:adders}
 
-A half adder outputs sum $S = A\oplus B$ and carry $C = A\land B$. A full adder adds an incoming carry $C_{\mathrm{in}}$:
-\[
-S = A\oplus B\oplus C_{\mathrm{in}},\qquad
-C_{\mathrm{out}} = (A\land B)\lor\bigl(C_{\mathrm{in}}\land(A\oplus B)\bigr).
-\]
-Ripple-carry addition propagates carries sequentially, introducing a depth cost that foreshadows circuit depth in quantum computing.
+\subsection{Half adder}
+
+A \emph{half adder} adds two bits without incoming carry, producing sum $S$ and carry-out $C$:
+\begin{equation}
+S = A\oplus B,\qquad C = A\land B.
+\label{eq:half-adder}
+\end{equation}
+
+\subsection{Full adder and ripple carry}
+
+A \emph{full adder} includes carry-in $C_{\mathrm{in}}$:
+\begin{align}
+S &= A\oplus B\oplus C_{\mathrm{in}}, \label{eq:full-sum}\\
+C_{\mathrm{out}} &= (A\land B)\lor\bigl(C_{\mathrm{in}}\land(A\oplus B)\bigr). \label{eq:full-carry}
+\end{align}
+Chaining $n$ full adders yields an $n$-bit ripple-carry adder. Worst-case delay is $O(n)$ gate layers because the carry must propagate from least to most significant bit---a \emph{depth} bottleneck that quantum adder designs also confront.
+
+\begin{labbox}{3}{Binary Adder}
+Use \texttt{/playground/binary-adder} to add multi-bit numbers and trace carries step by step. Compare ripple depth with your hand calculation of~\eqref{eq:full-sum}--\eqref{eq:full-carry}.
+\end{labbox}
+
+\begin{example}
+Compute $1101_2 + 1011_2$:
+\begin{align*}
+  &\phantom{+}1101_2 \;(13_{10}) \\
+  + &\phantom{+}1011_2 \;(11_{10}) \\
+  \hline
+  &11000_2 \;(24_{10}).
+\end{align*}
+Column-wise: $1+1=0$ carry $1$; $0+1+1=0$ carry $1$; $1+0+1=0$ carry $1$; $1+1+1=1$ carry $1$.
+\end{example}
 
 \section{Reversible Computation}
+\label{sec:reversible}
 
-Reversible operations preserve enough information to recover inputs. NOT is reversible; AND is not. The Toffoli gate $(a,b,c)\mapsto(a,b,c\oplus ab)$ is reversible and can emulate AND when $c=0$. Quantum evolution before measurement must be reversible (unitary).
+\subsection{Information loss in irreversible gates}
+
+A gate is \emph{reversible} if outputs uniquely determine inputs. NOT and XOR (with one output wired as copy) are reversible; AND is not---knowing output $0$ does not distinguish $(0,0)$ from $(0,1)$. Landauer's principle links irreversible erasure to minimum heat dissipation, motivating reversible architectures.
+
+\subsection{Toffoli and Fredkin gates}
+
+The \emph{Toffoli} (controlled-controlled-NOT) gate maps $(a,b,c)\mapsto(a,b,c\oplus ab)$. With $c=0$, it computes AND reversibly into the third wire. The \emph{Fredkin} (controlled-SWAP) gate conditionally exchanges two target bits. Any classical computation can be embedded in a reversible circuit using ancilla bits initialized to~$0$.
+
+\begin{example}
+To emulate $c = a\land b$ reversibly, start with $(a,b,0)$ and apply Toffoli to obtain $(a,b,a\land b)$. The original AND output is read from the third wire; $(a,b)$ remain available for later use.
+\end{example}
+
+Quantum evolution before measurement must be unitary (hence reversible). Classical reversible logic is the direct template for quantum circuit synthesis.
 
 \section{Classical Error Correction}
+\label{sec:classical-ecc}
 
-Three-bit repetition encoding uses $0_L=000$ and $1_L=111$. A single bit flip is corrected by majority vote. Parity $p=a\oplus b$ summarizes two-bit information.
+\subsection{Repetition code}
+
+Noise flips bits with small probability $p$. The three-bit \emph{repetition code} encodes logical $0$ as $0_L=000$ and logical $1$ as $1_L=111$. A single bit flip yields a word at Hamming distance~$1$ from one codeword and distance~$2$ from the other; \emph{majority vote} decoding corrects one error.
+
+\subsection{Parity checks}
+
+Parity $p=a\oplus b$ summarizes two bits in one check bit. Longer block codes add multiple parity checks to locate errors via \emph{syndromes}. The quantum three-qubit bit-flip code (Chapter~\ref{ch:qec}) is a direct quantum analogue.
+
+\begin{example}
+Codeword $101$ suffers a flip on the middle bit, becoming $111$. Majority vote: two ones $\Rightarrow$ decode as $1$. The syndrome ``even number of ones in first two bits'' would flag an error in more elaborate schemes.
+\end{example}
 
 \section{Computational Complexity}
+\label{sec:complexity}
 
-Growth classes include $O(1)$, $O(\log n)$, $O(n)$, $O(n\log n)$, $O(n^2)$, and $O(2^n)$. The class \textbf{P} contains problems solvable in polynomial time on a deterministic classical computer. \textbf{NP} is defined decision-theoretically; quantum computers do not automatically solve NP-complete problems in polynomial time.
+\subsection{Asymptotic growth}
+
+Algorithm cost is measured as a function of input size $n$. Common classes include $O(1)$, $O(\log n)$, $O(n)$, $O(n\log n)$, $O(n^2)$, and $O(2^n)$. Exponential growth renders problems intractable for large $n$ on any physically realizable classical machine.
+
+\subsection{P, NP, and BQP preview}
+
+\textbf{P} is the class of decision problems solvable in polynomial time on a deterministic Turing machine. \textbf{NP} contains problems whose \emph{yes} certificates are verifiable in polynomial time; NP-complete problems are the hardest in NP. Quantum computers do \emph{not} automatically solve NP-complete problems in polynomial time.
+
+\textbf{BQP} (bounded-error quantum polynomial time) is the quantum analogue of P: problems solvable by a quantum computer with error probability $<1/3$ in polynomial time. Factoring (Shor) and unstructured search (Grover) illustrate problems where quantum algorithms offer provable advantages over known classical methods for specific tasks.
 
 \section{Turing Machines}
+\label{sec:turing}
 
-A Turing machine reads and writes symbols on a tape, changes internal state, and moves its head according to transition rules. The Church--Turing thesis asserts that realistic classical computation is captured by this model. Quantum computation asks whether every physically realizable process is efficiently simulable classically; this motivates the class \textbf{BQP}.
+\subsection{The model}
+
+A \emph{Turing machine} consists of an infinite tape, a head that reads/writes symbols, a finite state controller, and a transition function. At each step the head reads a symbol, writes a symbol, moves left or right, and updates state. Despite its simplicity, the model captures what is \emph{classically computable}.
+
+\subsection{Church--Turing thesis}
+
+The Church--Turing thesis asserts that any physically realizable \emph{classical} computation can be simulated by a Turing machine with at most polynomial overhead. Quantum computation extends the physical model: the open question is whether all quantum processes admit efficient classical simulation. Evidence from Shor's algorithm suggests the answer is no for some problems.
+
+\begin{example}
+A Turing machine adding two $n$-bit binary numbers can scan the tape once per bit with carry, using $O(n)$ steps and $O(n)$ tape cells---polynomial in the input size, hence membership in P for this functional problem.
+\end{example}
 
 \section*{Exercises}
 \begin{enumerate}[label=\arabic*.]
-\item How many states does a 10-bit register have?
-\item Simplify $\overline{A\land(B\lor C)}$ using De Morgan.
-\item Add $1101_2 + 1011_2$ with ripple carry.
+\item How many distinct states does a 12-bit register have? Express the answer as a power of two and as a decimal integer.
+\item Using De Morgan's laws, rewrite $\overline{(\overline{A}\lor B)\land C}$ without nested negations above the variable level.
+\item Add $1110_2 + 0111_2$ using ripple carry. How many column carries occur?
+\item Prove that XOR is associative: $(A\oplus B)\oplus C = A\oplus(B\oplus C)$.
+\item Explain why AND alone cannot form a NOT gate without constant inputs.
+\item In the three-bit repetition code, what is the minimum Hamming distance between valid codewords? How many bit errors can be corrected?
+\item Classify each function as constant or balanced for $n=1$: $f(x)=0$, $f(x)=1$, $f(x)=x$, $f(x)=\overline{x}$.
+\item In one paragraph, relate reversible computation to the requirement that quantum gates be unitary before measurement.
 \end{enumerate}

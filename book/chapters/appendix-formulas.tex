@@ -1,15 +1,75 @@
-Single qubit: $\ket{\psi}=\alpha\ket{0}+\beta\ket{1}$, $|\alpha|^2+|\beta|^2=1$.
+This appendix summarizes key formulas for exam review. Cross-references point to defining chapters.
 
-Measurement: $P(i)=|\braket{i|\psi}|^2$.
+\section{Single-Qubit States and Measurement}
 
-Bloch: $\ket{\psi}=\cos\frac{\theta}{2}\ket{0}+e^{i\phi}\sin\frac{\theta}{2}\ket{1}$.
+Pure state (Chapter~\ref{ch:qubit}):
+\begin{equation}
+\ket{\psi}=\alpha\ket{0}+\beta\ket{1},\qquad |\alpha|^2+|\beta|^2=1.
+\end{equation}
+Born rule (Chapter~\ref{ch:linear-algebra}):
+\begin{equation}
+P(m)=|\braket{m|\psi}|^2,\qquad \langle A\rangle=\bra{\psi}A\ket{\psi}.
+\end{equation}
+Bloch parametrization:
+\begin{equation}
+\ket{\psi}=\cos\frac{\theta}{2}\ket{0}+e^{i\phi}\sin\frac{\theta}{2}\ket{1},\quad
+(x,y,z)=(\sin\theta\cos\phi,\sin\theta\sin\phi,\cos\theta).
+\end{equation}
 
-Unitary: $U^\dagger U=I$.
+\section{Linear Algebra}
 
-Bell: $\ket{\Phi^+}=\frac{\ket{00}+\ket{11}}{\sqrt2}$.
+Inner product and norm:
+\begin{equation}
+\braket{\phi|\psi}=\sum_i a_i^* b_i,\qquad \|\ket{\psi}\|=\sqrt{\braket{\psi|\psi}}.
+\end{equation}
+Projector and completeness:
+\begin{equation}
+P_m=\ket{m}\bra{m},\qquad \sum_m P_m=I.
+\end{equation}
+Unitary evolution:
+\begin{equation}
+U^\dagger U=I,\qquad \ket{\psi'}=U\ket{\psi}.
+\end{equation}
 
-Grover: $O_w=I-2\ket{w}\bra{w}$, $D=2\ket{s}\bra{s}-I$.
+\section{Multi-Qubit Systems}
 
-QFT: $\mathrm{QFT}\ket{x}=\frac{1}{\sqrt N}\sum_k e^{2\pi ixk/N}\ket{k}$.
+Tensor product dimension: $n$ qubits $\Rightarrow$ dimension $2^n$.
 
-Shor: $a^r\equiv 1\pmod N$, factors from $\gcd(a^{r/2}\pm 1,N)$.
+Bell states (Chapter~\ref{ch:multi}):
+\begin{equation}
+\ket{\Phi^\pm}=\frac{\ket{00}\pm\ket{11}}{\sqrt2},\qquad
+\ket{\Psi^\pm}=\frac{\ket{01}\pm\ket{10}}{\sqrt2}.
+\end{equation}
+CNOT: $\mathrm{CNOT}\ket{a,b}=\ket{a,a\oplus b}$.
+
+\section{Error Correction}
+
+Three-qubit bit-flip encoding:
+\begin{equation}
+\ket{0_L}=\ket{000},\qquad \ket{1_L}=\ket{111}.
+\end{equation}
+Stabilizer example: $Z_0Z_1$ and $Z_1Z_2$ for bit-flip code.
+
+\section{Oracles and Algorithms}
+
+Phase oracle from kickback:
+\begin{equation}
+O_f\ket{x}=(-1)^{f(x)}\ket{x}.
+\end{equation}
+Grover operators:
+\begin{equation}
+O_w=I-2\ket{w}\bra{w},\qquad D=2\ket{s}\bra{s}-I,\qquad k\approx\left\lfloor\frac{\pi}{4}\sqrt{N}\right\rfloor.
+\end{equation}
+Quantum Fourier transform:
+\begin{equation}
+\mathrm{QFT}_N\ket{x}=\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}e^{2\pi i xk/N}\ket{k}.
+\end{equation}
+Shor period finding: if $a^r\equiv 1\pmod N$, factors from $\gcd(a^{r/2}\pm 1,N)$ when conditions hold.
+
+\section{CHSH and Protocols}
+
+CHSH parameter:
+\begin{equation}
+S=E(a,b)+E(a,b')+E(a',b)-E(a',b'),\qquad |S|\le 2 \text{ (LHV)},\quad |S|\le 2\sqrt2 \text{ (QM)}.
+\end{equation}
+Teleportation cost: one ebit + two classical bits per unknown qubit.

@@ -1,38 +1,128 @@
 \chapter{Entanglement and Quantum Protocols}
+\label{ch:protocols}
 
-Entanglement enables communication protocols impossible with classical bits alone, while respecting the no-signaling principle.
+Entanglement enables communication and cryptography protocols impossible with classical bits alone, while respecting the \emph{no-signaling} principle: local measurements cannot transmit controllable faster-than-light messages. This chapter covers EPR paradox and hidden variables, the CHSH inequality, superdense coding, quantum teleportation, and BB84 quantum key distribution.
 
 \section{EPR and Hidden Variables}
+\label{sec:epr}
 
-Entangled correlations prompted questions about local hidden variables. Quantum mechanics predicts correlations beyond any local classical model for certain measurements.
+\subsection{The EPR argument}
+
+Einstein, Podolsky, and Rosen (1935) highlighted that entangled pairs exhibit perfect correlations when both parties measure in the same basis, yet each qubit alone appears maximally random. They questioned whether quantum mechanics is \emph{complete} or whether \emph{local hidden variables} (LHV) predetermine outcomes.
+
+\subsection{Local realism versus quantum predictions}
+
+An LHV model assigns definite values to observables before measurement, with outcomes determined locally without faster-than-light influence. Bell and CHSH showed certain correlations violate inequalities any LHV model must satisfy.
+
+\begin{example}
+Shared $\ket{\Phi^+}$: Alice and Bob both measure $Z$. Outcomes are perfectly correlated ($00$ or $11$) yet individually random with $P(0)=P(1)=1/2$. Classically, one might imagine hidden bits copied at source; Bell tests rule out \emph{local} hidden variables for maximal entanglement.
+\end{example}
 
 \section{CHSH Inequality}
+\label{sec:chsh}
 
-Define correlations $E(a,b)$ for measurement settings $a,b$. The CHSH combination
-\[
-S=E(a,b)+E(a,b')+E(a',b)-E(a',b')\le 2
-\]
-for local hidden-variable theories. Quantum mechanics permits $|S|\le 2\sqrt2$ (Tsirelson bound).
+\subsection{Setup}
+
+Alice chooses measurement settings $a,a'\in\{0,1\}$; Bob chooses $b,b'$. Define correlation
+\begin{equation}
+E(a,b)=P(00)+P(11)-P(01)-P(10)
+\label{eq:chsh-correlation}
+\end{equation}
+for $\pm1$ outcomes mapped to $\{+1,-1\}$.
+
+\subsection{Classical and quantum bounds}
+
+The CHSH combination
+\begin{equation}
+S=E(a,b)+E(a,b')+E(a',b)-E(a',b')
+\label{eq:chsh-s}
+\end{equation}
+satisfies $|S|\le 2$ for any local hidden-variable theory. Quantum mechanics permits $|S|\le 2\sqrt{2}$ (Tsirelson bound), achieved by suitable measurements on $\ket{\Phi^-}$ or singlet states.
+
+\begin{labbox}{14}{Bell/CHSH Experiment}
+Simulate \texttt{/playground/chsh}: choose measurement angles, estimate $E(a,b)$ from shot statistics, and compute $S$. Push toward the quantum limit $2\sqrt{2}$.
+\end{labbox}
+
+\begin{example}
+For singlet $\ket{\Psi^-}=\frac{1}{\sqrt{2}}(\ket{01}-\ket{10})$, opposite measurements in the Bloch plane can yield $E=-\cos(\theta_A-\theta_B)$. Optimizing settings gives $|S|=2\sqrt{2}$.
+\end{example}
 
 \section{Superdense Coding}
+\label{sec:superdense}
 
-Shared $\ket{\Phi^+}$ lets Alice encode two classical bits into one qubit by applying $I,X,Z,$ or $XZ$ before sending her qubit to Bob, who performs Bell decoding.
+\subsection{Protocol}
+
+Alice and Bob share $\ket{\Phi^+}_{AB}$. Alice encodes two classical bits into one qubit by applying one of $\{I,X,Z,XZ\}$ to her half, then sends her qubit to Bob. Bob performs a Bell-basis measurement decoding $(00),(01),(10),(11)$.
+
+\subsection{Resource trade-off}
+
+Two classical bits travel on one qubit \emph{plus} one shared ebit (entang bit). Entanglement is consumable but not cloneable; pre-shared entanglement is a resource.
+
+\begin{labbox}{15}{Superdense Coding}
+Walk through \texttt{/playground/superdense}: pick a two-bit message, apply Alice's encoding, and verify Bob's Bell measurement recovers the message with certainty.
+\end{labbox}
+
+\begin{example}
+Alice sends bit pair $(1,0)$ using $Z$. On $\ket{\Phi^+}$, $Z_A\ket{\Phi^+}=\ket{\Phi^-}$. Bob's Bell measurement distinguishes $\ket{\Phi^+}$ from $\ket{\Phi^-}$, decoding $(1,0)$.
+\end{example}
 
 \section{Quantum Teleportation}
+\label{sec:teleportation}
 
-Unknown $\ket{\psi}=\alpha\ket{0}+\beta\ket{1}$ transfers to Bob using shared entanglement, local gates, measurement, and two classical bits. No matter moves; Alice's original state is destroyed; signaling faster than light is impossible.
+\subsection{Protocol steps}
+
+Unknown state $\ket{\psi}=\alpha\ket{0}+\beta\ket{1}$ on qubit~0 teleports to Bob using shared $\ket{\Phi^+}_{12}$ on qubits~1 (Alice) and~2 (Bob):
+\begin{enumerate}[noitemsep]
+\item Alice applies CNOT$_{0\to 1}$ then $H_0$.
+\item Alice measures qubits~0 and~1 in $Z$, obtaining two classical bits.
+\item Bob applies corrections $X^{m_1}Z^{m_0}$ to qubit~2 based on outcomes $(m_0,m_1)$.
+\end{enumerate}
+Bob's qubit ends in $\ket{\psi}$; Alice's original is destroyed.
+
+\subsection{No cloning and no signaling}
+
+Teleportation transfers quantum state using one ebit and two classical bits. It does not copy $\ket{\psi}$ (no-cloning) and cannot signal faster than light because Bob's state is mixed until classical bits arrive.
+
+\begin{labbox}{16}{Teleportation Simulator}
+Run \texttt{/playground/teleportation} with random $\ket{\psi}$. Track Alice's measurements and Bob's conditional corrections.
+\end{labbox}
+
+\begin{example}
+After Alice measures $\ket{\Phi^+}$ shared pair and gets $(m_0,m_1)=(0,0)$, Bob's qubit is $X^0Z^0\ket{\psi}=\ket{\psi}$ without correction if the circuit normalization matches standard conventions; other outcomes require $X$ and/or $Z$.
+\end{example}
 
 \section{BB84 Quantum Key Distribution}
+\label{sec:bb84}
 
-Alice encodes random bits in random Z or X bases; Bob measures in random bases. Matching bases yield sifted key bits; sampling reveals eavesdropping via elevated error rates.
+\subsection{Protocol outline}
 
-\begin{center}
-\fbox{\parbox{0.9\textwidth}{\textbf{Interactive Labs 15--18:} CHSH, superdense coding, teleportation, BB84.}}
-\end{center}
+\begin{enumerate}[noitemsep]
+\item Alice chooses random bits and random bases ($Z$ or $X$), encodes, and sends qubits.
+\item Bob measures in random bases.
+\item They publicly compare bases (not outcomes); matching bases yield sifted key bits.
+\item They sample a subset to estimate error rate; elevated errors suggest eavesdropping.
+\end{enumerate}
+
+\subsection{Security intuition}
+
+An eavesdropper Eve cannot measure unknown states without disturbance (no-cloning, measurement back-action). Intercept-resend attacks increase bit-error rates detectable in the sifted key.
+
+\begin{labbox}{17}{BB84 Simulator}
+Use \texttt{/playground/bb84} with and without an eavesdropper. Compare error rates on the sifted key.
+\end{labbox}
+
+\begin{example}
+Alice encodes bit~1 in $X$ basis as $\ket{-}$. Bob measures in $Z$, obtaining random outcomes---sifted key uses only rounds where bases matched. If Eve intercepts with random bases, $\approx 25\%$ of sifted bits err for unbiased encoding.
+\end{example}
 
 \section*{Exercises}
 \begin{enumerate}[label=\arabic*.]
-\item After Alice measures $\ket{\Phi^+}$ and gets $1$, what is Bob's qubit?
-\item Why does Eve's intercept-resend attack increase the error rate?
-\item Compute $S$ for a singlet with optimal angles (sketch).
+\item After Alice measures her qubit of $\ket{\Phi^+}$ in $Z$ and gets $1$, what is Bob's qubit (before any correction)?
+\item Why does Eve's intercept-resend attack increase the error rate in BB84?
+\item Sketch how $S$ in~\eqref{eq:chsh-s} is computed from four correlation settings.
+\item How many classical bits and ebits does teleportation consume per unknown qubit?
+\item Can superdense coding work without pre-shared entanglement? Justify briefly.
+\item Write the four Bell measurement projectors as $4\times 4$ matrices.
+\item Explain no-signaling: why can't Alice's local choice of $Z$ versus $X$ measurement send a message to Bob instantly?
+\item Compare BB84 security assumptions with RSA security assumptions in one paragraph.
 \end{enumerate}

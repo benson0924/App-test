@@ -1,34 +1,142 @@
 \chapter{Quantum Error Correction}
+\label{ch:qec}
 
-Real devices decohere. Error correction protects \emph{logical} qubits using redundancy in \emph{physical} qubits.
+Real quantum devices decohere: amplitudes leak to the environment, relative phases randomize, and energy relaxes toward ground states. \emph{Quantum error correction} (QEC) protects \emph{logical} qubits by encoding them redundantly across many \emph{physical} qubits and continuously extracting error \emph{syndromes} without learning the encoded data. This chapter covers noise models, the three-qubit bit-flip and phase-flip codes, the Shor nine-qubit code, stabilizer formalism (preview), and the distinction between mitigation and full fault tolerance.
 
 \section{Noise and Decoherence}
+\label{sec:noise}
 
-Errors include bit flips ($X$), phase flips ($Z$), depolarizing noise, relaxation ($T_1$), and dephasing ($T_2$). As of the \cutoff{} research cutoff, large-scale fault-tolerant quantum computation remains an active engineering goal; recent experiments demonstrate improving logical error rates with surface-code scaling \cite{acharya2024}, while commercial roadmaps should be distinguished from established theorems.
+\subsection{Error channels}
+
+Common error types include:
+\begin{itemize}[noitemsep]
+\item \textbf{Bit flip} ($X$): $\ket{0}\leftrightarrow\ket{1}$.
+\item \textbf{Phase flip} ($Z$): $\ket{+}\leftrightarrow\ket{-}$; $\ket{1}\mapsto-\ket{1}$.
+\item \textbf{Depolarizing}: random $I,X,Y,Z$ with probabilities.
+\item \textbf{Amplitude damping} ($T_1$): relaxation toward $\ket{0}$.
+\item \textbf{Phase damping} ($T_2$): loss of off-diagonal coherence.
+\end{itemize}
+Open-system evolution is modeled by completely positive trace-preserving (CPTP) maps; for introductory purposes, Pauli error models suffice.
+
+\subsection{Hardware context (\cutoff{})}
+
+As of the \cutoff{} research cutoff, large-scale fault-tolerant quantum computation remains an active engineering goal. Experiments demonstrate improving \emph{logical} error rates with surface-code scaling \cite{acharya2024}, while vendor roadmaps should be distinguished from established theorems.
+
+\begin{example}
+A bit-flip channel with probability $p$ on one qubit maps $\rho\mapsto (1-p)\rho + p X\rho X$. For $p=0.01$, repeated gates accumulate error exponentially in circuit depth unless corrected.
+\end{example}
 
 \section{Three-Qubit Bit-Flip Code}
+\label{sec:bit-flip-code}
 
-Logical encoding: $\ket{0_L}=\ket{000}$, $\ket{1_L}=\ket{111}$. An arbitrary logical qubit $\alpha\ket{0_L}+\beta\ket{1_L}$ can suffer a single $X$ error on one wire; parity measurements reveal the syndrome without collapsing $\alpha,\beta$.
+\subsection{Encoding}
+
+Logical states encode as
+\begin{equation}
+\ket{0_L}=\ket{000},\qquad \ket{1_L}=\ket{111}.
+\label{eq:bitflip-encoding}
+\end{equation}
+An arbitrary logical qubit $\alpha\ket{0_L}+\beta\ket{1_L}$ spreads information across three physical qubits.
+
+\subsection{Syndrome measurement}
+
+Measure parity $Z_0 Z_1$ and $Z_1 Z_2$ without collapsing the logical $\alpha,\beta$ (using ancilla-based circuits). Outcomes form a \emph{syndrome} identifying which $X$ error occurred, if any. Apply corrective $X$ on the flagged qubit.
+
+\begin{labbox}{13}{Error Correction Simulator}
+At \texttt{/playground/error-correction}, inject a random single bit-flip on a encoded $\ket{+_L}$ state. Read syndromes and apply correction. Verify the logical state is restored.
+\end{labbox}
+
+\begin{example}
+An $X$ error on qubit~2 flips $\ket{010}$ component in $\alpha\ket{000}+\beta\ket{111}$ if only qubit~2 errs---more generally, $X_2$ on $\alpha\ket{0_L}+\beta\ket{1_L}$ yields $\alpha\ket{010}+\beta\ket{101}$. Parity checks distinguish $X_0,X_1,X_2$ syndromes uniquely for single errors.
+\end{example}
 
 \section{Phase-Flip Code}
+\label{sec:phase-flip-code}
 
-Phase errors flip $\ket{+}\leftrightarrow\ket{-}$. Conjugation by $H$ exchanges $X$ and $Z$, reducing phase-flip correction to bit-flip correction in the rotated basis.
+\subsection{Encoding in $X$ eigenbasis}
+
+Phase errors flip $\ket{+}\leftrightarrow\ket{-}$. Encode
+\begin{equation}
+\ket{0_L}=\ket{+++},\qquad \ket{1_L}=\ket{---}.
+\label{eq:phaseflip-encoding}
+\end{equation}
+A single $Z$ error on one qubit reverses one $\ket{+}$ to $\ket{-}$, detectable by $X$-parity measurements.
+
+\subsection{Conjugation by Hadamard}
+
+Since $HXH=Z$ and $HZH=X$, conjugating the bit-flip code circuit by $H^{\otimes 3}$ converts bit-flip protection into phase-flip protection. This \emph{basis change} trick recurs in stabilizer codes.
 
 \section{Shor Nine-Qubit Code}
+\label{sec:shor}
 
-The Shor code combines bit- and phase-flip protection using nine physical qubits per logical qubit. Modern research emphasizes surface codes and other topological schemes with higher thresholds and more hardware-friendly layouts.
+\subsection{Simultaneous bit- and phase-flip protection}
 
-\section{Error Mitigation vs.\ Correction}
+The Shor code concatenates bit-flip and phase-flip encodings using nine physical qubits per logical qubit. It corrects arbitrary single-qubit Pauli errors. The encoding spreads one logical qubit across a block resilient to both $X$ and $Z$ faults on any one wire.
 
-In the NISQ era \cite{preskill2018}, error \emph{mitigation} techniques (zero-noise extrapolation, probabilistic error cancellation) reduce bias without full logical encoding. Mitigation is not a substitute for fault tolerance at scale.
+\subsection{Historical role and modern successors}
 
-\begin{center}
-\fbox{\parbox{0.9\textwidth}{\textbf{Interactive Lab 14:} Inject bit-flip errors and correct with syndromes.}}
-\end{center}
+Shor's code established that quantum error correction is possible in principle. Modern research emphasizes \emph{surface codes} and other topological schemes with higher thresholds and 2D-local check layouts suitable for superconducting and ion-trap arrays.
+
+\begin{example}
+Logical $\ket{0_L}$ in Shor's code is a highly entangled superposition of 512 computational basis strings (nine qubits). A single $Y$ error (combined bit and phase) maps to a detectable syndrome without revealing whether the logical state was $\ket{0_L}$ or $\ket{1_L}$.
+\end{example}
+
+\section{Stabilizer Formalism (Preview)}
+\label{sec:stabilizers}
+
+\subsection{Stabilizer group}
+
+Many QEC codes are described by an abelian \emph{stabilizer group} $\mathcal{S}$ of Pauli operators that fix the code space:
+\begin{equation}
+\ket{\psi_L}\in\mathcal{C}\quad\Leftrightarrow\quad s\ket{\psi_L}=\ket{\psi_L}\;\;\forall s\in\mathcal{S}.
+\label{eq:stabilizer}
+\end{equation}
+Measuring stabilizer generators yields syndromes without collapsing logical information when performed via ancilla coupling. The three-qubit bit-flip code has stabilizers $Z_0Z_1$ and $Z_1Z_2$; the phase-flip code uses $X_0X_1$ and $X_1X_2$.
+
+\subsection{CSS codes}
+
+\emph{Calderbank--Shor--Steane} (CSS) codes separate $X$-type and $Z$-type stabilizers, enabling bitwise error correction for each type. The Steane [[7,1,3]] code uses seven physical qubits per logical qubit and corrects any single Pauli error---a stepping stone between three-qubit toy codes and surface codes.
+
+\begin{example}
+For the bit-flip code, valid codewords satisfy $Z_0Z_1\ket{\psi}=\ket{\psi}$ and $Z_1Z_2\ket{\psi}=\ket{\psi}$. An $X$ error on qubit~1 anticommutes with $Z_0Z_1$, flipping the syndrome bit associated with that stabilizer.
+\end{example}
+
+\subsection{Surface code glance}
+
+The surface code stabilizes a 2D lattice of physical qubits with local $X$- and $Z$-type checks on plaquettes and stars. Logical operators correspond to non-contractible loops on the surface. Threshold estimates near $1\%$ physical error per gate motivate current hardware efforts \cite{acharya2024}. Distance~$d$ codes correct up to $\lfloor(d-1)/2\rfloor$ Pauli errors.
+
+\subsection{Fault-tolerant gate synthesis}
+
+Logical gates are implemented by \emph{transversal} operations (applying physical gates in parallel without spreading errors) or \emph{code switching} and \emph{magic-state injection} for non-Clifford gates. The full pipeline---encode, syndrome extract, decode, distill---defines the resource overhead separating NISQ demos from cryptographically relevant computation.
+
+\section{Error Mitigation versus Correction}
+\label{sec:mitigation}
+
+\subsection{NISQ-era techniques}
+
+In the NISQ (noisy intermediate-scale quantum) era \cite{preskill2018}, \emph{error mitigation} reduces bias without full encoding:
+\begin{itemize}[noitemsep]
+\item \textbf{Zero-noise extrapolation:} run at multiple noise scales and extrapolate to zero.
+\item \textbf{Probabilistic error cancellation:} combine noisy circuits with signed weights.
+\item \textbf{Readout error mitigation:} calibrate and invert measurement confusion matrices.
+\end{itemize}
+
+\subsection{When mitigation suffices}
+
+Mitigation helps variational algorithms and short-depth demonstrations. It is \emph{not} a substitute for fault tolerance at scale: deep circuits amplify errors exponentially without logical encoding and continual syndrome extraction.
+
+\begin{example}
+Suppose a depolarizing error probability $p=10^{-3}$ per gate and depth $D=1000$. Naively, success probability $\approx (1-p)^D\approx e^{-1}\approx 0.37$. Mitigation might improve effective fidelity modestly; fault-tolerant QEC targets logical error rates $\ll p$ per logical gate.
+\end{example}
 
 \section*{Exercises}
 \begin{enumerate}[label=\arabic*.]
-\item What syndrome indicates an $X$ error on qubit 2 in the three-bit code?
-\item Why cannot you clone $\ket{\psi}$ to protect it?
+\item What syndrome pattern indicates an $X$ error on qubit~2 in the three-bit bit-flip code?
+\item Why cannot you clone $\ket{\psi}$ to protect against erasure?
 \item Distinguish physical and logical qubits in one paragraph.
+\item Write stabilizer generators for the three-qubit phase-flip code.
+\item If two independent bit-flips occur, can the three-qubit code always correct? Explain.
+\item Compare resource overhead: three-qubit code versus Shor nine-qubit code per logical qubit.
+\item Name one mitigation technique and state its limitation relative to fault tolerance.
+\item Why must syndrome measurements be designed not to reveal $\alpha,\beta$ in $\alpha\ket{0_L}+\beta\ket{1_L}$?
 \end{enumerate}

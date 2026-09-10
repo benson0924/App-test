@@ -9,5 +9,7 @@ if ! command -v pdflatex >/dev/null 2>&1; then
 fi
 
 pdflatex -interaction=nonstopmode main.tex
+bibtex main || true
+pdflatex -interaction=nonstopmode main.tex
 pdflatex -interaction=nonstopmode main.tex
 echo "Built: book/main.pdf"
