@@ -22,7 +22,6 @@ import {
   type MeasurementBasis,
 } from 'quantum-core';
 
-const SQ2 = 1 / Math.sqrt(2);
 
 function BasisProbabilityPanel() {
   const [alphaRe, setAlphaRe] = useState(0.6);
