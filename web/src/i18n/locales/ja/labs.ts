@@ -1,0 +1,303 @@
+import type { TranslationTree } from '@/i18n/types';
+
+export const labs: TranslationTree = {
+  "shared": {
+    "stateColumn": "|ψ⟩",
+    "amplitude": "振幅",
+    "probSquared": "|振幅|²",
+    "real": "実部",
+    "imaginary": "虚部",
+    "before": "前",
+    "after": "後",
+    "reset": "リセット",
+    "measure": "測定",
+    "run": "実行",
+    "step": "ステップ",
+    "clear": "クリア",
+    "prev": "← 前へ",
+    "next": "次へ →",
+    "qubits": "量子ビット",
+    "depth": "深さ",
+    "gates": "ゲート",
+    "presets": "プリセット",
+    "position": "位置",
+    "decimal": "十進",
+    "component": "成分",
+    "value": "値",
+    "columnVector": "列ベクトル",
+    "normalized": "（正規化済み）",
+    "scaleToNormalize": "{{scale}} 倍して正規化",
+    "theoreticalProbabilities": "理論確率：",
+    "shots": "{{n}} ショット",
+    "empiricalFrequencies": "{{n}} 回の測定{{plural}}からの実測度数。",
+    "productStateTest": "積状態テスト：",
+    "separable": "分離可能（積状態）",
+    "entangled": "もつれ（積状態ではない）",
+    "syndrome": "シンドローム（Z₀Z₁, Z₁Z₂）：",
+    "encoded": "符号化後",
+    "afterError": "エラー後",
+    "afterCorrection": "訂正後",
+    "applied": "適用：",
+    "blochVector": "ブロッホベクトル：",
+    "inputAmplitudes": "入力振幅",
+    "afterQft": "QFT 後",
+    "selectGateUnitary": "単一量子ビットゲートを選び、行列とユニタリ性（U†U = I）を確認します。",
+    "isUnitary": "✓ この行列はユニタリです。",
+    "notUnitary": "✗ 非ユニタリ（標準ゲートでは想定外）。",
+    "chshDesc": "一重項源の相関をシミュレート。古典的上界 |S| ≤ 2；量子力学では |S| ≈ 2√2。",
+    "teleportDesc": "共有もつれと 2 古典ビットで未知の |ψ⟩ を転送。量子ビット 0 = メッセージ、1 = Alice、2 = Bob。",
+    "groverDesc": "マークされた計算基底状態での振幅増幅を観察。",
+    "classicalRegister": "n ビットの古典レジスタは 2^n 種類の状態を表現できます。",
+    "zeroVectorError": "正規化には非ゼロ状態が必要です。",
+    "measurementBasis": "測定基底",
+    "basisZ": "計算基底（Z）— |0⟩, |1⟩",
+    "basisX": "X — |+⟩, |−⟩",
+    "basisY": "Y — |i⟩, |−i⟩",
+    "sequence": "列 a^x mod N：",
+    "period": "周期 r =",
+    "factors": "因数：",
+    "recovered": "復元：",
+    "actual": "実際：",
+    "result": "結果：",
+    "error": "誤差：",
+    "fidelity": "忠実度",
+    "protocolNotes": "プロトコル注記",
+    "send": "送信",
+    "runProtocol": "プロトコル実行",
+    "runExperiment": "実験実行",
+    "runBb84": "BB84 実行",
+    "runDeutsch": "ドイチ実行",
+    "runDj": "DJ 実行",
+    "recoverSecret": "秘密を復元",
+    "queryOracle": "オラクル照会",
+    "estimatePhase": "位相推定",
+    "runFactoringDemo": "因数分解デモ実行",
+    "optimalIterations": "最適反復",
+    "fromHCnot": "H + CNOT から",
+    "directState": "直接状態",
+    "bellPhiPlus": "ベル |Φ⁺⟩",
+    "productState": "積状態",
+    "noError": "エラーなし",
+    "qubit": "量子ビット {{n}}",
+    "logicalBit": "論理ビット",
+    "errorLocation": "エラー位置",
+    "trials": "試行回数：",
+    "precisionQubits": "精度量子ビット：",
+    "truePhase": "真の位相 φ：{{phi}}（2π の分数）",
+    "baseA": "底 a",
+    "modulusN": "法 N",
+    "randomBaseA": "ランダム底 a：{{a}}",
+    "inputQubitsN": "入力量子ビット n：{{n}}",
+    "constantOracle": "定数オラクル",
+    "balancedOracle": "バランスオラクル",
+    "classification": "分類：",
+    "measuredInput": "測定された入力量子ビット：",
+    "siftedKeyLength": "ふるい後鍵長：",
+    "errorRate": "誤り率（一致基底）：",
+    "sifted": "ふるい後：",
+    "eveIntercepts": "イブが傍受（ランダム基底）",
+    "dragOntoCircuit": "{{gate}} を回路にドラッグ",
+    "rotationTheta": "回転 θ：{{deg}}°",
+    "showOpenQasm": "OpenQASM を表示",
+    "hideOpenQasm": "OpenQASM を隠す",
+    "statevector": "状態ベクトル |ψ⟩",
+    "probDistribution": "確率分布",
+    "measurementHistogram": "測定ヒストグラム",
+    "measureShots": "測定（1024 ショット）",
+    "chshParameter": "CHSH パラメータ S =",
+    "violatesClassical": "古典的上界を違反（|S| > 2）",
+    "withinClassical": "このサンプルでは古典的上界内",
+    "applyGate": "{{gate}} を適用",
+    "initialTheta": "初期 θ：{{deg}}°",
+    "initialPhi": "初期 φ：{{deg}}°",
+    "amp0": "|0⟩ 振幅",
+    "amp1": "|1⟩ 振幅",
+    "polarAngle": "θ（極角）：{{deg}}°",
+    "azimuthal": "φ（方位角）：{{deg}}°",
+    "magnitudeR": "大きさ r：{{r}}",
+    "phasePhi": "位相 φ：{{deg}}°（{{rad}} ラジアン）",
+    "rectangular": "直交座標：",
+    "polar": "極座標：",
+    "alphaAmp0": "α（|0⟩ の振幅）",
+    "betaAmp1": "β（|1⟩ の振幅）",
+    "alphaReal": "α 実部",
+    "alphaImag": "α 虚部",
+    "betaReal": "β 実部",
+    "betaImag": "β 虚部",
+    "hint": "ヒント",
+    "hideHint": "ヒントを隠す",
+    "revealStep": "ステップ {{n}} を表示",
+    "bitWidth": "ビット幅：{{n}}",
+    "carryOut": "キャリー出力",
+    "sum": "和",
+    "numberOfBits": "ビット数（n）：{{n}}",
+    "possibleBitStrings": "{{count}} 種類のビット列",
+    "scrollBrowse": "全 {{count}} 列を表示 — スクロールして閲覧。",
+    "selectGateTruth": "ゲートを選び、真理値表の行をクリックして入力を設定し出力を確認。",
+    "rippleCarryDesc": "2 つの二進数を入力し、キャリービットが最下位から最上位へ伝播する様子を観察。",
+    "complexPlaneDesc": "スライダーで直交座標と極座標の複素数を探索。",
+    "qubitStateDesc": "振幅 α と β を編集。ケット、列ベクトル、測定確率、ブロッホ座標がリアルタイム更新。",
+    "measurementDesc": "振幅を設定し測定基底を選び、複数ショットでヒストグラムを構築。",
+    "blochDesc": "θ と φ を調整するかプリセットを選択。すべての表現が同期。",
+    "gateExplorerDesc": "ゲートを選び現在の状態に適用。行列–ベクトル積とブロッホベクトルの更新を確認。",
+    "tensorDesc": "2 つの単一量子ビット状態が積状態 |ψ⟩ ⊗ |φ⟩ にどう結合するか探索。",
+    "errorCorrectionDesc": "|0⟩ または |1⟩ を符号化し、ビットフリップエラーを注入、シンドロームを読み取り訂正。",
+    "superdenseDesc": "1 量子ビットと 1 共有 ebit で 2 古典ビットを送信。",
+    "bb84Desc": "BB84 量子鍵配送シミュレーション。",
+    "deutschDesc": "1 回の照会で 1 ビットの定数関数とバランス関数を区別。",
+    "djDesc": "1 回の照会で定数とバランスのオラクルを区別。",
+    "bvDesc": "f(x) = s·x mod 2 の隠れ文字列 s を 1 回で見つける。",
+    "simonDesc": "オラクルは周期 s を隠す：f(x) = f(x ⊕ s)。衝突を集めて s を復元。",
+    "qftDesc": "計算基底入力に QFT を適用し振幅の広がりを確認。",
+    "phaseEstDesc": "制御-U 反復で固有位相を推定。",
+    "periodDesc": "ショアアルゴリズムで使う合同累乗列を探索。",
+    "shorDesc": "量子因数分解パイプラインの古典周期探索デモ。",
+    "markedState": "マーク状態 |{{label}}⟩",
+    "iteration": "反復：{{step}} / {{total}}",
+    "probMarked": "P(マーク) =",
+    "inputLabel": "入力 |{{label}}⟩",
+    "hiddenS": "隠れ s（十進）：{{s}}",
+    "originalPsi": "元の |ψ⟩：",
+    "bobsQubit": "Bob の量子ビット：",
+    "randomize": "ランダム化",
+    "runAll": "実行",
+    "stepLabel": "ステップ（{{label}}）",
+    "oracleConst0": "f(x)=0",
+    "oracleConst1": "f(x)=1",
+    "oracleBalX": "f(x)=x",
+    "oracleBalNotX": "f(x)=NOT x",
+    "constant": "定数",
+    "balanced": "バランス",
+    "idealNoiseless": "|0⟩ → 定数、|1⟩ → バランス（理想ノイズなし）。",
+    "checkSimulation": "（シミュレーションを確認）",
+    "oracleIs": "オラクルは",
+    "binaryEstimate": "二進推定：",
+    "phiEstimate": "φ 推定：",
+    "periodRecovered": "復元された周期 s =",
+    "shorFactorDemo": "ショアアルゴリズムデモ（N = 15）",
+    "entangledCriterion": "2 量子ビットでは、もつれ状態は c₀₀·c₁₁ ≠ c₀₁·c₁₀（シュミットランク > 1）を満たす。",
+    "shorPeriodNote": "ショアアルゴリズムは耐故障マシン上で QFT ベースの位相推定によりこの周期を効率的に見つける。",
+    "teleportNote1": "訂正表：00→I、01→X、10→Z、11→ZX（慣例による）。",
+    "teleportNote2": "Alice の状態は破壊される；Bob は古典ビットが必要。",
+    "teleportNote3": "もつれだけでは超光速通信はできない。",
+    "superdenseStep1": "Alice と Bob の間で共有ベル対 |Φ⁺⟩ を準備。",
+    "superdenseStep2": "Alice が自分の量子ビットに古典ビット（{{b0}}, {{b1}}）を符号化。",
+    "superdenseStep3": "Alice が CNOT と H を適用し、量子ビットを Bob に送る。",
+    "superdenseStep4": "Bob が両量子ビットを測定 → |{{outcome}}⟩ →（{{d0}}, {{d1}}）に復号。",
+    "teleportStepBell": "量子ビット 1,2 で H₁ と CNOT₁₂ により |Φ⁺⟩ を準備。",
+    "teleportStepAlice": "Alice が CNOT₀₁ と H₀ を適用。",
+    "teleportStepMeasure": "Alice が測定 →（{{m0}}, {{m1}}）。2 古典ビットを送信。",
+    "teleportStepBob": "Bob が {{z}} と {{x}} を適用。",
+    "teleportStepVerify": "検証済み：F = {{f}}（理想値 1）。",
+    "teleportRunBell": "量子ビット 1,2 で |Φ⁺⟩ を準備。",
+    "teleportRunAlice": "Alice が CNOT₀₁ と H₀ を適用。",
+    "teleportRunMeasure": "Alice が測定 →（{{m0}}, {{m1}}）。",
+    "teleportRunBob": "Bob が {{z}} と {{x}} を適用。",
+    "teleportRunFidelity": "忠実度 F = {{f}}。",
+    "shorStepFactor": "N = {{N}} を因数分解、 a = {{a}} を選択。",
+    "shorStepGcd": "gcd({{a}}, {{N}}) = {{g}} → 古典的に因数発見。",
+    "shorStepPeriod": "{{a}}^x mod {{N}} の周期は r = {{r}}。",
+    "shorStepHalf": "{{a}}^{{half}} mod {{N}} = {{val}}。",
+    "shorStepFactors": "因数：{{p}} × {{q}} = {{N}}。",
+    "shorStepNoFactors": "この a では因数が得られなかった（別の底を試す）。",
+    "setup": "セットアップ",
+    "bellPair": "ベル対",
+    "aliceGates": "Alice ゲート",
+    "measureStep": "測定",
+    "bobCorrects": "Bob 訂正",
+    "complete": "完了",
+    "presetBell": "ベル |Φ⁺⟩",
+    "presetGhz": "GHZ (3)",
+    "presetTeleport": "テレポ（一部）",
+    "tableAliceBit": "Alice ビット",
+    "tableAliceBasis": "Alice 基底",
+    "tableBobBasis": "Bob 基底",
+    "tableBobBit": "Bob ビット",
+    "tableX": "x",
+    "tableFx": "f(x)",
+    "tableXor": "x ⊕ f(x)",
+    "unaryOutput": "{{gate}}({{a}}) = {{out}}",
+    "binaryOutput": "{{gate}}({{a}}, {{b}}) = {{out}}",
+    "binarySum": "{{a}}₂ + {{b}}₂ = {{sum}}₂（十進：{{da}} + {{db}} = {{ds}}）",
+    "twoPowN": "2^{{n}} = {{count}}",
+    "entanglementSchmidt": "2 量子ビットでは、もつれ状態は c₀₀·c₁₁ ≠ c₀₁·c₁₀（シュミットランク > 1）を満たす。"
+  },
+  "binary-states": {
+    "title": "二進状態エクスプローラ"
+  },
+  "logic-gates": {
+    "title": "論理ゲートシミュレータ"
+  },
+  "binary-adder": {
+    "title": "二進加算器（リップルキャリー）"
+  },
+  "complex-plane": {
+    "title": "複素数エクスプローラ"
+  },
+  "qubit-state": {
+    "title": "単一量子ビット状態エクスプローラ"
+  },
+  "measurement": {
+    "title": "測定シミュレータ"
+  },
+  "bloch-sphere": {
+    "title": "3D ブロッホ球"
+  },
+  "gate-explorer": {
+    "title": "量子ゲートエクスプローラ"
+  },
+  "unitary-checker": {
+    "title": "行列・ユニタリチェッカー"
+  },
+  "tensor-product": {
+    "title": "テンソル積計算機"
+  },
+  "bell-states": {
+    "title": "ベル状態生成器"
+  },
+  "entanglement": {
+    "title": "もつれ測定"
+  },
+  "error-correction": {
+    "title": "3量子ビットビットフリップ符号"
+  },
+  "chsh": {
+    "title": "CHSH ベルテスト"
+  },
+  "superdense": {
+    "title": "超高密度符号化"
+  },
+  "teleportation": {
+    "title": "量子テレポーテーション"
+  },
+  "bb84": {
+    "title": "BB84 鍵配送"
+  },
+  "deutsch": {
+    "title": "ドイチアルゴリズム"
+  },
+  "deutsch-jozsa": {
+    "title": "ドイチ・ヨズサ"
+  },
+  "bernstein-vazirani": {
+    "title": "バーンスタイン・ヴァジラニ"
+  },
+  "simon": {
+    "title": "サイモンアルゴリズム（デモ）"
+  },
+  "grover": {
+    "title": "グローバー探索"
+  },
+  "qft": {
+    "title": "量子フーリエ変換"
+  },
+  "phase-estimation": {
+    "title": "量子位相推定"
+  },
+  "period-finding": {
+    "title": "周期探索（mod N）"
+  },
+  "shor": {
+    "title": "ショアアルゴリズムデモ（N = 15）"
+  }
+};

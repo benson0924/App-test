@@ -1,0 +1,303 @@
+import type { TranslationTree } from '@/i18n/types';
+
+export const labs: TranslationTree = {
+  "shared": {
+    "stateColumn": "|ψ⟩",
+    "amplitude": "Amplitude",
+    "probSquared": "|amp|²",
+    "real": "Real",
+    "imaginary": "Imaginary",
+    "before": "Before",
+    "after": "After",
+    "reset": "Reset",
+    "measure": "Measure",
+    "run": "Run",
+    "step": "Step",
+    "clear": "Clear",
+    "prev": "← Prev",
+    "next": "Next →",
+    "qubits": "Qubits",
+    "depth": "Depth",
+    "gates": "Gates",
+    "presets": "Presets",
+    "position": "Position",
+    "decimal": "decimal",
+    "component": "Component",
+    "value": "Value",
+    "columnVector": "Column vector",
+    "normalized": "(normalized)",
+    "scaleToNormalize": "Scale by {{scale}} to normalize",
+    "theoreticalProbabilities": "Theoretical probabilities:",
+    "shots": "{{n}} shots",
+    "empiricalFrequencies": "Empirical frequencies from {{n}} measurement{{plural}}.",
+    "productStateTest": "Product state test:",
+    "separable": "Separable (product state)",
+    "entangled": "Entangled (not a product state)",
+    "syndrome": "Syndrome (Z₀Z₁, Z₁Z₂):",
+    "encoded": "Encoded",
+    "afterError": "After error",
+    "afterCorrection": "After correction",
+    "applied": "Applied:",
+    "blochVector": "Bloch vector:",
+    "inputAmplitudes": "Input amplitudes",
+    "afterQft": "After QFT",
+    "sequence": "Sequence a^x mod N:",
+    "period": "Period r =",
+    "factors": "Factors:",
+    "recovered": "Recovered:",
+    "actual": "actual:",
+    "result": "Result:",
+    "error": "Error:",
+    "fidelity": "Fidelity",
+    "protocolNotes": "Protocol notes",
+    "send": "Send",
+    "runProtocol": "Run protocol",
+    "runExperiment": "Run experiment",
+    "runBb84": "Run BB84",
+    "runDeutsch": "Run Deutsch",
+    "runDj": "Run DJ",
+    "recoverSecret": "Recover secret",
+    "queryOracle": "Query oracle",
+    "estimatePhase": "Estimate phase",
+    "runFactoringDemo": "Run factoring demo",
+    "optimalIterations": "Optimal iterations",
+    "fromHCnot": "From H + CNOT",
+    "directState": "Direct state",
+    "bellPhiPlus": "Bell |Φ⁺⟩",
+    "productState": "Product state",
+    "noError": "No error",
+    "qubit": "Qubit {{n}}",
+    "logicalBit": "Logical bit",
+    "errorLocation": "Error location",
+    "trials": "Trials:",
+    "precisionQubits": "Precision qubits:",
+    "truePhase": "True phase φ: {{phi}} (fraction of 2π)",
+    "baseA": "Base a",
+    "modulusN": "Modulus N",
+    "randomBaseA": "Random base a: {{a}}",
+    "inputQubitsN": "Input qubits n: {{n}}",
+    "constantOracle": "Constant oracle",
+    "balancedOracle": "Balanced oracle",
+    "classification": "Classification:",
+    "measuredInput": "Measured input qubit:",
+    "siftedKeyLength": "Sifted key length:",
+    "errorRate": "Error rate (matching bases):",
+    "sifted": "Sifted:",
+    "eveIntercepts": "Eve intercepts (random basis)",
+    "dragOntoCircuit": "Drag {{gate}} onto circuit",
+    "rotationTheta": "Rotation θ: {{deg}}°",
+    "showOpenQasm": "Show OpenQASM",
+    "hideOpenQasm": "Hide OpenQASM",
+    "statevector": "Statevector |ψ⟩",
+    "probDistribution": "Probability distribution",
+    "measurementHistogram": "Measurement histogram",
+    "measureShots": "Measure (1024 shots)",
+    "isUnitary": "✓ This matrix is unitary.",
+    "notUnitary": "✗ Not unitary (unexpected for standard gates).",
+    "selectGateUnitary": "Select a single-qubit gate to inspect its matrix and verify unitarity (U†U = I).",
+    "chshParameter": "CHSH parameter S =",
+    "violatesClassical": "Violates classical bound (|S| > 2)",
+    "withinClassical": "Within classical bound for this sample",
+    "applyGate": "Apply {{gate}}",
+    "initialTheta": "Initial θ: {{deg}}°",
+    "initialPhi": "Initial φ: {{deg}}°",
+    "amp0": "|0⟩ amp",
+    "amp1": "|1⟩ amp",
+    "polarAngle": "θ (polar angle): {{deg}}°",
+    "azimuthal": "φ (azimuthal): {{deg}}°",
+    "magnitudeR": "Magnitude r: {{r}}",
+    "phasePhi": "Phase φ: {{deg}}° ({{rad}} rad)",
+    "rectangular": "Rectangular:",
+    "polar": "Polar:",
+    "alphaAmp0": "α (amplitude for |0⟩)",
+    "betaAmp1": "β (amplitude for |1⟩)",
+    "zeroVectorError": "State must be non-zero to normalize.",
+    "measurementBasis": "Measurement basis",
+    "basisZ": "Computational (Z) — |0⟩, |1⟩",
+    "basisX": "X — |+⟩, |−⟩",
+    "basisY": "Y — |i⟩, |−i⟩",
+    "alphaReal": "α real",
+    "alphaImag": "α imag",
+    "betaReal": "β real",
+    "betaImag": "β imag",
+    "hint": "Hint",
+    "hideHint": "Hide hint",
+    "revealStep": "Reveal step {{n}}",
+    "bitWidth": "Bit width: {{n}}",
+    "carryOut": "Carry out",
+    "sum": "Sum",
+    "numberOfBits": "Number of bits (n): {{n}}",
+    "possibleBitStrings": "{{count}} possible bit strings",
+    "scrollBrowse": "Showing all {{count}} strings — scroll to browse.",
+    "classicalRegister": "A classical register with n bits can represent 2^n distinct states.",
+    "selectGateTruth": "Select a gate, then click a row in the truth table to set inputs and see the output.",
+    "rippleCarryDesc": "Enter two binary numbers and watch how carry bits propagate from least to most significant bit.",
+    "complexPlaneDesc": "Drag the sliders to explore a complex number in rectangular and polar form.",
+    "qubitStateDesc": "Edit amplitudes α and β. The ket, column vector, measurement probabilities, and Bloch coordinates update live.",
+    "measurementDesc": "Set amplitudes, choose a measurement basis, and run repeated shots to build a histogram.",
+    "blochDesc": "Adjust θ and φ, or pick a preset. All representations stay synchronized.",
+    "gateExplorerDesc": "Choose a gate and apply it to the current state. See matrix–vector multiplication and the Bloch vector update.",
+    "tensorDesc": "Explore how two single-qubit states combine into a two-qubit product state |ψ⟩ ⊗ |φ⟩.",
+    "errorCorrectionDesc": "Encode |0⟩ or |1⟩, inject a bit-flip error, read syndrome, and correct.",
+    "chshDesc": "Simulate correlations for a singlet-like source. Classical bound |S| ≤ 2; quantum mechanics can reach |S| ≈ 2√2.",
+    "superdenseDesc": "Send two classical bits using one qubit and one shared ebit.",
+    "teleportDesc": "Transfer unknown |ψ⟩ using shared entanglement + 2 classical bits. Qubit 0 = message, 1 = Alice, 2 = Bob.",
+    "bb84Desc": "BB84 quantum key distribution simulation.",
+    "deutschDesc": "One query distinguishes constant from balanced functions on one bit.",
+    "djDesc": "Distinguish constant vs balanced oracle with a single query.",
+    "bvDesc": "Find hidden string s where f(x) = s·x mod 2 in one query.",
+    "simonDesc": "Oracle hides period s: f(x) = f(x ⊕ s). Collect collisions to recover s.",
+    "groverDesc": "Watch amplitude amplification on a marked computational basis state.",
+    "qftDesc": "Apply QFT to a computational basis input and inspect amplitude spread.",
+    "phaseEstDesc": "Estimate an eigenphase using controlled-U iterations.",
+    "periodDesc": "Explore modular exponentiation sequences used in Shor's algorithm.",
+    "shorDesc": "Classical period-finding demo of the quantum factoring pipeline.",
+    "markedState": "Marked state |{{label}}⟩",
+    "iteration": "Iteration: {{step}} / {{total}}",
+    "probMarked": "P(marked) =",
+    "inputLabel": "Input |{{label}}⟩",
+    "hiddenS": "Hidden s (decimal): {{s}}",
+    "originalPsi": "Original |ψ⟩:",
+    "bobsQubit": "Bob's qubit:",
+    "randomize": "Randomize",
+    "runAll": "Run",
+    "stepLabel": "Step ({{label}})",
+    "oracleConst0": "f(x)=0",
+    "oracleConst1": "f(x)=1",
+    "oracleBalX": "f(x)=x",
+    "oracleBalNotX": "f(x)=NOT x",
+    "constant": "Constant",
+    "balanced": "Balanced",
+    "idealNoiseless": "|0⟩ → constant, |1⟩ → balanced (ideal noiseless case).",
+    "checkSimulation": "(check simulation)",
+    "oracleIs": "oracle is",
+    "binaryEstimate": "Binary estimate:",
+    "phiEstimate": "φ estimate:",
+    "periodRecovered": "Recovered period s =",
+    "shorFactorDemo": "Shor's Algorithm Demo (N = 15)",
+    "entangledCriterion": "For two qubits, entangled states satisfy c₀₀·c₁₁ ≠ c₀₁·c₁₀ (Schmidt rank > 1).",
+    "shorPeriodNote": "Shor's algorithm uses QFT-based phase estimation to find this period efficiently on a fault-tolerant machine.",
+    "teleportNote1": "Correction table: 00→I, 01→X, 10→Z, 11→ZX (convention-dependent).",
+    "teleportNote2": "Alice's state is destroyed; Bob needs classical bits before decoding.",
+    "teleportNote3": "Entanglement alone cannot signal faster than light.",
+    "superdenseStep1": "Shared Bell pair |Φ⁺⟩ prepared between Alice and Bob.",
+    "superdenseStep2": "Alice encodes classical bits ({{b0}}, {{b1}}) on her qubit.",
+    "superdenseStep3": "Alice applies CNOT and H, then sends her qubit to Bob.",
+    "superdenseStep4": "Bob measures both qubits → |{{outcome}}⟩ → decoded ({{d0}}, {{d1}}).",
+    "teleportStepBell": "Prepare |Φ⁺⟩ on qubits 1,2 via H₁ and CNOT₁₂.",
+    "teleportStepAlice": "Alice applies CNOT₀₁ and H₀ to her qubits.",
+    "teleportStepMeasure": "Alice measures → ({{m0}}, {{m1}}). Sends 2 classical bits.",
+    "teleportStepBob": "Bob applies {{z}} and {{x}}.",
+    "teleportStepVerify": "Verified: F = {{f}} (ideal 1).",
+    "teleportRunBell": "Prepare |Φ⁺⟩ on qubits 1,2.",
+    "teleportRunAlice": "Alice applies CNOT₀₁ and H₀.",
+    "teleportRunMeasure": "Alice measures → ({{m0}}, {{m1}}).",
+    "teleportRunBob": "Bob applies {{z}} and {{x}}.",
+    "teleportRunFidelity": "Fidelity F = {{f}}.",
+    "shorStepFactor": "Factor N = {{N}}, choose a = {{a}}.",
+    "shorStepGcd": "gcd({{a}}, {{N}}) = {{g}} → factor found classically.",
+    "shorStepPeriod": "Period of {{a}}^x mod {{N}} is r = {{r}}.",
+    "shorStepHalf": "{{a}}^{{half}} mod {{N}} = {{val}}.",
+    "shorStepFactors": "Factors: {{p}} × {{q}} = {{N}}.",
+    "shorStepNoFactors": "This choice of a did not yield factors (try another base).",
+    "setup": "Setup",
+    "bellPair": "Bell pair",
+    "aliceGates": "Alice gates",
+    "measureStep": "Measure",
+    "bobCorrects": "Bob corrects",
+    "complete": "Complete",
+    "presetBell": "Bell |Φ⁺⟩",
+    "presetGhz": "GHZ (3)",
+    "presetTeleport": "Teleport (partial)",
+    "tableAliceBit": "Alice bit",
+    "tableAliceBasis": "Alice basis",
+    "tableBobBasis": "Bob basis",
+    "tableBobBit": "Bob bit",
+    "tableX": "x",
+    "tableFx": "f(x)",
+    "tableXor": "x ⊕ f(x)",
+    "unaryOutput": "{{gate}}({{a}}) = {{out}}",
+    "binaryOutput": "{{gate}}({{a}}, {{b}}) = {{out}}",
+    "binarySum": "{{a}}₂ + {{b}}₂ = {{sum}}₂ (decimal: {{da}} + {{db}} = {{ds}})",
+    "twoPowN": "2^{{n}} = {{count}}",
+    "entanglementSchmidt": "For two qubits, entangled states satisfy c₀₀·c₁₁ ≠ c₀₁·c₁₀ (Schmidt rank > 1)."
+  },
+  "binary-states": {
+    "title": "Binary State Explorer"
+  },
+  "logic-gates": {
+    "title": "Logic Gate Simulator"
+  },
+  "binary-adder": {
+    "title": "Binary Adder (Ripple Carry)"
+  },
+  "complex-plane": {
+    "title": "Complex Number Explorer"
+  },
+  "qubit-state": {
+    "title": "Single-Qubit State Explorer"
+  },
+  "measurement": {
+    "title": "Measurement Simulator"
+  },
+  "bloch-sphere": {
+    "title": "3D Bloch Sphere"
+  },
+  "gate-explorer": {
+    "title": "Quantum Gate Explorer"
+  },
+  "unitary-checker": {
+    "title": "Matrix & Unitary Checker"
+  },
+  "tensor-product": {
+    "title": "Tensor Product Calculator"
+  },
+  "bell-states": {
+    "title": "Bell State Generator"
+  },
+  "entanglement": {
+    "title": "Entanglement Measurement"
+  },
+  "error-correction": {
+    "title": "3-Qubit Bit-Flip Code"
+  },
+  "chsh": {
+    "title": "CHSH Bell Test"
+  },
+  "superdense": {
+    "title": "Superdense Coding"
+  },
+  "teleportation": {
+    "title": "Quantum Teleportation"
+  },
+  "bb84": {
+    "title": "BB84 Key Distribution"
+  },
+  "deutsch": {
+    "title": "Deutsch Algorithm"
+  },
+  "deutsch-jozsa": {
+    "title": "Deutsch–Jozsa"
+  },
+  "bernstein-vazirani": {
+    "title": "Bernstein–Vazirani"
+  },
+  "simon": {
+    "title": "Simon's Algorithm (Demo)"
+  },
+  "grover": {
+    "title": "Grover Search"
+  },
+  "qft": {
+    "title": "Quantum Fourier Transform"
+  },
+  "phase-estimation": {
+    "title": "Quantum Phase Estimation"
+  },
+  "period-finding": {
+    "title": "Period Finding (mod N)"
+  },
+  "shor": {
+    "title": "Shor's Algorithm Demo (N = 15)"
+  }
+};

@@ -1,0 +1,303 @@
+import type { TranslationTree } from '@/i18n/types';
+
+export const labs: TranslationTree = {
+  "shared": {
+    "stateColumn": "|ψ⟩",
+    "amplitude": "振幅",
+    "probSquared": "|振幅|²",
+    "real": "實部",
+    "imaginary": "虛部",
+    "before": "之前",
+    "after": "之後",
+    "reset": "重設",
+    "measure": "測量",
+    "run": "執行",
+    "step": "步驟",
+    "clear": "清除",
+    "prev": "← 上一步",
+    "next": "下一步 →",
+    "qubits": "量子位元",
+    "depth": "深度",
+    "gates": "閘",
+    "presets": "預設",
+    "position": "位元位置",
+    "decimal": "十進位",
+    "component": "分量",
+    "value": "值",
+    "columnVector": "列向量",
+    "normalized": "（已歸一化）",
+    "scaleToNormalize": "乘以 {{scale}} 以歸一化",
+    "theoreticalProbabilities": "理論機率：",
+    "shots": "{{n}} 次測量",
+    "empiricalFrequencies": "來自 {{n}} 次測量{{plural}}的實測頻率。",
+    "productStateTest": "乘積態測試：",
+    "separable": "可分離（乘積態）",
+    "entangled": "糾纏（非乘積態）",
+    "syndrome": "症候群（Z₀Z₁, Z₁Z₂）：",
+    "encoded": "編碼後",
+    "afterError": "錯誤後",
+    "afterCorrection": "校正後",
+    "applied": "已套用：",
+    "blochVector": "Bloch 向量：",
+    "inputAmplitudes": "輸入振幅",
+    "afterQft": "QFT 之後",
+    "selectGateUnitary": "選擇單量子位元閘以檢視其矩陣並驗證酉性（U†U = I）。",
+    "isUnitary": "✓ 此矩陣為酉矩陣。",
+    "notUnitary": "✗ 非酉矩陣（標準閘不應出現此情況）。",
+    "chshDesc": "模擬單態源的相關性。古典上界 |S| ≤ 2；量子力學可達 |S| ≈ 2√2。",
+    "teleportDesc": "使用共享糾纏與 2 個古典位元傳送未知 |ψ⟩。量子位元 0 = 訊息，1 = Alice，2 = Bob。",
+    "groverDesc": "觀察標記計算基態上的振幅放大。",
+    "classicalRegister": "具有 n 個位元的古典寄存器可表示 2^n 種不同狀態。",
+    "zeroVectorError": "狀態必須非零才能歸一化。",
+    "measurementBasis": "測量基",
+    "basisZ": "計算基（Z）— |0⟩, |1⟩",
+    "basisX": "X — |+⟩, |−⟩",
+    "basisY": "Y — |i⟩, |−i⟩",
+    "sequence": "序列 a^x mod N：",
+    "period": "週期 r =",
+    "factors": "因數：",
+    "recovered": "已恢復：",
+    "actual": "實際：",
+    "result": "結果：",
+    "error": "錯誤：",
+    "fidelity": "保真度",
+    "protocolNotes": "協定說明",
+    "send": "傳送",
+    "runProtocol": "執行協定",
+    "runExperiment": "執行實驗",
+    "runBb84": "執行 BB84",
+    "runDeutsch": "執行 Deutsch",
+    "runDj": "執行 DJ",
+    "recoverSecret": "恢復密鑰",
+    "queryOracle": "查詢神諭",
+    "estimatePhase": "估計相位",
+    "runFactoringDemo": "執行因數分解示範",
+    "optimalIterations": "最佳迭代次數",
+    "fromHCnot": "由 H + CNOT 產生",
+    "directState": "直接狀態",
+    "bellPhiPlus": "Bell |Φ⁺⟩",
+    "productState": "乘積態",
+    "noError": "無錯誤",
+    "qubit": "量子位元 {{n}}",
+    "logicalBit": "邏輯位元",
+    "errorLocation": "錯誤位置",
+    "trials": "試驗次數：",
+    "precisionQubits": "精度量子位元：",
+    "truePhase": "真實相位 φ：{{phi}}（2π 的分數）",
+    "baseA": "底數 a",
+    "modulusN": "模數 N",
+    "randomBaseA": "隨機底數 a：{{a}}",
+    "inputQubitsN": "輸入量子位元 n：{{n}}",
+    "constantOracle": "常數神諭",
+    "balancedOracle": "平衡神諭",
+    "classification": "分類：",
+    "measuredInput": "測得的輸入量子位元：",
+    "siftedKeyLength": "篩選後密鑰長度：",
+    "errorRate": "錯誤率（匹配基）：",
+    "sifted": "篩選後：",
+    "eveIntercepts": "Eve 竊聽（隨機基）",
+    "dragOntoCircuit": "將 {{gate}} 拖曳至電路",
+    "rotationTheta": "旋轉 θ：{{deg}}°",
+    "showOpenQasm": "顯示 OpenQASM",
+    "hideOpenQasm": "隱藏 OpenQASM",
+    "statevector": "狀態向量 |ψ⟩",
+    "probDistribution": "機率分布",
+    "measurementHistogram": "測量直方圖",
+    "measureShots": "測量（1024 次）",
+    "chshParameter": "CHSH 參數 S =",
+    "violatesClassical": "違反古典上界（|S| > 2）",
+    "withinClassical": "在此樣本中位於古典上界內",
+    "applyGate": "套用 {{gate}}",
+    "initialTheta": "初始 θ：{{deg}}°",
+    "initialPhi": "初始 φ：{{deg}}°",
+    "amp0": "|0⟩ 振幅",
+    "amp1": "|1⟩ 振幅",
+    "polarAngle": "θ（極角）：{{deg}}°",
+    "azimuthal": "φ（方位角）：{{deg}}°",
+    "magnitudeR": "模長 r：{{r}}",
+    "phasePhi": "相位 φ：{{deg}}°（{{rad}} 弧度）",
+    "rectangular": "直角座標：",
+    "polar": "極座標：",
+    "alphaAmp0": "α（|0⟩ 的振幅）",
+    "betaAmp1": "β（|1⟩ 的振幅）",
+    "alphaReal": "α 實部",
+    "alphaImag": "α 虛部",
+    "betaReal": "β 實部",
+    "betaImag": "β 虛部",
+    "hint": "提示",
+    "hideHint": "隱藏提示",
+    "revealStep": "揭示步驟 {{n}}",
+    "bitWidth": "位元寬度：{{n}}",
+    "carryOut": "進位輸出",
+    "sum": "和",
+    "numberOfBits": "位元數（n）：{{n}}",
+    "possibleBitStrings": "{{count}} 種可能的位元字串",
+    "scrollBrowse": "顯示全部 {{count}} 個字串 — 可捲動瀏覽。",
+    "selectGateTruth": "選擇閘，然後點擊真值表中的列以設定輸入並查看輸出。",
+    "rippleCarryDesc": "輸入兩個二進位數，觀察進位位元如何從最低有效位傳播到最高有效位。",
+    "complexPlaneDesc": "拖動滑桿以在直角座標與極座標中探索複數。",
+    "qubitStateDesc": "編輯振幅 α 與 β。Ket、列向量、測量機率與 Bloch 座標即時更新。",
+    "measurementDesc": "設定振幅、選擇測量基，並執行多次測量以建立直方圖。",
+    "blochDesc": "調整 θ 與 φ，或選擇預設。所有表示保持同步。",
+    "gateExplorerDesc": "選擇閘並套用到目前狀態。查看矩陣–向量乘法與 Bloch 向量更新。",
+    "tensorDesc": "探索兩個單量子位元狀態如何組合成雙量子位元乘積態 |ψ⟩ ⊗ |φ⟩。",
+    "errorCorrectionDesc": "編碼 |0⟩ 或 |1⟩，注入位元翻轉錯誤，讀取症候群並校正。",
+    "superdenseDesc": "使用一個量子位元與一個共享 ebit 傳送兩個古典位元。",
+    "bb84Desc": "BB84 量子密鑰分配模擬。",
+    "deutschDesc": "一次查詢即可區分單一位元上的常數與平衡函數。",
+    "djDesc": "以單次查詢區分常數與平衡神諭。",
+    "bvDesc": "一次查詢找出隱藏字串 s，其中 f(x) = s·x mod 2。",
+    "simonDesc": "神諭隱藏週期 s：f(x) = f(x ⊕ s)。收集碰撞以恢復 s。",
+    "qftDesc": "對計算基輸入套用 QFT 並檢視振幅分布。",
+    "phaseEstDesc": "使用受控-U 迭代估計本征相位。",
+    "periodDesc": "探索 Shor 演算法中使用的模指數序列。",
+    "shorDesc": "量子因數分解管線的古典週期尋找示範。",
+    "markedState": "標記狀態 |{{label}}⟩",
+    "iteration": "迭代：{{step}} / {{total}}",
+    "probMarked": "P(標記) =",
+    "inputLabel": "輸入 |{{label}}⟩",
+    "hiddenS": "隱藏 s（十進位）：{{s}}",
+    "originalPsi": "原始 |ψ⟩：",
+    "bobsQubit": "Bob 的量子位元：",
+    "randomize": "隨機化",
+    "runAll": "執行",
+    "stepLabel": "步驟（{{label}}）",
+    "oracleConst0": "f(x)=0",
+    "oracleConst1": "f(x)=1",
+    "oracleBalX": "f(x)=x",
+    "oracleBalNotX": "f(x)=NOT x",
+    "constant": "常數",
+    "balanced": "平衡",
+    "idealNoiseless": "|0⟩ → 常數，|1⟩ → 平衡（理想無噪聲情況）。",
+    "checkSimulation": "（檢查模擬）",
+    "oracleIs": "神諭為",
+    "binaryEstimate": "二進位估計：",
+    "phiEstimate": "φ 估計：",
+    "periodRecovered": "已恢復週期 s =",
+    "shorFactorDemo": "Shor 演算法示範（N = 15）",
+    "entangledCriterion": "對於兩個量子位元，糾纏態滿足 c₀₀·c₁₁ ≠ c₀₁·c₁₀（Schmidt 秩 > 1）。",
+    "shorPeriodNote": "Shor 演算法在容錯機器上使用基於 QFT 的相位估計以高效找出此週期。",
+    "teleportNote1": "校正表：00→I，01→X，10→Z，11→ZX（依慣例而定）。",
+    "teleportNote2": "Alice 的狀態被破壞；Bob 需要古典位元才能解碼。",
+    "teleportNote3": "僅靠糾纏無法超光速傳信。",
+    "superdenseStep1": "Alice 與 Bob 之間準備共享 Bell 對 |Φ⁺⟩。",
+    "superdenseStep2": "Alice 在其量子位元上編碼古典位元（{{b0}}, {{b1}}）。",
+    "superdenseStep3": "Alice 套用 CNOT 與 H，然後將其量子位元傳給 Bob。",
+    "superdenseStep4": "Bob 測量兩個量子位元 → |{{outcome}}⟩ → 解碼為（{{d0}}, {{d1}}）。",
+    "teleportStepBell": "在量子位元 1,2 上透過 H₁ 與 CNOT₁₂ 準備 |Φ⁺⟩。",
+    "teleportStepAlice": "Alice 對其量子位元套用 CNOT₀₁ 與 H₀。",
+    "teleportStepMeasure": "Alice 測量 →（{{m0}}, {{m1}}）。傳送 2 個古典位元。",
+    "teleportStepBob": "Bob 套用 {{z}} 與 {{x}}。",
+    "teleportStepVerify": "已驗證：F = {{f}}（理想值 1）。",
+    "teleportRunBell": "在量子位元 1,2 上準備 |Φ⁺⟩。",
+    "teleportRunAlice": "Alice 套用 CNOT₀₁ 與 H₀。",
+    "teleportRunMeasure": "Alice 測量 →（{{m0}}, {{m1}}）。",
+    "teleportRunBob": "Bob 套用 {{z}} 與 {{x}}。",
+    "teleportRunFidelity": "保真度 F = {{f}}。",
+    "shorStepFactor": "因數分解 N = {{N}}，選擇 a = {{a}}。",
+    "shorStepGcd": "gcd({{a}}, {{N}}) = {{g}} → 以古典方式找到因數。",
+    "shorStepPeriod": "{{a}}^x mod {{N}} 的週期為 r = {{r}}。",
+    "shorStepHalf": "{{a}}^{{half}} mod {{N}} = {{val}}。",
+    "shorStepFactors": "因數：{{p}} × {{q}} = {{N}}。",
+    "shorStepNoFactors": "此 a 的選擇未產生因數（請嘗試其他底數）。",
+    "setup": "設定",
+    "bellPair": "Bell 對",
+    "aliceGates": "Alice 閘",
+    "measureStep": "測量",
+    "bobCorrects": "Bob 校正",
+    "complete": "完成",
+    "presetBell": "Bell |Φ⁺⟩",
+    "presetGhz": "GHZ (3)",
+    "presetTeleport": "傳態（部分）",
+    "tableAliceBit": "Alice 位元",
+    "tableAliceBasis": "Alice 基",
+    "tableBobBasis": "Bob 基",
+    "tableBobBit": "Bob 位元",
+    "tableX": "x",
+    "tableFx": "f(x)",
+    "tableXor": "x ⊕ f(x)",
+    "unaryOutput": "{{gate}}({{a}}) = {{out}}",
+    "binaryOutput": "{{gate}}({{a}}, {{b}}) = {{out}}",
+    "binarySum": "{{a}}₂ + {{b}}₂ = {{sum}}₂（十進位：{{da}} + {{db}} = {{ds}}）",
+    "twoPowN": "2^{{n}} = {{count}}",
+    "entanglementSchmidt": "對於兩個量子位元，糾纏態滿足 c₀₀·c₁₁ ≠ c₀₁·c₁₀（Schmidt 秩 > 1）。"
+  },
+  "binary-states": {
+    "title": "二元狀態探索器"
+  },
+  "logic-gates": {
+    "title": "邏輯閘模擬器"
+  },
+  "binary-adder": {
+    "title": "二元加法器（漣波進位）"
+  },
+  "complex-plane": {
+    "title": "複數探索器"
+  },
+  "qubit-state": {
+    "title": "單量子位元狀態探索器"
+  },
+  "measurement": {
+    "title": "測量模擬器"
+  },
+  "bloch-sphere": {
+    "title": "三維 Bloch 球面"
+  },
+  "gate-explorer": {
+    "title": "量子閘探索器"
+  },
+  "unitary-checker": {
+    "title": "矩陣與酉性檢查器"
+  },
+  "tensor-product": {
+    "title": "張量積計算器"
+  },
+  "bell-states": {
+    "title": "Bell 態產生器"
+  },
+  "entanglement": {
+    "title": "糾纏測量"
+  },
+  "error-correction": {
+    "title": "三量子位元位元翻轉碼"
+  },
+  "chsh": {
+    "title": "CHSH Bell 測試"
+  },
+  "superdense": {
+    "title": "超密集編碼"
+  },
+  "teleportation": {
+    "title": "量子傳態"
+  },
+  "bb84": {
+    "title": "BB84 密鑰分配"
+  },
+  "deutsch": {
+    "title": "Deutsch 演算法"
+  },
+  "deutsch-jozsa": {
+    "title": "Deutsch–Jozsa"
+  },
+  "bernstein-vazirani": {
+    "title": "Bernstein–Vazirani"
+  },
+  "simon": {
+    "title": "Simon 演算法（示範）"
+  },
+  "grover": {
+    "title": "Grover 搜尋"
+  },
+  "qft": {
+    "title": "量子傅立葉變換"
+  },
+  "phase-estimation": {
+    "title": "量子相位估計"
+  },
+  "period-finding": {
+    "title": "週期尋找（模 N）"
+  },
+  "shor": {
+    "title": "Shor 演算法示範（N = 15）"
+  }
+};
