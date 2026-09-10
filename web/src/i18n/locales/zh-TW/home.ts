@@ -1,0 +1,128 @@
+import type { TranslationTree } from '@/i18n/types';
+
+export const home: TranslationTree = {
+  tag: '2026 年版 · 全部在瀏覽器執行，無需安裝',
+  title: '量子計算入門 — 2026',
+  subtitle: '從古典位元到量子演算法',
+  description:
+    '一本自成體系的互動式教科書，從零開始建立量子計算的完整知識架構。全部 {{labCount}} 個實驗、電路建構器、練習題與章節內容，皆可直接在瀏覽器中執行。',
+  buttons: {
+    startLearning: '開始學習',
+    openPlayground: '開啟實驗場（{{labCount}} 個實驗）',
+    circuitBuilder: '電路建構器',
+    practice: '練習題',
+  },
+  featuredLabs: {
+    title: '互動實驗 — 直接在網頁操作',
+    description:
+      '點選任一實驗即可開始互動模擬（Bloch 球、量子閘、Grover、Shor、BB84 等）。共 {{labCount}} 個實驗 + 電路建構器。',
+    browseAll: '瀏覽全部 {{labCount}} 個實驗 →',
+    items: {
+      'bloch-sphere': '3D Bloch 球',
+      'circuit-builder': '電路建構器',
+      teleportation: '量子傳態',
+      grover: 'Grover 搜尋',
+      bb84: 'BB84 協定',
+      shor: 'Shor 演算法',
+      'gate-explorer': '量子閘探索器',
+      'logic-gates': '邏輯閘',
+    },
+  },
+  allLabs: {
+    title: '全部互動實驗',
+    circuitBuilder: {
+      tag: '電路',
+      title: '量子電路建構器',
+    },
+  },
+  learningPath: {
+    title: '學習路徑',
+    description:
+      '課程遵循精心設計的學習弧線：先建立古典計算基礎，再深入單量子位元與多量子位元系統的數學與物理，最後進入量子協定與演算法。每章均包含概念檢核、詳解範例，以及互動實驗連結。',
+    phases: {
+      foundation: {
+        name: '基礎篇',
+        chapters: '古典計算 → 線性代數 → 單量子位元',
+      },
+      multiQubit: {
+        name: '多量子位元世界',
+        chapters: '多量子位元 → 量子電路 → 量子糾纏',
+      },
+      algorithms: {
+        name: '演算法與前沿',
+        chapters: '量子協定 → 量子演算法 → QFT → Shor → 現代主題',
+      },
+    },
+    browseAll: '瀏覽全部 {{chapterCount}} 章 →',
+  },
+  learnCard: {
+    title: '學習',
+    description: '結構化章節，包含直觀說明、數學形式化、詳解範例與概念檢核點。',
+    cta: '第 1 章：古典計算',
+  },
+  referenceCard: {
+    title: '參考資料',
+    description: '量子閘速查表、公式集、複雜度類別、術語表與常見迷思。',
+    cta: '量子閘參考',
+  },
+  allChapters: {
+    title: '全部章節',
+  },
+  researchCutoff: {
+    label: '研究截止日：',
+    text: '2026 年 9 月。所有模擬均在瀏覽器中執行 — 無需下載。',
+  },
+  chapters: {
+    classical: '古典計算',
+    oneQubit: '單量子位元',
+    linearAlgebra: '線性代數',
+    multipleQubits: '多量子位元',
+    circuits: '量子電路',
+    errorCorrection: '量子錯誤校正',
+    entanglement: '量子糾纏',
+    protocols: '量子協定',
+    algorithms: '量子演算法',
+    qft: '量子傅立葉轉換',
+    phaseEstimation: '相位估計',
+    shor: 'Shor 演算法',
+    modern: '現代主題（2026）',
+  },
+  labChapters: {
+    Classical: '古典計算',
+    'One Qubit': '單量子位元',
+    'Linear Algebra': '線性代數',
+    'Multiple Qubits': '多量子位元',
+    QEC: '量子錯誤校正',
+    Protocols: '量子協定',
+    Algorithms: '量子演算法',
+    Shor: 'Shor 演算法',
+  },
+  labs: {
+    'binary-states': '二元狀態探索器',
+    'logic-gates': '邏輯閘模擬器',
+    'binary-adder': '二元加法器',
+    'complex-plane': '複數平面探索器',
+    'qubit-state': '單量子位元狀態探索器',
+    measurement: '測量模擬器',
+    'bloch-sphere': '3D Bloch 球',
+    'gate-explorer': '量子閘探索器',
+    'unitary-checker': '矩陣與酉矩陣檢查器',
+    'tensor-product': '張量積計算器',
+    'bell-states': 'Bell 態產生器',
+    entanglement: '糾纏測量',
+    'error-correction': '錯誤校正模擬器',
+    chsh: 'Bell/CHSH 實驗',
+    superdense: '超密集編碼',
+    teleportation: '量子傳態',
+    bb84: 'BB84 模擬器',
+    deutsch: 'Deutsch 演算法',
+    'deutsch-jozsa': 'Deutsch–Jozsa',
+    'bernstein-vazirani': 'Bernstein–Vazirani',
+    simon: 'Simon 演算法',
+    grover: 'Grover 搜尋',
+    qft: 'QFT 視覺化器',
+    'phase-estimation': '相位估計',
+    'period-finding': '週期探索器',
+    shor: 'Shor 演算法示範',
+  },
+};

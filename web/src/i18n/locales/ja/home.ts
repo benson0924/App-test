@@ -1,0 +1,128 @@
+import type { TranslationTree } from '@/i18n/types';
+
+export const home: TranslationTree = {
+  tag: '2026年版 · すべてブラウザで実行 — インストール不要',
+  title: '量子コンピューティング入門 — 2026',
+  subtitle: '古典ビットから量子アルゴリズムへ',
+  description:
+    '量子コンピューティングを基礎から体系的に学べる、自己完結型のインタラクティブ教科書です。全{{labCount}}個のラボ、回路ビルダー、練習問題、各章の内容はすべてブラウザで直接実行できます。',
+  buttons: {
+    startLearning: '学習を始める',
+    openPlayground: 'プレイグラウンドを開く（{{labCount}}ラボ）',
+    circuitBuilder: '回路ビルダー',
+    practice: '練習問題',
+  },
+  featuredLabs: {
+    title: 'インタラクティブラボ — ブラウザで直接操作',
+    description:
+      '任意のラボをクリックしてインタラクティブなシミュレーションを開始できます（ブロッホ球、量子ゲート、Grover、Shor、BB84など）。全{{labCount}}ラボ＋回路ビルダー。',
+    browseAll: '全{{labCount}}ラボを見る →',
+    items: {
+      'bloch-sphere': '3Dブロッホ球',
+      'circuit-builder': '回路ビルダー',
+      teleportation: '量子テレポーテーション',
+      grover: 'Grover探索',
+      bb84: 'BB84プロトコル',
+      shor: 'Shorのアルゴリズム',
+      'gate-explorer': 'ゲートエクスプローラー',
+      'logic-gates': '論理ゲート',
+    },
+  },
+  allLabs: {
+    title: 'すべてのインタラクティブラボ',
+    circuitBuilder: {
+      tag: '回路',
+      title: '量子回路ビルダー',
+    },
+  },
+  learningPath: {
+    title: '学習パス',
+    description:
+      'カリキュラムは計画的な構成に沿って進みます。まず古典計算の基礎を固め、次に単一・複数量子ビット系の数学と物理学を学び、最後に量子プロトコルとアルゴリズムへ進みます。各章には概念チェック、詳解付きの例題、インタラクティブラボへのリンクが含まれます。',
+    phases: {
+      foundation: {
+        name: '基礎',
+        chapters: '古典計算 → 線形代数 → 単一量子ビット',
+      },
+      multiQubit: {
+        name: '多量子ビットの世界',
+        chapters: '複数量子ビット → 量子回路 → 量子もつれ',
+      },
+      algorithms: {
+        name: 'アルゴリズムとその先',
+        chapters: 'プロトコル → アルゴリズム → QFT → Shor → 現代トピック',
+      },
+    },
+    browseAll: '全{{chapterCount}}章を見る →',
+  },
+  learnCard: {
+    title: '学習',
+    description: '直感的な説明、数学的な形式化、詳解付きの例題、概念チェックポイントを備えた構造化された章。',
+    cta: '第1章：古典計算',
+  },
+  referenceCard: {
+    title: 'リファレンス',
+    description: 'ゲート早見表、公式集、計算量クラス、用語集、よくある誤解。',
+    cta: 'ゲートリファレンス',
+  },
+  allChapters: {
+    title: 'すべての章',
+  },
+  researchCutoff: {
+    label: '研究カットオフ：',
+    text: '2026年9月。すべてのシミュレーションはブラウザ内で実行 — ダウンロード不要。',
+  },
+  chapters: {
+    classical: '古典計算',
+    oneQubit: '単一量子ビット',
+    linearAlgebra: '線形代数',
+    multipleQubits: '複数量子ビット',
+    circuits: '量子回路',
+    errorCorrection: '誤り訂正',
+    entanglement: '量子もつれ',
+    protocols: '量子プロトコル',
+    algorithms: '量子アルゴリズム',
+    qft: '量子フーリエ変換',
+    phaseEstimation: '位相推定',
+    shor: 'Shorのアルゴリズム',
+    modern: '現代トピック（2026）',
+  },
+  labChapters: {
+    Classical: '古典計算',
+    'One Qubit': '単一量子ビット',
+    'Linear Algebra': '線形代数',
+    'Multiple Qubits': '複数量子ビット',
+    QEC: '誤り訂正',
+    Protocols: 'プロトコル',
+    Algorithms: 'アルゴリズム',
+    Shor: 'Shor',
+  },
+  labs: {
+    'binary-states': 'バイナリ状態エクスプローラー',
+    'logic-gates': '論理ゲートシミュレーター',
+    'binary-adder': 'バイナリ加算器',
+    'complex-plane': '複素平面エクスプローラー',
+    'qubit-state': '単一量子ビット状態エクスプローラー',
+    measurement: '測定シミュレーター',
+    'bloch-sphere': '3Dブロッホ球',
+    'gate-explorer': '量子ゲートエクスプローラー',
+    'unitary-checker': '行列・ユニタリチェッカー',
+    'tensor-product': 'テンソル積計算機',
+    'bell-states': 'ベル状態ジェネレーター',
+    entanglement: 'もつれ測定',
+    'error-correction': '誤り訂正シミュレーター',
+    chsh: 'ベル/CHSH実験',
+    superdense: '超高密度符号化',
+    teleportation: '量子テレポーテーション',
+    bb84: 'BB84シミュレーター',
+    deutsch: 'Deutschアルゴリズム',
+    'deutsch-jozsa': 'Deutsch–Jozsa',
+    'bernstein-vazirani': 'Bernstein–Vazirani',
+    simon: 'Simonのアルゴリズム',
+    grover: 'Grover探索',
+    qft: 'QFTビジュアライザー',
+    'phase-estimation': '位相推定',
+    'period-finding': '周期探索',
+    shor: 'Shorアルゴリズムデモ',
+  },
+};
