@@ -29,15 +29,14 @@ jobs:
       - name: Build web textbook
         run: npm run build
         env:
-          VITE_BASE: /docs/
+          VITE_BASE: /
 
       - name: SPA fallback for client-side routing
         run: cp web/dist/index.html web/dist/404.html
 
-      - name: Publish to docs/ on main
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          folder: web/dist
-          target-folder: docs
-          branch: main
-          commit-message: Deploy site to docs/
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./web/dist
+          force_orphan: true
