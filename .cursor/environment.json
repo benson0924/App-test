@@ -1,0 +1,4 @@
+{
+  "name": "1234 iOS",
+  "install": ".cursor/scripts/cloud-agent-install.sh"
+}
