@@ -15,9 +15,11 @@ This is an **independently authored** educational work. It uses standard curricu
 
 ## Live site
 
-**Interactive textbook:** https://benson0924.github.io/App-test/
+**Interactive textbook:** https://benson0924.github.io/
 
 **PDF (60 pages):** [book/main.pdf](book/main.pdf) in this repository
+
+> **One-time setup:** Rename this repository to `benson0924.github.io` in GitHub **Settings → General → Repository name**, then enable **Settings → Pages → Source: GitHub Actions**. This replaces any previous personal site at that URL.
 
 ## Quick start
 
