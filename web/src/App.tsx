@@ -1,65 +1,78 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
-import HomePage from './pages/HomePage';
-import LearnIndex from './pages/learn/LearnIndex';
-import PlaygroundIndex from './pages/playground/PlaygroundIndex';
-import ReferenceIndex from './pages/reference/ReferenceIndex';
-import PracticeIndex from './pages/practice/PracticeIndex';
-import MisconceptionsPage from './pages/reference/MisconceptionsPage';
-import GlossaryPage from './pages/reference/GlossaryPage';
-import GateReferencePage from './pages/reference/GateReferencePage';
-import FormulaSheetPage from './pages/reference/FormulaSheetPage';
-import ComplexityPage from './pages/reference/ComplexityPage';
+import LearnChapterLayout from './components/LearnChapterLayout';
 
-// Learn chapters
-import ClassicalComputing from './pages/learn/ClassicalComputing';
-import OneQubit from './pages/learn/OneQubit';
-import LinearAlgebra from './pages/learn/LinearAlgebra';
-import MultipleQubits from './pages/learn/MultipleQubits';
-import QuantumCircuits from './pages/learn/QuantumCircuits';
-import ErrorCorrection from './pages/learn/ErrorCorrection';
-import Entanglement from './pages/learn/Entanglement';
-import Protocols from './pages/learn/Protocols';
-import Algorithms from './pages/learn/Algorithms';
-import QFT from './pages/learn/QFT';
-import PhaseEstimation from './pages/learn/PhaseEstimation';
-import Shor from './pages/learn/Shor';
-import ModernTopics from './pages/learn/ModernTopics';
+const HomePage = lazy(() => import('./pages/HomePage'));
+const LearnIndex = lazy(() => import('./pages/learn/LearnIndex'));
+const PlaygroundIndex = lazy(() => import('./pages/playground/PlaygroundIndex'));
+const ReferenceIndex = lazy(() => import('./pages/reference/ReferenceIndex'));
+const PracticeIndex = lazy(() => import('./pages/practice/PracticeIndex'));
+const MisconceptionsPage = lazy(() => import('./pages/reference/MisconceptionsPage'));
+const GlossaryPage = lazy(() => import('./pages/reference/GlossaryPage'));
+const GateReferencePage = lazy(() => import('./pages/reference/GateReferencePage'));
+const FormulaSheetPage = lazy(() => import('./pages/reference/FormulaSheetPage'));
+const ComplexityPage = lazy(() => import('./pages/reference/ComplexityPage'));
 
-// Labs
-import LabPage from './pages/playground/LabPage';
-import CircuitBuilderPage from './pages/playground/CircuitBuilderPage';
+const ClassicalComputing = lazy(() => import('./pages/learn/ClassicalComputing'));
+const OneQubit = lazy(() => import('./pages/learn/OneQubit'));
+const LinearAlgebra = lazy(() => import('./pages/learn/LinearAlgebra'));
+const MultipleQubits = lazy(() => import('./pages/learn/MultipleQubits'));
+const QuantumCircuits = lazy(() => import('./pages/learn/QuantumCircuits'));
+const ErrorCorrection = lazy(() => import('./pages/learn/ErrorCorrection'));
+const Entanglement = lazy(() => import('./pages/learn/Entanglement'));
+const Protocols = lazy(() => import('./pages/learn/Protocols'));
+const Algorithms = lazy(() => import('./pages/learn/Algorithms'));
+const QFT = lazy(() => import('./pages/learn/QFT'));
+const PhaseEstimation = lazy(() => import('./pages/learn/PhaseEstimation'));
+const Shor = lazy(() => import('./pages/learn/Shor'));
+const ModernTopics = lazy(() => import('./pages/learn/ModernTopics'));
+
+const LabPage = lazy(() => import('./pages/playground/LabPage'));
+const CircuitBuilderPage = lazy(() => import('./pages/playground/CircuitBuilderPage'));
+
+function PageLoader() {
+  return (
+    <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+      Loading…
+    </div>
+  );
+}
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<HomePage />} />
-        <Route path="learn" element={<LearnIndex />} />
-        <Route path="learn/classical" element={<ClassicalComputing />} />
-        <Route path="learn/one-qubit" element={<OneQubit />} />
-        <Route path="learn/linear-algebra" element={<LinearAlgebra />} />
-        <Route path="learn/multiple-qubits" element={<MultipleQubits />} />
-        <Route path="learn/circuits" element={<QuantumCircuits />} />
-        <Route path="learn/error-correction" element={<ErrorCorrection />} />
-        <Route path="learn/entanglement" element={<Entanglement />} />
-        <Route path="learn/protocols" element={<Protocols />} />
-        <Route path="learn/algorithms" element={<Algorithms />} />
-        <Route path="learn/qft" element={<QFT />} />
-        <Route path="learn/phase-estimation" element={<PhaseEstimation />} />
-        <Route path="learn/shor" element={<Shor />} />
-        <Route path="learn/modern" element={<ModernTopics />} />
-        <Route path="playground" element={<PlaygroundIndex />} />
-        <Route path="playground/circuit-builder" element={<CircuitBuilderPage />} />
-        <Route path="playground/:labId" element={<LabPage />} />
-        <Route path="reference" element={<ReferenceIndex />} />
-        <Route path="reference/gates" element={<GateReferencePage />} />
-        <Route path="reference/formulas" element={<FormulaSheetPage />} />
-        <Route path="reference/complexity" element={<ComplexityPage />} />
-        <Route path="reference/glossary" element={<GlossaryPage />} />
-        <Route path="reference/misconceptions" element={<MisconceptionsPage />} />
-        <Route path="practice" element={<PracticeIndex />} />
-      </Route>
-    </Routes>
+    <Suspense fallback={<PageLoader />}>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />} />
+          <Route path="learn" element={<LearnChapterLayout />}>
+            <Route index element={<LearnIndex />} />
+            <Route path="classical" element={<ClassicalComputing />} />
+            <Route path="one-qubit" element={<OneQubit />} />
+            <Route path="linear-algebra" element={<LinearAlgebra />} />
+            <Route path="multiple-qubits" element={<MultipleQubits />} />
+            <Route path="circuits" element={<QuantumCircuits />} />
+            <Route path="error-correction" element={<ErrorCorrection />} />
+            <Route path="entanglement" element={<Entanglement />} />
+            <Route path="protocols" element={<Protocols />} />
+            <Route path="algorithms" element={<Algorithms />} />
+            <Route path="qft" element={<QFT />} />
+            <Route path="phase-estimation" element={<PhaseEstimation />} />
+            <Route path="shor" element={<Shor />} />
+            <Route path="modern" element={<ModernTopics />} />
+          </Route>
+          <Route path="playground" element={<PlaygroundIndex />} />
+          <Route path="playground/circuit-builder" element={<CircuitBuilderPage />} />
+          <Route path="playground/:labId" element={<LabPage />} />
+          <Route path="reference" element={<ReferenceIndex />} />
+          <Route path="reference/gates" element={<GateReferencePage />} />
+          <Route path="reference/formulas" element={<FormulaSheetPage />} />
+          <Route path="reference/complexity" element={<ComplexityPage />} />
+          <Route path="reference/glossary" element={<GlossaryPage />} />
+          <Route path="reference/misconceptions" element={<MisconceptionsPage />} />
+          <Route path="practice" element={<PracticeIndex />} />
+        </Route>
+      </Routes>
+    </Suspense>
   );
 }

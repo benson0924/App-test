@@ -9,6 +9,17 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          katex: ['katex'],
+          three: ['three'],
+          'quantum-core': ['quantum-core'],
+        },
+      },
+    },
+  },
   server: {
     port: 5173,
     host: true,

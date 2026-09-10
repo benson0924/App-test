@@ -5,7 +5,7 @@ import Checkpoint from '@/components/Checkpoint';
 import WorkedExample from '@/components/WorkedExample';
 import Expandable from '@/components/Expandable';
 import Section from '@/components/Section';
-import ChapterOutline, { LabLink, MisconceptionAlert, PracticeBlock } from '@/components/ChapterHelpers';
+import { LabLink, MisconceptionAlert, PracticeBlock } from '@/components/ChapterHelpers';
 import ComplexPlaneLab from '@/components/labs/ComplexPlaneLab';
 import QubitStateLab from '@/components/labs/QubitStateLab';
 import MeasurementLab from '@/components/labs/MeasurementLab';
@@ -22,15 +22,7 @@ import {
   type MeasurementBasis,
 } from 'quantum-core';
 
-const OUTLINE = [
-  { id: 'what-is-a-qubit', title: '2.1 What Is a Qubit?' },
-  { id: 'complex-amplitudes', title: '2.2 Complex Amplitudes' },
-  { id: 'measurement', title: '2.3 Measurement' },
-  { id: 'other-bases', title: '2.4 Other Measurement Bases' },
-  { id: 'global-relative-phase', title: '2.5 Global and Relative Phase' },
-  { id: 'bloch-sphere', title: '2.6 The Bloch Sphere' },
-  { id: 'one-qubit-gates', title: '2.7 One-Qubit Gates' },
-];
+const SQ2 = 1 / Math.sqrt(2);
 
 function BasisProbabilityPanel() {
   const [alphaRe, setAlphaRe] = useState(0.6);
@@ -148,8 +140,6 @@ export default function OneQubit() {
         measurement, alternative bases, phase, the Bloch sphere, and elementary gates — everything you
         need before combining qubits into larger systems.
       </p>
-
-      <ChapterOutline items={OUTLINE} />
 
       <MisconceptionAlert
         myth="A qubit is simply both 0 and 1 at the same time."

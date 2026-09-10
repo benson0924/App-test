@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import { learnNav, labs } from '../data/navigation';
 import { useTheme } from '../context/ThemeContext';
+import GlobalSearch from './GlobalSearch';
 import './Layout.css';
 
 export default function Layout() {
@@ -63,7 +64,8 @@ export default function Layout() {
           <NavLink to="/practice" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>Practice</NavLink>
         </nav>
         <div className="sidebar-footer">
-          <button className="btn" onClick={toggleTheme} aria-label="Toggle theme">
+          <GlobalSearch />
+          <button className="btn" onClick={toggleTheme} aria-label="Toggle theme" style={{ marginTop: '0.5rem', width: '100%' }}>
             {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
           </button>
         </div>
